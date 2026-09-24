@@ -31,6 +31,8 @@ a{color:inherit}
 :focus-visible{outline:2px solid var(--acc);outline-offset:3px}
 img{max-width:100%;display:block}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+/* phones: instant taps (no double-tap-zoom delay), no grey tap flash */
+a,button,.card,[data-full]{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .pad{padding-inline:var(--g)}
 .lbl{font:400 12px/1.5 var(--pix);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
 
@@ -112,6 +114,13 @@ html,body{overflow-x:clip}
 .hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(50% 45% at 30% 45%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 70%)}
 .line{font:400 clamp(52px,10vw,150px)/.92 var(--disp);letter-spacing:-.01em;margin:0}
 .line .acc{color:var(--acc)}
+/* typed word sits in a slot as wide as the longest word, so the line never re-wraps while typing */
+.slot{display:inline-grid;text-align:left;white-space:nowrap}
+.slot>*{grid-area:1/1;display:block}
+.slot .cur{vertical-align:baseline}
+.slot .ghost{visibility:hidden}
+/* phones: the word always takes its own line, so the heading height never changes */
+@media (max-width:600px){.slot{display:grid;width:max-content}}
 .cur{display:inline-block;width:.06em;height:.8em;background:var(--acc);margin-left:.06em;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 .hero p.sub{max-width:56ch;color:var(--mute);margin:28px 0 0;font-size:clamp(15px,1.5vw,18px)}
@@ -386,7 +395,7 @@ footer .st{color:var(--acc)}
       <div class="cell txt">
         <span class="lbl">Portfolio · 2024–2026 · Brisbane</span>
         <h1 class="line">Hi, I'm Helen.</h1>
-        <p class="line" aria-label="I design for climate, ecology and people."><span aria-hidden="true">I design for <span class="acc" id="typed">climate</span><span class="cur"></span></span></p>
+        <p class="line" aria-label="I design for climate, ecology and people."><span aria-hidden="true">I design for <span class="slot"><span class="ghost">climate</span><span class="ghost">ecology</span><span class="ghost">people</span><span class="ghost">the city</span><span class="now"><span class="acc" id="typed">climate</span><span class="cur"></span></span></span></span></p>
         <p class="sub" id="intro" aria-label="Master of Architecture student at QUT, Brisbane. I work from concept design and Revit documentation through to rendering and computational modelling, with practice experience in Brisbane and Milan."><span aria-hidden="true" id="introTxt">Master of Architecture student at QUT, Brisbane. I work from concept design and Revit documentation through to rendering and computational modelling, with practice experience in Brisbane and Milan.</span></p>
         <div class="cta"><a class="pill" href="#work">See selected work</a><a class="pill ghost" href="#cv">Experience</a></div>
       </div>
@@ -605,9 +614,13 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-open
   dots.addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(b)go(+b.dataset.i)});
   car.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){go(idx+1);e.preventDefault()}if(e.key==="ArrowLeft"){go(idx-1);e.preventDefault()}if(e.key==="Enter")activate(idx)});
   var sx=null,dx=0,moved=false;
-  car.addEventListener("pointerdown",function(e){if(e.button>0)return;sx=e.clientX;dx=0;moved=false});
-  addEventListener("pointermove",function(e){if(sx===null)return;dx=e.clientX-sx;if(!moved&&Math.abs(dx)>6){moved=true;car.classList.add("drag")}if(moved)place(dx)});
-  function end(){if(sx===null)return;car.classList.remove("drag");if(moved){var cw=cards[0].offsetWidth,w=cw*.3;if(dx<-w)go(idx+Math.max(1,Math.round(-dx/cw)));else if(dx>w)go(idx-Math.max(1,Math.round(dx/cw)));else place()}sx=null}
+  // gesture: a tap stays a tap (finger jitter allowed), a sideways swipe drags, a vertical swipe is left to page scrolling
+  var sy=0,dy=0,t0=0;
+  car.addEventListener("pointerdown",function(e){if(e.button>0)return;sx=e.clientX;sy=e.clientY;dx=dy=0;moved=false;t0=Date.now()});
+  addEventListener("pointermove",function(e){if(sx===null)return;dx=e.clientX-sx;dy=e.clientY-sy;
+    if(!moved){if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){sx=null;return}if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)){moved=true;car.classList.add("drag")}}
+    if(moved)place(dx)});
+  function end(){if(sx===null)return;car.classList.remove("drag");if(moved){var cw=cards[0].offsetWidth,fast=Date.now()-t0<300&&Math.abs(dx)>30,w=fast?0:cw*.25;if(dx<-w)go(idx+Math.max(1,Math.round(-dx/cw)));else if(dx>w)go(idx-Math.max(1,Math.round(dx/cw)));else place()}sx=null}
   addEventListener("pointerup",end);addEventListener("pointercancel",end);
   car.addEventListener("click",function(e){if(moved){moved=false;e.preventDefault();return}var c=e.target.closest(".card");if(!c)return;var i=+c.dataset.i;if(i===idx)activate(i);else go(i)});
   var lock=0;car.addEventListener("wheel",function(e){var d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:(e.shiftKey?e.deltaY:0);if(!d)return;e.preventDefault();var t=Date.now();if(t-lock<450)return;lock=t;go(idx+(d>0?1:-1))},{passive:false});
