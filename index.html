@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Helen Nguyen Folio</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Architecture portfolio of Helen Nguyen, Master of Architecture student at QUT, Brisbane.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap">
+<style>
+/* Big type: PP Fragment (licensed, used from the viewer's installed copy; not shipped with the site) */
+@font-face{font-family:"HN Display";font-weight:400;src:local("PP Fragment Glare Regular"),local("PPFragment-GlareRegular"),local("PP Fragment Serif Regular"),local("PPFragment-SerifRegular")}
+:root{
+  color-scheme:dark;
+  --bg:#07090c;--s1:#0f1318;--s2:#161b22;--line:#222a33;--ink:#e8edf2;--mute:#8d99a6;--acc:#4f8dff;--acc-ink:#04101f;
+  --disp:"HN Display",Georgia,serif;
+  --pix:"Space Grotesk",system-ui,sans-serif;
+  --sans:"Space Grotesk",system-ui,sans-serif;
+  --g:clamp(16px,4vw,56px);--ease:cubic-bezier(.2,.7,.1,1);--rail:0px;--bar:58px;--sr:0;
+  /* the system glyph: four diamonds on a cross, four point-dots */
+  --star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 1l2 3-2 3-2-3zM20 33l2 3-2 3-2-3zM1 20l3-2 3 2-3 2zM33 20l3-2 3 2-3 2zM20 8l4 6-4 6-4-6zM20 20l4 6-4 6-4-6zM8 20l6-4 6 4-6 4zM20 20l6-4 6 4-6 4z'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){color-scheme:light;--bg:#f3f4f2;--s1:#fff;--s2:#eceeec;--line:#d6dad8;--ink:#101418;--mute:#5a6470;--acc:#1f5fd6;--acc-ink:#fff}}
+:root[data-theme="light"]{color-scheme:light;--bg:#f3f4f2;--s1:#fff;--s2:#eceeec;--line:#d6dad8;--ink:#101418;--mute:#5a6470;--acc:#1f5fd6;--acc-ink:#fff}
+@media (min-width:861px){:root{--rail:64px;--g:calc(var(--rail) + clamp(20px,3vw,44px))}}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar) + 12px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.pad{padding-inline:var(--g)}
+.lbl{font:400 12px/1.5 var(--pix);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- the star: one glyph, used everywhere, turns with scroll ---------- */
+.st{display:inline-block;width:1em;height:1em;flex:none;background:currentColor;-webkit-mask:var(--star) center/contain no-repeat;mask:var(--star) center/contain no-repeat;rotate:calc(var(--sr) * 1deg + var(--o,0deg));transition:scale .4s var(--ease)}
+.st.acc{color:var(--acc)}
+.st.rev{rotate:calc(var(--sr) * -1deg + var(--o,0deg))}
+
+/* top bar */
+.top{position:fixed;inset:0 0 auto 0;z-index:30;display:flex;justify-content:space-between;align-items:center;min-height:var(--bar);padding:env(safe-area-inset-top,0px) var(--g) 0;background:var(--bg);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font:400 13px/1 var(--pix);letter-spacing:.1em;text-decoration:none}
+.brand .st{font-size:16px;color:var(--acc)}
+.pill{display:inline-flex;align-items:center;gap:8px;font:400 12px/1 var(--pix);letter-spacing:.08em;text-transform:uppercase;padding:11px 16px;border-radius:999px;background:var(--acc);color:var(--acc-ink);text-decoration:none;transition:transform .3s var(--ease)}
+.pill:hover{transform:translateY(-2px)}
+.pill.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.bar-r{display:flex;gap:8px;align-items:center}
+
+/* frame rails */
+.orn{color:var(--mute);pointer-events:none}
+.orn-top{display:flex;justify-content:space-between;align-items:center;padding:78px var(--g) 0;font-size:22px}
+.orn-side{position:fixed;top:0;bottom:0;z-index:25;width:var(--rail);background:var(--bg);display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:calc(var(--bar) + 22px) 0 22px;font-size:22px}
+.orn-side.l{left:0;border-right:1px solid var(--line)}.orn-side.r{right:0;border-left:1px solid var(--line)}
+.orn svg{display:block;fill:currentColor;transition:color .4s}
+.orn .ros{rotate:calc(var(--sr) * 1deg)}
+.orn .ros.rev{rotate:calc(var(--sr) * -1deg)}
+.orn .on{color:var(--acc)}
+/* rails: an accent line fills top-to-bottom as you scroll (both sides) */
+
+/* ---------- hero: a specimen sheet of bordered cells ---------- */
+.hgrid{display:grid;grid-template-columns:auto minmax(0,1.1fr) minmax(0,1fr) auto;border:1px solid var(--line);min-height:min(76svh,720px)}
+.cell{position:relative;margin:0;border-left:1px solid var(--line);min-width:0}
+.tabs{display:flex}
+.tabs a{width:54px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:18px 0;text-decoration:none;border-left:1px solid var(--line);color:var(--mute);transition:background .3s,color .3s}
+.tabs.l a:first-child{border-left:0}
+.tabs b{font:400 12px/1 var(--pix);color:var(--ink)}
+.tabs span{writing-mode:vertical-rl;rotate:180deg;font:400 11px/1 var(--pix);letter-spacing:.14em;text-transform:uppercase}
+.tabs a:hover{background:color-mix(in srgb,var(--acc) 10%,transparent);color:var(--acc)}
+.tabs a:hover b{color:var(--acc)}
+/* scrollbar: a blue capsule carrying the site's dot-diamond pattern, on a hairline track */
+html{scrollbar-width:thin;scrollbar-color:var(--acc) transparent}
+::-webkit-scrollbar{width:12px;height:12px}
+::-webkit-scrollbar-track{background:linear-gradient(90deg,transparent 5.5px,color-mix(in srgb,var(--line) 70%,transparent) 5.5px 6.5px,transparent 6.5px)}
+::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:12px;min-height:60px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='28' viewBox='0 0 8 28' fill='white' fill-opacity='.85'%3E%3Ccircle cx='4' cy='2' r='.9'/%3E%3Cpath d='M4 6.5l2.2 2.5L4 11.5 1.8 9zM4 15l1.6 1.9L4 18.8 2.4 16.9z'/%3E%3Ccircle cx='4' cy='23' r='.9'/%3E%3C/svg%3E") center top/8px 28px repeat-y padding-box,var(--acc) padding-box}
+::-webkit-scrollbar-thumb:hover,::-webkit-scrollbar-thumb:active{border-width:1px;background-color:color-mix(in srgb,var(--acc) 85%,white)}
+::-webkit-scrollbar-corner{background:transparent}
+/* subtler specimen lines */
+.hgrid,.hgrid .cell,.tabs a{border-color:color-mix(in srgb,var(--line) 50%,transparent)}
+/* scroll control living in the right-hand tab */
+.scrolltab{width:64px!important}
+.scrolltab .ring{writing-mode:horizontal-tb;rotate:none;position:relative;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:border-color .3s,scale .4s var(--ease)}
+.scrolltab .ring::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px dashed color-mix(in srgb,var(--acc) 50%,transparent);animation:spin 14s linear infinite}
+.scrolltab svg{width:16px;height:16px;stroke:var(--acc);fill:none;stroke-width:1.6;animation:bob 1.8s var(--ease) infinite}
+.scrolltab:hover .ring{border-color:var(--acc);scale:1.08}
+.art{display:grid;place-items:center;padding:clamp(28px,3.4vw,56px)}
+.art{overflow:hidden}
+.art .dial{width:min(118%,700px);aspect-ratio:1;color:var(--mute);opacity:.5;-webkit-mask:radial-gradient(closest-side,#000 72%,transparent 104%);mask:radial-gradient(closest-side,#000 72%,transparent 104%)}
+.dial .core{transform-origin:300px 300px;rotate:calc(var(--sr) * 1deg)}
+.art .dial svg{width:100%;height:100%;display:block;overflow:visible}
+.dial .spin{transform-origin:300px 300px;rotate:calc(var(--sr) * .35deg)}
+.dial .spin2{transform-origin:300px 300px;rotate:calc(var(--sr) * -.6deg)}
+.art figcaption,.figlbl{position:absolute;left:0;right:0;bottom:14px;text-align:center;font:400 11px/1 var(--pix);letter-spacing:.08em;color:var(--mute)}
+.sect{position:absolute;top:14px;left:18px;font:400 30px/1 var(--disp);color:var(--ink)}
+.art .corner{position:absolute;top:18px;right:18px;font-size:22px;color:var(--acc)}
+.txt{display:flex;flex-direction:column;justify-content:center;padding:clamp(24px,3.4vw,56px)}
+@media (max-width:860px){
+  .hgrid{grid-template-columns:minmax(0,1fr);min-height:0}
+  .tabs{display:none}
+  .art{border-left:0;border-bottom:1px solid var(--line);padding:44px 24px 40px}
+  .art .dial{width:min(96vw,460px)}
+  .txt{border-left:0;padding:28px 20px}
+}
+@media (max-width:860px){.orn-side{display:none}.orn-top>:nth-child(even){display:none}}
+@media (max-height:760px){.orn-side .v:nth-of-type(3n){display:none}}
+
+/* hero */
+html,body{overflow-x:clip}
+.hero{overflow:clip;padding-block:24px 110px;position:relative;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(50% 45% at 30% 45%,color-mix(in srgb,var(--acc) 10%,transparent),transparent 70%)}
+.line{font:400 clamp(52px,10vw,150px)/.92 var(--disp);letter-spacing:-.01em;margin:0}
+.line .acc{color:var(--acc)}
+.cur{display:inline-block;width:.06em;height:.8em;background:var(--acc);margin-left:.06em;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero p.sub{max-width:56ch;color:var(--mute);margin:28px 0 0;font-size:clamp(15px,1.5vw,18px)}
+.hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+/* scroll-down control */
+.down{position:absolute;left:50%;bottom:22px;translate:-50% 0;display:grid;justify-items:center;gap:10px;text-decoration:none}
+.down .ring{position:relative;width:62px;height:62px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:border-color .3s,scale .4s var(--ease)}
+.down .ring::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:1px dashed color-mix(in srgb,var(--acc) 55%,transparent);animation:spin 14s linear infinite}
+.down svg{width:20px;height:20px;stroke:var(--acc);fill:none;stroke-width:1.6;animation:bob 1.8s var(--ease) infinite}
+.down:hover .ring{border-color:var(--acc);scale:1.08}
+@keyframes bob{50%{translate:0 6px}}
+@keyframes spin{to{rotate:360deg}}
+
+/* section heads */
+section{padding-block:clamp(64px,10vw,120px)}
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:28px;border-top:1px solid var(--line);padding-top:16px}
+h2{display:flex;align-items:center;gap:.3em;font:400 clamp(40px,6vw,84px)/.95 var(--disp);letter-spacing:-.01em;margin:0}
+h2 .st{font-size:.42em;color:var(--acc)}
+
+/* works list */
+.works{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.work{border-bottom:1px solid var(--line)}
+.work>button{width:100%;display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:16px;align-items:center;text-align:left;padding:16px 0}
+.work .no{font:400 12px/1 var(--pix);color:var(--mute)}
+.work .t{display:flex;align-items:center;gap:16px;font:400 clamp(30px,4.6vw,64px)/1 var(--disp);letter-spacing:-.01em;transition:translate .5s var(--ease),color .3s}
+.work .t .st{font-size:.42em;color:var(--acc);transition:rotate .8s var(--ease),scale .4s var(--ease)}
+.work .k{font:400 11px/1.5 var(--pix);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-align:right;max-width:32ch}
+.work>button:hover .t{translate:14px 0;color:var(--acc)}
+.work>button:hover .t .st{--o:45deg;scale:1.2}
+.work.active .t .st{--o:225deg}
+.work.soon>button{cursor:default;opacity:.45}
+.work.soon>button:hover .t{translate:none;color:inherit}
+.soonchip{font:400 11px/1 var(--pix);letter-spacing:.08em;padding:6px 8px;border:1px dashed var(--line);border-radius:999px;color:var(--mute)}
+.peek{position:fixed;left:0;top:0;z-index:35;width:clamp(220px,20vw,320px);aspect-ratio:4/3;border-radius:12px;overflow:hidden;pointer-events:none;opacity:0;scale:.85;transition:opacity .25s,scale .35s var(--ease);box-shadow:0 24px 60px -18px rgba(0,0,0,.7);border:1px solid var(--line);background:var(--s2)}
+.peek.on{opacity:1;scale:1}
+.peek img{width:100%;height:100%;object-fit:cover}
+@media (hover:none){.peek{display:none}}
+
+/* ---------- project window (isolates the project over a blurred page) ---------- */
+#pw,#lb{color:var(--ink)} /* dialogs default to black text; follow the theme */
+#pw{border:0;padding:0;background:transparent;width:min(1180px,94vw);max-width:none;height:min(86vh,980px);max-height:none;overflow:visible}
+#pw::backdrop{background:rgba(3,5,8,.72);backdrop-filter:blur(10px)}
+#pw[open] .win{animation:winin .5s var(--ease)}
+@keyframes winin{from{opacity:0;scale:.94;translate:0 16px}}
+.win{height:100%;display:flex;flex-direction:column;background:color-mix(in srgb,var(--bg) 94%,#1a2230);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 40px 120px -30px rgba(0,0,0,.8)}
+#pw.max{width:100vw;height:100vh}
+#pw.max .win{border-radius:0}
+.wbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--s1)}
+.wbar .ttl{display:flex;align-items:center;gap:10px;font:400 12px/1 var(--pix);letter-spacing:.1em;color:var(--acc);min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.wbar .ttl .st{font-size:14px}
+.wctl{display:flex;gap:4px}
+.wctl button{width:34px;height:30px;border-radius:6px;display:grid;place-items:center;color:var(--mute);transition:background .2s,color .2s}
+.wctl button:hover{background:var(--s2);color:var(--ink)}
+.wctl #pwx:hover{background:#c23b3b;color:#fff}
+.wctl svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5}
+.wbody{flex:1;overflow:auto;overscroll-behavior:contain;padding:clamp(18px,3vw,40px)}
+.wbody{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--acc) 70%,transparent) transparent}
+.wbody h3{font:400 clamp(44px,7vw,96px)/.9 var(--disp);margin:6px 0 22px}
+.wlead{display:flex;justify-content:center;cursor:zoom-in;margin-bottom:26px}
+.wlead img{max-width:100%;max-height:62vh;width:auto;height:auto;border-radius:10px}
+.dtext{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(16px,4vw,48px)}
+.dtext p{margin:0 0 12px;max-width:64ch}
+.dtext details summary{cursor:pointer;display:inline-flex;gap:8px;align-items:center;font:400 12px/1 var(--pix);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);padding:8px 0;list-style:none}
+.dtext details summary::-webkit-details-marker{display:none}
+.dtext details[open] summary .st{--o:45deg}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:0;font-size:14px;align-content:start}
+.meta dt{font:400 11px/2.1 var(--pix);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.meta dd{margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.chips span{font:400 11px/1 var(--pix);padding:7px 9px;border:1px solid var(--line);border-radius:999px;color:var(--mute)}
+.nodes{display:flex;align-items:center;gap:10px;margin:34px 0 14px;padding-top:18px;border-top:1px dashed var(--line);font:400 12px/1 var(--pix);letter-spacing:.08em;color:var(--mute)}
+.nodes .st{color:var(--acc);font-size:13px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px}
+.thumbs button{text-align:left;display:block;width:100%;padding:8px;border:1px solid var(--line);border-radius:12px;background:var(--s1);transition:border-color .3s,translate .35s var(--ease)}
+.thumbs button:hover{border-color:var(--acc);translate:0 -4px}
+.thumbs img{aspect-ratio:4/3;width:100%;object-fit:cover;border-radius:8px;background:#fff}
+.thumbs .draw img{object-fit:contain;padding:6px}
+.thumbs .cap{display:flex;justify-content:space-between;gap:10px;font:400 11px/1.4 var(--pix);letter-spacing:.04em;color:var(--mute);margin-top:8px;text-transform:uppercase}
+.thumbs .cap b{font-weight:400;color:var(--acc)}
+@media (max-width:860px){#pw{width:100vw;height:100svh}.win{border-radius:0}.dtext{grid-template-columns:1fr}}
+
+/* all projects carousel */
+.car{position:relative;overflow:hidden;padding-block:26px 8px;touch-action:pan-y;cursor:grab;user-select:none;-webkit-user-select:none;outline:none}
+.car.drag{cursor:grabbing}
+.car::before,.car::after{content:"";position:absolute;top:0;bottom:0;width:12%;z-index:2;pointer-events:none}
+.car::before{left:0;background:linear-gradient(90deg,var(--bg),transparent)}
+.car::after{right:0;background:linear-gradient(270deg,var(--bg),transparent)}
+.track{display:flex;gap:clamp(14px,2vw,28px);align-items:center;width:max-content;will-change:transform;transition:transform .8s var(--ease)}
+.car.drag .track{transition:none}
+.card{flex:none;width:clamp(240px,27vw,400px);border-radius:18px;background:var(--s1);border:1px solid var(--line);padding:12px;text-align:left;opacity:.4;scale:.84;filter:grayscale(1);transition:scale .7s var(--ease),opacity .5s,filter .6s,border-color .3s,box-shadow .6s}
+.card.on{opacity:1;scale:1;filter:none;border-color:color-mix(in srgb,var(--acc) 45%,var(--line));box-shadow:0 30px 80px -30px color-mix(in srgb,var(--acc) 40%,transparent)}
+.card:not(.on):hover{opacity:.7}
+.card .ph2{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/5;background:var(--s2)}
+.card .ph2 img{width:100%;height:100%;object-fit:cover;pointer-events:none;transition:scale 1.2s var(--ease)}
+.card.on:hover .ph2 img{scale:1.05}
+.card .badge{position:absolute;top:10px;left:10px;font:400 11px/1 var(--pix);padding:6px 8px;border-radius:6px;background:rgba(0,0,0,.6);color:#fff}
+.card .lock{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:14px;font:400 12px/1 var(--pix);letter-spacing:.12em;color:var(--mute);background:repeating-linear-gradient(135deg,transparent 0 10px,color-mix(in srgb,var(--line) 50%,transparent) 10px 11px)}
+.card .lock .st{font-size:34px;color:var(--acc)}
+.card .ci{padding:14px 4px 4px;display:grid;gap:8px}
+.card .ci b{font:400 clamp(24px,2.4vw,34px)/1 var(--disp)}
+.card .ci span{display:flex;justify-content:space-between;gap:10px;font:400 11px/1.3 var(--pix);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
+.card .ci em{font-style:normal;color:var(--acc);opacity:0;transition:opacity .4s}
+.card.on .ci em{opacity:1}
+.carnav{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:22px}
+.carnav button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);font-size:18px;transition:border-color .3s,background .3s,scale .3s var(--ease)}
+.carnav button:hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,transparent);scale:1.08}
+.carnav span{font:400 12px var(--pix);letter-spacing:.12em;color:var(--mute);min-width:84px;text-align:center}
+/* moon phases: small, quiet. passed = "(", ahead = ")", current = full.
+   A solid disc slides behind the row to the chosen project, eclipsing it. */
+.dots{position:relative;display:flex;justify-content:center;align-items:center;gap:12px;margin:18px auto 0;width:max-content;max-width:100%;flex-wrap:nowrap}
+.dots .disc{position:absolute;top:50%;left:0;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;border:1px solid color-mix(in srgb,var(--acc) 55%,transparent);background:color-mix(in srgb,var(--acc) 10%,transparent);transition:translate .7s var(--ease);pointer-events:none}
+.dots button{position:relative;width:12px;height:12px;border-radius:50%;color:color-mix(in srgb,var(--mute) 75%,transparent);box-shadow:inset -3.5px 0 0 0 currentColor;transition:box-shadow .7s var(--ease),color .5s}
+.dots button::before{content:"";position:absolute;inset:-8px}
+.dots button.past{box-shadow:inset 3.5px 0 0 0 currentColor}
+.dots button.on{color:var(--acc);box-shadow:inset 0 0 0 6px currentColor}
+.dots button:hover{color:var(--ink)}
+@media (max-width:860px){.dots{gap:9px}}
+
+/* skills */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:clamp(24px,5vw,72px)}
+.stick{position:sticky;top:calc(var(--bar) + 32px);align-self:start;container-type:inline-size;min-width:0}
+.stick .big{font:400 min(19cqi,150px)/.88 var(--disp);margin:10px 0 0}
+.stick .big b{color:var(--acc);font-weight:400}
+.stack{display:grid;gap:14px}
+.card2{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.card2 .lbl{display:flex;align-items:center;gap:8px}
+.card2 .lbl .st{color:var(--acc);font-size:11px}
+.card2 h3{font:400 30px/1 var(--disp);margin:10px 0 10px}
+.card2 p{margin:0;color:var(--mute);font-size:15px}
+.tools{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tools span{font:400 11px/1 var(--pix);padding:8px 10px;border-radius:999px;background:var(--s2)}
+
+/* experience */
+.cvh{display:flex;align-items:center;gap:12px;font:400 13px/1 var(--pix);letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin:0 0 14px}
+.cvh .st{font-size:14px}
+.cvh::after{content:"";flex:1;height:1px;background:var(--line)}
+.tl2+.cvh{margin-top:56px}
+.tl2{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.tl2 li{display:grid;grid-template-columns:22px 150px minmax(0,1fr);gap:14px;padding:16px 0;border-bottom:1px solid var(--line);transition:padding .4s var(--ease),background .3s}
+.tl2 li>.st{font-size:12px;color:var(--mute);margin-top:4px;transition:color .3s}
+.tl2 li:hover{padding-left:10px;background:color-mix(in srgb,var(--acc) 6%,transparent)}
+.tl2 li:hover>.st{color:var(--acc)}
+.tl2 .d{font:400 12px/2 var(--pix);color:var(--mute)}
+.tl2 b{display:block;font-weight:600}
+.tl2 div span{color:var(--mute);font-size:14px}
+
+/* contact: channels + form */
+.cwrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:clamp(16px,3vw,40px);align-items:stretch}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:clamp(20px,3vw,34px);box-shadow:0 30px 60px -40px rgba(0,0,0,.6)}
+.phead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:18px;border-bottom:1px dashed var(--line);margin-bottom:20px}
+.phead b{display:flex;align-items:center;gap:10px;font:400 13px/1 var(--pix);letter-spacing:.1em}
+.phead b .st{color:var(--acc);font-size:15px}
+.phead span{font:400 11px/1 var(--pix);letter-spacing:.08em;color:var(--acc)}
+.chan{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;padding:14px 16px;margin-bottom:12px;border-radius:10px;background:var(--s2);border:1px solid var(--line);text-decoration:none;transition:border-color .3s,translate .3s var(--ease)}
+.chan:hover{border-color:var(--acc);translate:4px 0}
+.chan>.st{font-size:18px;color:var(--acc)}
+.chan i{display:block;font:400 11px/1.6 var(--pix);font-style:normal;letter-spacing:.08em;color:var(--mute)}
+.chan .v{font-size:clamp(13px,3.6vw,15px);overflow-wrap:anywhere}
+.chan button{font:400 11px/1 var(--pix);letter-spacing:.06em;padding:8px 10px;border-radius:999px;border:1px solid var(--line)}
+.chan button,.chan .go{min-height:34px;display:inline-grid;place-items:center}
+.chan .go{font:400 11px/1 var(--pix);letter-spacing:.06em;padding:8px 10px;border-radius:999px;border:1px solid var(--line)}
+.chan button:hover,.chan:hover .go{border-color:var(--acc);color:var(--acc)}
+.loc{display:flex;justify-content:space-between;margin-top:22px;padding-top:18px;border-top:1px dashed var(--line);font:400 11px/1 var(--pix);letter-spacing:.08em;color:var(--mute)}
+.panel h3{font:400 clamp(40px,5vw,64px)/.95 var(--disp);color:var(--acc);margin:0 0 20px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:22px 28px}
+.form label{display:grid;gap:8px;font:400 11px/1 var(--pix);letter-spacing:.08em;color:var(--mute)}
+.form .full{grid-column:1/-1}
+.form input,.form textarea{font:400 16px/1.5 var(--sans);color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:8px 0;border-radius:0;transition:border-color .3s}
+.form textarea{border:1px solid var(--line);border-radius:8px;padding:12px;min-height:150px;resize:vertical}
+.form input:focus,.form textarea:focus{outline:none;border-color:var(--acc)}
+.fbot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.fbot small{font-size:13px;color:var(--mute);max-width:46ch}
+.send{display:inline-flex;align-items:center;gap:10px;font:400 12px/1 var(--pix);letter-spacing:.12em;padding:16px 26px;background:var(--acc);color:var(--acc-ink);border-radius:4px;transition:filter .3s,translate .3s var(--ease)}
+.send:hover{filter:brightness(1.1);translate:0 -2px}
+.send .st{font-size:13px}
+.fstatus{grid-column:1/-1;font-size:14px;color:var(--mute);min-height:1.2em}
+.fstatus button{font:400 11px/1 var(--pix);padding:8px 10px;border:1px solid var(--line);border-radius:999px;margin-left:8px}
+.thanks{padding-block:clamp(90px,14vw,180px) clamp(40px,6vw,80px);text-align:center}
+.thanks p{font:400 clamp(38px,6.5vw,104px)/1 var(--disp);margin:0 auto;min-height:2.1em;max-width:12ch;letter-spacing:-.01em}
+.thanks .st{font-size:28px;color:var(--acc);margin-bottom:26px}
+footer{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding-block:28px 48px;border-top:1px solid var(--line)}
+footer .st{color:var(--acc)}
+@media (max-width:860px){.cwrap,.form{grid-template-columns:1fr}.split{grid-template-columns:1fr}.stick{position:static}.work>button{grid-template-columns:40px minmax(0,1fr)}.work .k{display:none}.tl2 li{grid-template-columns:18px minmax(0,1fr)}.tl2 .d{grid-column:2}.tl2 li>div{grid-column:2}}
+
+/* menu orb */
+.orb{position:fixed;right:calc(var(--rail) + 18px);bottom:calc(22px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.orb>button{width:56px;height:56px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 6px color-mix(in srgb,var(--acc) 22%,transparent),0 0 28px color-mix(in srgb,var(--acc) 60%,transparent);display:grid;place-items:center;color:var(--acc-ink);font:400 11px var(--pix);transition:scale .3s var(--ease)}
+.orb>button:hover{scale:1.08}
+.menu{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:8px;min-width:230px;transform-origin:bottom right;scale:.6;opacity:0;pointer-events:none;transition:scale .4s var(--ease),opacity .3s}
+.orb.open .menu{scale:1;opacity:1;pointer-events:auto}
+.menu a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;text-decoration:none;font:400 12px var(--pix);letter-spacing:.06em}
+.menu a .st{font-size:11px;color:var(--mute)}
+.menu a span{margin-left:auto;color:var(--mute)}
+.menu a:hover{background:var(--s2);color:var(--acc)}
+.menu a:hover .st{color:var(--acc)}
+
+/* reveal */
+.rv{transition:opacity .9s var(--ease),translate .9s var(--ease),clip-path 1s var(--ease)}
+.rv.pre{opacity:.001;translate:0 40px;clip-path:inset(0 0 30% 0)}
+
+/* lightbox */
+#lb{border:0;padding:0;background:transparent;max-width:min(96vw,1500px);max-height:96vh}
+#lb::backdrop{background:rgba(4,6,9,.9);backdrop-filter:blur(4px)}
+.lbframe{position:relative;background:#0b0e12;border:1px solid #232b35;border-radius:10px;padding:14px 14px 0}
+.lbwrap{position:relative;max-width:min(96vw,1500px);max-height:76vh;overflow:auto;overscroll-behavior:contain}
+#lbimg{max-height:74vh;margin:auto;background:#fff;border-radius:6px;cursor:zoom-in}
+#lb[open] #lbimg{animation:pop .45s var(--ease)}
+@keyframes pop{from{scale:.94;opacity:0}}
+.lbwrap.zoom #lbimg{max-width:none;max-height:none;width:180%;cursor:zoom-out}
+.loupe{position:absolute;width:220px;height:220px;border-radius:50%;pointer-events:none;opacity:0;scale:.6;transition:opacity .2s,scale .25s var(--ease);box-shadow:0 12px 40px rgba(0,0,0,.55),inset 0 0 0 2px rgba(255,255,255,.85);background-repeat:no-repeat;background-color:#fff}
+.loupe.on{opacity:1;scale:1}
+.zbadge{position:absolute;top:10px;right:10px;font:400 11px var(--pix);letter-spacing:.1em;padding:6px 10px;background:rgba(40,44,50,.85);color:#cfd6de;border-radius:4px;opacity:0;transition:opacity .2s}
+.zbadge.on{opacity:1}
+.lbarrow{position:absolute;top:calc(50% - 30px);width:52px;height:52px;border-radius:50%;background:rgba(90,96,104,.75);color:#fff;font-size:20px;display:grid;place-items:center;transition:background .3s,scale .3s var(--ease);z-index:2}
+.lbarrow:hover{background:var(--acc);scale:1.08}
+.lbarrow.l{left:22px}.lbarrow.r{right:22px}
+.dc{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#e8edf2;border-top:1px solid #1d242d;margin-top:14px;padding:14px 6px;font:400 11px/1.4 var(--pix);letter-spacing:.06em}
+.dc #lbcap{display:flex;align-items:center;gap:10px}
+.dc #lbcap .st{color:var(--acc);font-size:12px}
+.dc button{min-height:34px;padding:6px 12px;border-radius:999px;font:400 11px var(--pix);letter-spacing:.08em;background:#e8edf2;color:#07090c}
+.dc #lbx{background:transparent;color:#ff5a5a}
+.lbnav{display:flex;gap:6px;flex:none}
+@media (hover:none){.loupe,.zbadge{display:none}}
+@media (max-width:860px){#lb{max-width:100vw;width:100vw}.lbframe{padding:8px 0 0;border-radius:0}.lbwrap{max-width:100vw;max-height:74svh}.lbwrap.zoom #lbimg{width:260%}.lbarrow{width:42px;height:42px}.lbarrow.l{left:8px}.lbarrow.r{right:8px}.dc{flex-wrap:wrap;padding-inline:10px}}
+
+/* laptop / desktop: calmer type scale and more empty space (phones keep their own sizes) */
+@media (min-width:861px){
+  .hero{padding-block:28px 120px}
+  .line{font-size:clamp(40px,3.8vw,66px);line-height:1.04}
+  .hero p.sub{margin-top:28px;font-size:15px;max-width:48ch}
+  .hero .cta{margin-top:26px}
+  section{padding-block:clamp(90px,11vw,150px)}
+  h2{font-size:clamp(34px,3.4vw,54px)}
+  .head{margin-bottom:40px;padding-top:20px}
+  .work>button{padding:22px 0;grid-template-columns:72px minmax(0,1fr) auto}
+  .work .t{font-size:clamp(24px,2.3vw,38px);gap:14px}
+  .work .k{font-size:10px}
+  .wbody h3{font-size:clamp(40px,4.4vw,68px)}
+  .stick .big{font-size:min(15cqi,104px)}
+  .card .ci b{font-size:clamp(20px,1.8vw,28px)}
+  .panel h3{font-size:clamp(34px,3.2vw,50px)}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .cur,.scrolltab svg,.scrolltab .ring::after{animation:none}
+  .rv.pre{opacity:1;translate:none;clip-path:none}
+}
+</style>
+
+<header class="top">
+  <a class="brand" href="#top"><i class="st"></i>HELEN NGUYEN</a>
+  <div class="bar-r">
+    <button class="pill ghost" id="theme" type="button">Light</button>
+    <a class="pill" href="#contact">Contact me</a>
+  </div>
+</header>
+<div class="orn orn-side l" id="ornL" aria-hidden="true"></div>
+<div class="orn orn-side r" id="ornR" aria-hidden="true"></div>
+
+<main id="top">
+  <div class="orn orn-top" id="ornT" aria-hidden="true"></div>
+  <section class="hero pad" aria-label="Introduction">
+    <div class="hgrid">
+      <nav class="tabs l" aria-label="Social links">
+        <a href="https://www.instagram.com/nluuhue204/" target="_blank" rel="noopener" aria-label="Instagram (opens in a new tab)"><b>01</b><span>Instagram ↗</span></a>
+        <a href="https://m.me/hue.l.nguyen2" target="_blank" rel="noopener" aria-label="Message me on Messenger (opens in a new tab)"><b>02</b><span>Messenger ↗</span></a>
+      </nav>
+      <figure class="cell art" aria-hidden="true">
+        <i class="st corner"></i>
+        <div class="dial" id="dial"></div>
+      </figure>
+      <div class="cell txt">
+        <span class="lbl">Portfolio · 2024–2026 · Brisbane</span>
+        <h1 class="line">Hi, I'm Helen.</h1>
+        <p class="line" aria-label="I design for climate, ecology and people."><span aria-hidden="true">I design for <span class="acc" id="typed">climate</span><span class="cur"></span></span></p>
+        <p class="sub" id="intro" aria-label="Master of Architecture student at QUT, Brisbane. I work from concept design and Revit documentation through to rendering and computational modelling, with practice experience in Brisbane and Milan."><span aria-hidden="true" id="introTxt">Master of Architecture student at QUT, Brisbane. I work from concept design and Revit documentation through to rendering and computational modelling, with practice experience in Brisbane and Milan.</span></p>
+        <div class="cta"><a class="pill" href="#work">See selected work</a><a class="pill ghost" href="#cv">Experience</a></div>
+      </div>
+      <div class="tabs r">
+        <a href="#work" class="scrolltab" aria-label="Scroll to selected works"><b>03</b><span class="ring"><svg viewBox="0 0 24 24"><path d="M12 4v15M6 13l6 6 6-6"/></svg></span><span>Scroll</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="pad" id="work" aria-labelledby="work-h">
+    <div class="head rv"><h2 id="work-h"><i class="st"></i>Selected works</h2><span class="lbl">Click a project to open its window</span></div>
+    <ol class="works" id="works"></ol>
+  </section>
+
+  <section id="all" aria-labelledby="all-h">
+    <div class="head rv" style="margin-inline:var(--g)"><h2 id="all-h"><i class="st rev"></i>All projects</h2><span class="lbl">Drag · swipe · arrows</span></div>
+    <div class="car" id="car" tabindex="0" role="region" aria-roledescription="carousel" aria-label="All projects, use arrow keys or drag"><div class="track" id="track"></div></div>
+    <div class="carnav"><button type="button" id="carprev" aria-label="Previous project">←</button><span id="carcount">01 / 01</span><button type="button" id="carnext" aria-label="Next project">→</button></div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <section class="pad" id="skills" aria-labelledby="sk-h">
+    <div class="split">
+      <div class="stick rv">
+        <span class="lbl">Skills</span>
+        <p class="big" id="sk-h">Concept<br>to <b>construction</b><br>docs.</p>
+      </div>
+      <div class="stack">
+        <div class="card2 rv"><span class="lbl"><i class="st"></i>Documentation</span><h3>Revit models and drawing sets</h3><p>Design development to DA, BA and construction documentation. Schedules, material coordination and 2D technical drafting in AutoCAD.</p><div class="tools"><span>Revit</span><span>AutoCAD</span><span>Revizto</span><span>Plannerly</span><span>dRofus</span></div></div>
+        <div class="card2 rv"><span class="lbl"><i class="st"></i>Computational</span><h3>Parametric and scripted modelling</h3><p>Rhino and Grasshopper geometry, C# RhinoCommon scripts through RhinoMCP, and export into Revit for documentation.</p><div class="tools"><span>Rhino</span><span>Grasshopper</span><span>RhinoCommon C#</span><span>RhinoMCP</span></div></div>
+        <div class="card2 rv"><span class="lbl"><i class="st"></i>Visualisation</span><h3>Renders, diagrams and boards</h3><p>Rendering and post-production for design reviews and client presentation, plus physical and 3D-printed models.</p><div class="tools"><span>D5</span><span>Lumion</span><span>Enscape</span><span>SketchUp</span><span>Photoshop</span><span>Illustrator</span><span>InDesign</span></div></div>
+        <div class="card2 rv"><span class="lbl"><i class="st"></i>Languages</span><h3>Four languages</h3><div class="tools"><span>Vietnamese · native</span><span>English · fluent</span><span>Mandarin · elementary</span><span>Italian · basic</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pad" id="cv" aria-labelledby="cv-h">
+    <div class="head rv"><h2 id="cv-h"><i class="st"></i>Experience</h2><span class="lbl">Brisbane · Milan</span></div>
+    <h3 class="cvh rv"><i class="st"></i>Work</h3>
+    <ul class="tl2">
+      <li class="rv"><i class="st"></i><span class="d">JUL 2026–NOW</span><div><b>Architecture Assistant · ISA Collective</b><span>Concept design to construction documentation on mosque, residential and commercial projects, including Waswee House and Eagle Rise Shopping Centre. BCA compliance review, 3D visualisation, animation and 3D printing.</span></div></li>
+      <li class="rv"><i class="st"></i><span class="d">MAR–JUL 2026</span><div><b>Architecture Intern · GVU Architect</b><span>Revit models and documentation for residential and commercial projects, from design development to construction documentation. Drawing sets, schedules and material coordination.</span></div></li>
+      <li class="rv"><i class="st"></i><span class="d">FEB 2026–NOW</span><div><b>Operations Assistant (casual) · Ryujin Oceania</b><span>AutoCAD technical drawings and assembly details, ISO / QHSE document control in SharePoint, marketing design. Residential and landscape design for a Collingwood Park house.</span></div></li>
+      <li class="rv"><i class="st"></i><span class="d">MAR–AUG 2025</span><div><b>Architecture Assistant · Roberto Querci Architetto, Milan</b><span>Floor plans, renders and 3D models rebuilt from plans and site photos for residential projects.</span></div></li>
+      <li class="rv"><i class="st"></i><span class="d">APR–JUL 2024</span><div><b>Student of Architecture · Brisbane City Council</b><span>Enoggera Creek Urban Renewal. "Eco Creek Crossing" bridge proposal with adaptive reuse.</span></div></li>
+    </ul>
+    <h3 class="cvh rv"><i class="st"></i>Education</h3>
+    <ul class="tl2">
+      <li class="rv"><i class="st"></i><span class="d">2026–NOW</span><div><b>Master of Architecture · QUT</b><span>Queensland University of Technology</span></div></li>
+      <li class="rv"><i class="st"></i><span class="d">2024–2025</span><div><b>Exchange year, Architectural Design · Politecnico di Milano</b><span>Building technology, sustainable building design and design for all</span></div></li>
+      <li class="rv"><i class="st"></i><span class="d">2022–2025</span><div><b>Bachelor of Design (International Architecture) · QUT</b><span>Distinction</span></div></li>
+    </ul>
+  </section>
+
+  <section class="pad" id="contact" aria-labelledby="ct-h">
+    <div class="head rv"><h2 id="ct-h"><i class="st"></i>Contact</h2><span class="lbl">Replies within a few days</span></div>
+    <div class="cwrap">
+      <div class="panel rv">
+        <div class="phead"><b><i class="st"></i>DIRECT_CHANNELS</b><span>BRISBANE</span></div>
+        <div class="chan"><i class="st"></i><div><i>EMAIL</i><span class="v" id="c-mail">nluuhue303@gmail.com</span></div><button type="button" data-copy="c-mail">COPY</button></div>
+        <a class="chan" href="https://www.linkedin.com/in/luu-hue-nguyen-39a289273/" target="_blank" rel="noopener"><i class="st"></i><div><i>LINKEDIN</i><span class="v">luu-hue-nguyen</span></div><span class="go">OPEN</span></a>
+        <a class="chan" href="#cform" id="toBoard"><i class="st"></i><div><i>MESSAGE BOARD</i><span class="v">Leave me a message</span></div><span class="go">WRITE</span></a>
+        <div class="loc"><span>LOCATION</span><span>BRISBANE, QLD</span></div>
+      </div>
+      <form class="panel form rv" id="cform" novalidate>
+        <h3 class="full">Let's get in touch</h3>
+        <label>NAME<input id="f-name" name="name" autocomplete="name" required></label>
+        <label>EMAIL<input id="f-mail" name="email" type="email" autocomplete="email" required></label>
+        <label class="full">SUBJECT<input id="f-sub" name="subject"></label>
+        <label class="full">MESSAGE<textarea id="f-msg" name="message" required></textarea></label>
+        <input type="text" name="_honey" id="f-hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+        <div class="fbot" style="justify-content:flex-end"><button class="send" type="submit" id="fsend"><i class="st"></i>SEND</button></div>
+        <p class="fstatus" id="fstatus" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <section class="thanks pad" aria-label="Thanks for stopping by"><i class="st"></i><p id="thx" aria-hidden="true"></p></section>
+  <footer class="pad lbl"><span>© 2026 Helen Nguyen (Nguyen Luu Hue)</span><i class="st"></i><span>Brisbane, QLD</span></footer>
+</main>
+
+<nav class="orb" id="orb" aria-label="Menu">
+  <div class="menu" id="menu">
+    <a href="#top"><i class="st"></i>Home<span>000</span></a>
+    <a href="#work"><i class="st"></i>Selected works<span>001</span></a>
+    <a href="#all"><i class="st"></i>All projects<span>002</span></a>
+    <a href="#skills"><i class="st"></i>Skills<span>003</span></a>
+    <a href="#cv"><i class="st"></i>Experience<span>004</span></a>
+    <a href="#contact"><i class="st"></i>Contact<span>005</span></a>
+  </div>
+  <button type="button" id="orbbtn" aria-expanded="false" aria-controls="menu">MENU</button>
+</nav>
+
+<div class="peek" id="peek" aria-hidden="true"><img alt=""></div>
+
+<dialog id="pw" aria-labelledby="pwtitle"><div class="win">
+  <div class="wbar"><span class="ttl"><i class="st"></i><span id="pwtitle">PROJECT.EXE</span></span>
+    <span class="wctl"><button type="button" id="pwmin" aria-label="Close window"><svg viewBox="0 0 12 12"><path d="M2 6h8"/></svg></button><button type="button" id="pwmax" aria-label="Maximise window"><svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8"/></svg></button><button type="button" id="pwx" aria-label="Close window"><svg viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></span></div>
+  <div class="wbody" id="pwbody"></div>
+</div></dialog>
+
+<dialog id="lb" aria-label="Enlarged image"><div class="lbframe">
+  <div class="lbwrap" id="lbwrap"><img id="lbimg" alt=""><div class="loupe" id="loupe"></div><span class="zbadge" id="zbadge">ZOOM: 250%</span></div>
+  <button type="button" class="lbarrow l" id="lbprev" aria-label="Previous image">←</button><button type="button" class="lbarrow r" id="lbnext" aria-label="Next image">→</button>
+  <div class="dc"><span id="lbcap"></span><span class="lbnav"><button type="button" id="lbzoom">ZOOM</button><button type="button" id="lbx">CLOSE_VIEW</button></span></div>
+</div></dialog>
+
+<script>
+// Projects. imgs: [src, caption, 1 = drawing (show whole sheet)]
+var P=[
+ {id:"chiral",t:"The Chiral Biome",k:"M.Arch studio · QUT · 2026",lead:"cb-pavilion-concert.jpg",
+  meta:[["Type","Butterfly sanctuary + public landscape"],["Site","Mt Coot-tha Quarry, Brisbane"],["Scenario","2050, SEQ +1.5–2 °C"],["Workflow","Rhino, Grasshopper, RhinoMCP, Revit"]],
+  txt:["By 2050, Brisbane summers reach 38–42 °C and the Richmond Birdwing, South East Queensland's most endangered butterfly, is collapsing. An invasive vine mimics the scent of its native host plant, so females lay eggs on it and the caterpillars are poisoned.",
+       "The project turns the disused quarry, which already traps cool, humid air at its floor, into a breeding ground for the butterfly and a shaded public landscape. A kinetic, lotus-inspired device (C.E.N.) shades, harvests fog and releases the native host-plant scent. Chirality, the left- and right-handed asymmetry of the butterfly and its vine, drives a bilateral plan and a helical section through four buildings: Train Station, Chrysalis Tower, Nectar Pavilion and The Camp."],
+  tags:["Biomimicry","Climate adaptation","Parametric design"],
+  imgs:[["cb-site-thesis.jpg","Site thesis: conditions, implications, response",1],["cb-scenario.jpg","Scenario adaptation: site conditions",1],["cb-site-strategy.jpg","Site strategy: the C.E.N. device",1],
+        ["cb-station-platform.jpg","Train Station arrival"],["cb-pavilion-interior.jpg","Nectar Pavilion interior"],["cb-camp-dusk.jpg","The Camp at dusk"],["cb-collage.jpg","C.E.N. canopies by the water, collage"],["cb-cen-axo2.webp","C.E.N. canopy: rainwater to cistern",1],
+        ["cb-axo-station.jpg","Axo: Train Station",1],["cb-axo-tower.jpg","Axo: Chrysalis Tower",1],["cb-axo-pavilion.jpg","Axo: Nectar Pavilion",1],["cb-axo-camp.jpg","Axo: The Camp",1],
+        ["cb-site-plan.jpg","Site plan",1],["cb-sec-station.jpg","Train Station section",1],["cb-sec-tower.jpg","Chrysalis Tower section",1],["cb-sec-pavilion.jpg","Nectar Pavilion section",1],["cb-sec-camp.jpg","The Camp section",1]]},
+ {id:"living",t:"Living² Via Pitagora",k:"Building technology studio · Politecnico di Milano · 2024/25",lead:"l2-model-3.jpg",
+  meta:[["Type","Flexible, adaptable student housing"],["Site","Via Pitagora, Milan"],["Structure","Steel frame on a 6 × 6 m grid"],["Format","Group project, 7 A1 panels + physical model"]],
+  txt:["Student housing built from interchangeable blocks on a steel structural grid. The rigid grid is softened by open-air walkways that weave between zig-zagging blocks, courtyards open to the sky, and blocks positioned so bedrooms get the best sun.",
+       "A second façade sits one balcony-depth off the building: a lightweight steel frame clad in expanded aluminium mesh panels with a diamond-shaped parametric perforation. Openings grow on the east and west, where sun is lower, to balance daylight and heat gain. Because the units are modular, the same kit produces different façades; the chosen diagonal balcony layout connects students above and below. Resolved through structure, sections and 1:20 / 1:5 details, and tested in a physical model with 3D-printed façade panels."],
+  tags:["Modular housing","Second-skin façade","Steel structure","Detailing","3D printing"],
+  imgs:[["l2-model-4.jpg","Model: perforated façade, front"],["l2-model-1.jpg","Model: façade panel opened to the frame"],["l2-model-2.jpg","Model: from above, roof and bracing"],["l2-p1.jpg","Site, form finding, typologies",1],["l2-p2.jpg","Masterplan + flexible units",1],["l2-p3.jpg","Floor plans 1:200",1],["l2-p4.jpg","Sections + south elevation",1],["l2-p5.jpg","Façade panels + structure",1],["l2-p6.jpg","Details 1:20",1],["l2-p7.jpg","Details 1:5",1]]},
+ {id:"unity",t:"Unit-Y Building",k:"Bachelor of Design · QUT · 2025",lead:"uy-street.jpg",
+  meta:[["Type","Social residential complex"],["Site","Woolloongabba, Brisbane"],["Grid","14 × 14 m → 3.5 × 3.5 m cells"],["Units","6 types, 49–122.5 m²"]],
+  txt:["Social housing near Norman Creek for residents of all ages and abilities. The unit system borrows Soma Cube logic: interlocking studio to three-bedroom units are extracted from a 3.5 m grid and recombined floor by floor. A central void carries airflow, buffers sound and connects the levels visually; sliding screens let residents control noise and ventilation."],
+  tags:["Modular housing","Accessibility","Cross-ventilation","Revit"],
+  imgs:[["uy-concept-comic.jpg","Concept: interlocking units assembled into one block",1],["uy-units.jpg","Unit types A–F, 49–122.5 m², with accessible clearances",1],["uy-sitemap.jpg","Site analysis 1:1000",1],["uy-site.jpg","Site plan",1],["uy-ground.jpg","Ground floor plan",1],["uy-plan.jpg","Typical floor plan",1],["uy-axo.jpg","Exploded floors",1],
+        ["uy-facade.jpg","Balconies and sliding screens"],["uy-interior.jpg","Apartment interior"],["uy-section.jpg","Section render through the central void"],["uy-elevations.jpg","Four elevations",1]]},
+ {id:"inter",t:"Inter-Linked Center",k:"Bachelor of Design · QUT · 2025",lead:"il-court.jpg",
+  meta:[["Type","Community centre"],["Site","Woolloongabba, Brisbane"],["Model","1:500, one 8 mm brick = 4 m"],["Levels","Ground + 3"]],
+  txt:["A LEGO-inspired modular community centre that can grow in phases, for local young people from migrant and diverse cultural backgrounds. Prefabricated modules interlock into a low-cost system, with breezeways, atria and terraces linking inside and out: hammocks, open-air libraries, graffiti walls and water fountains for hot days."],
+  tags:["Prefabrication","Community"],
+  imgs:[["il-garden.jpg","Garden court and stairs"],["il-interior.jpg","Library interior"],["il-section.jpg","Perspective section"],["il-aerial.jpg","Site aerial"],["il-modules.jpg","Indoor and outdoor modules + final form",1],["il-mod-in.jpg","Indoor modules",1],["il-mod-out.webp","Outdoor modules: hammocks, library, swings, fountain, graffiti wall",1],["il-site.jpg","Site plan 1:500",1],["il-program.jpg","Program space, exploded",1],["il-plan-ground.jpg","Ground floor plan",1],["il-plans.jpg","Level 1–3 floor plans",1],["il-elev.jpg","Elevations",1],["il-process.jpg","Process of making: LEGO model to modules",1]]},
+ {id:"facade",t:"Airfoil Façade",k:"Technical design · QUT · 2025",lead:"af-persp.jpg",
+  meta:[["Scope","South-west façade redesign"],["Site","140 Ann St, Brisbane"],["Scale","1:50 @ A1"],["Rotation","0° to 90°, five positions"]],
+  txt:["Rotating powder-coated aluminium airfoil fins cut afternoon glare while keeping classrooms bright. Blade angles were tested against the summer-solstice sun: open before 11 am, 45° from 1–3 pm, closed after 4:30 pm. Delivered as an exploded isometric, partial sections and elevations, with maintenance access to AS/NZS 1891."],
+  tags:["Façade engineering","Solar analysis","Detailing"],
+  imgs:[["af-elev.jpg","Blades in front of the classrooms"],["af-concept.jpg","Site, concept, climate and blade tests",1],["af-exploded.jpg","Exploded isometric view with legend",1],["af-details.jpg","Partial sections and elevations 1:50",1]]},
+ {id:"house",t:"Collingwood Park Residence",k:"Practice · Ryujin Oceania · 2026",lead:"cp-dusk.jpg",
+  meta:[["Type","House + landscape"],["Site","Collingwood Park, QLD"],["Site / building","1130 m² / 214 m²"],["Site cover","19%"]],
+  txt:["A house and garden with a Japanese-inspired design language: material restraint, framed views and a close link between inside and out. Delivered through site and planting plan, floor plan, elevations and internal joinery elevations with NCC 2022 notes."],
+  tags:["Residential","Landscape","Documentation"],
+  imgs:[["cp-front.jpg","Front garden"],["cp-day.jpg","Terraced garden and deck"],["cp-bath.jpg","Outdoor bath court"],["cp-landscape.jpg","Landscape and site plan",1],["cp-d1.jpg","Floor plan",1],["cp-d2.jpg","Elevations 1 and 2",1],["cp-d3.jpg","Elevations 3 and 4",1],["cp-section.jpg","Section A",1],["cp-d4.jpg","Roof plan",1],["cp-d5.jpg","Internal elevations: kitchen",1],["cp-d6.jpg","Internal elevations: walk-in pantry",1],["cp-d7.jpg","Internal elevations: bathroom and WC",1]]},
+ {id:"gardner",t:"Gardner Neuroscience Institute",k:"Integrated sustainable building design · Politecnico di Milano · 2024/25",lead:"gn-cover.jpg",leadDraw:1,
+  meta:[["Type","Technical analysis of an existing building"],["Building","UC Gardner Neuroscience Institute, Cincinnati"],["Scope","Structure, envelope, climate, services"],["Format","Group study"]],
+  txt:["A technical case study of a neurological care centre designed around patients with sensory and mobility needs. We analysed its steel structure and bracing, its orientation-based shading envelope and textile mesh second skin, daylight performance by floor, and its HVAC, fresh-air, water and electrical systems, then assessed its sustainability strategies."],
+  tags:["Building physics","Envelope","Daylight analysis","HVAC"],
+  imgs:[["gn-envelope.jpg","Envelope and shading",1],["gn-details.jpg","Façade details",1],["gn-daylight.jpg","Daylight performance",1],["gn-hvac.jpg","Fresh-air distribution",1]]},
+ {id:"dfa",t:"Design for All: Polimi Building 13",k:"Multicriteria analysis · Politecnico di Milano · 2025",lead:"dfa-hall.jpg",
+  meta:[["Type","Inclusive design evaluation"],["Focus","Common areas of a campus building"],["Method","Multicriteria analysis (Socrates)"],["Format","Group report"]],
+  txt:["An evaluation of how inclusive a university building's common areas are. A value tree split the goal into atmosphere, space configuration and wayfinding. Three alternatives (private workplaces, a wayfinding system and a welcoming atmosphere) were scored in neutral and stakeholder-weighted scenarios, informed by a student survey. The welcoming atmosphere scored highest: warmer materials, better lighting and clear zones for rest, meeting and lunch."],
+  tags:["Accessibility","Evaluation","User research"],
+  imgs:[["dfa-before-entry.jpg","Before: entrance hall today (after: lead render above)"],
+        ["dfa-before-hall.jpg","Before: common study area today"],["dfa-chalk.webp","After: welcoming atmosphere, chalk walls"],
+        ["dfa-before-sign.jpg","Before: current wayfinding signage"],["dfa-wayfinding.jpg","After: wayfinding system"],
+        ["dfa-pods.jpg","After: private workplaces, study pods"],["dfa-alt.jpg","Alternative 1: private workplaces",1],["dfa-alt2.jpg","Alternatives 2 and 3",1],["dfa-results.jpg","Scenario results",1]]},
+ {id:"envhouse",t:"Environmental House",k:"House design · Environmental design",lead:"eh-front.jpg",
+  meta:[["Type","Climate-responsive duplex"],["Site","Dubbo, NSW"],["Climate","Zone 4, warm temperate"],["Materials","Double brick, timber, light concrete tiles, low-E glazing"]],
+  txt:["A single-storey duplex shaped around Dubbo's climate. The L-shaped plan promotes cross-ventilation and separates zones: north-facing living rooms for winter sun, south-facing bedrooms, east-facing kitchens for soft morning light, and west-side service spaces buffering the afternoon heat. A shared courtyard water feature cools the air by evaporation.",
+       "Double brick walls give thermal mass, light-coloured concrete roof tiles reduce heat gain, and low-E glazing admits winter sun while holding internal heat. The design was tested against Dubbo's sun path and radiation range: high summer gain around 300 W/m² to shade against, and 150–200 W/m² in winter to capture."],
+  tags:["Residential","Passive design","Rendering"],
+  imgs:[["eh-street.jpg","Street view"],["eh-plan.jpg","Floor plan",1],["eh-interior.jpg","Kitchen and living"],["eh-section.jpg","Perspective section"],["eh-elev-a.jpg","Elevations 1 and 2",1],["eh-elev-b.jpg","Elevations 3 and 4",1],["eh-site.jpg","Site plan and sun path",1]]}
+];
+// In progress: listed, not openable yet
+var SOON=[{id:"office",t:"Building Science: Office",k:"Coming soon"},{id:"songline",t:"Songline Apartment",k:"Coming soon"},{id:"dream",t:"Library of the Dream",k:"Coming soon"}];
+
+var $=function(s,r){return (r||document).querySelector(s)},esc=function(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")};
+var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+var ST='<i class="st"></i>';
+
+// ---------- works list ----------
+// Selected works shows a curated subset; every project (these included) stays in the All projects carousel
+var NOT_SELECTED={gardner:1,dfa:1,envhouse:1},SEL=P.filter(function(p){return !NOT_SELECTED[p.id]});
+$("#works").innerHTML=SEL.map(function(p,i){
+  return '<li class="work rv" id="'+p.id+'"><button type="button" data-open="'+p.id+'" aria-haspopup="dialog"><span class="no">'+String(i+1).padStart(3,"0")+'</span><span class="t">'+esc(p.t)+ST+'</span><span class="k">'+esc(p.k)+'</span></button></li>'}).join("")+
+ SOON.map(function(p,i){return '<li class="work soon rv"><button type="button" aria-disabled="true"><span class="no">'+String(SEL.length+i+1).padStart(3,"0")+'</span><span class="t">'+esc(p.t)+ST+'</span><span class="k"><span class="soonchip">COMING SOON</span></span></button></li>'}).join("");
+
+// ---------- project window ----------
+var pw=$("#pw"),pwbody=$("#pwbody"),current=null;
+function openProject(id){
+  var i=P.findIndex(function(q){return q.id===id});if(i<0)return;var p=P[i];current=id;
+  var imgs=p.imgs.filter(function(m){return m[0]!==p.lead});
+  $("#pwtitle").textContent="PROJECT_"+String(i+1).padStart(2,"0")+".EXE  //  "+p.t.toUpperCase();
+  pwbody.innerHTML='<span class="lbl">'+esc(p.k)+'</span><h3>'+esc(p.t)+'</h3>'+
+   '<div class="wlead" data-full="'+p.lead+'" data-cap="'+esc(p.t)+'"><img src="'+p.lead+'" alt="'+esc(p.t)+', lead image"'+(p.leadDraw?' style="background:#fff"':'')+'></div>'+
+   '<div class="dtext"><div><dl class="meta">'+p.meta.map(function(m){return '<dt>'+m[0]+'</dt><dd>'+esc(m[1])+'</dd>'}).join("")+'</dl><div class="chips">'+p.tags.map(function(t){return '<span>'+esc(t)+'</span>'}).join("")+'</div></div>'+
+   '<div><p>'+esc(p.txt[0])+'</p>'+(p.txt.length>1?'<details><summary>'+ST+'Read more</summary>'+p.txt.slice(1).map(function(t){return '<p>'+esc(t)+'</p>'}).join("")+'</details>':'')+'</div></div>'+
+   '<div class="nodes">'+ST+'DATA NODES ('+imgs.length+')</div>'+
+   '<div class="thumbs">'+imgs.map(function(m,k){return '<button type="button" class="'+(m[2]?'draw':'')+'" data-full="'+m[0]+'" data-cap="'+esc(m[1])+'"><img loading="lazy" src="'+m[0]+'" alt="'+esc(p.t+", "+m[1])+'"><div class="cap"><span>'+esc(m[1])+'</span><b>NODE_'+String(k+1).padStart(2,"0")+'</b></div></button>'}).join("")+'</div>';
+  pwbody.scrollTop=0;
+  document.querySelectorAll(".work").forEach(function(w){w.classList.toggle("active",w.id===id)});
+  if(!pw.open){try{pw.showModal()}catch(e){pw.setAttribute("open","")}}
+}
+function closeProject(){pw.close()}
+pw.addEventListener("close",function(){pw.classList.remove("max");document.querySelectorAll(".work.active").forEach(function(w){w.classList.remove("active")})});
+$("#pwx").addEventListener("click",closeProject);$("#pwmin").addEventListener("click",closeProject);
+$("#pwmax").addEventListener("click",function(){pw.classList.toggle("max")});
+pw.addEventListener("click",function(e){if(e.target===pw)closeProject()});
+document.addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(b)openProject(b.dataset.open)});
+
+// ---------- carousel ----------
+(function(){
+  var car=$("#car"),track=$("#track"),dots=$("#dots"),count=$("#carcount"),idx=0;
+  var items=P.map(function(p){return p}).concat(SOON.map(function(s){return {id:s.id,t:s.t,k:"In progress · 2026",soon:1}})),n=items.length;
+  track.innerHTML=items.map(function(p,i){var yr=p.k.split("·").pop().trim(),cat=p.k.split("·")[0].trim();
+    return '<button type="button" class="card" data-i="'+i+'" aria-label="'+esc(p.t)+(p.soon?", coming soon":"")+'"><div class="ph2">'+(p.soon?'<div class="lock">'+ST+'COMING SOON</div>':'<img loading="lazy" src="'+p.lead+'" alt="" draggable="false">')+'<span class="badge">'+String(i+1).padStart(2,"0")+'</span></div><div class="ci"><b>'+esc(p.t)+'</b><span><i style="font-style:normal">'+esc(yr)+' // '+esc(cat)+'</i><em>'+(p.soon?"SOON":"VIEW ↗")+'</em></span></div></button>'}).join("");
+  dots.innerHTML=items.map(function(p,i){return '<button type="button" aria-label="Go to '+esc(p.t)+'" data-i="'+i+'"></button>'}).join("");
+  var cards=track.children,dotEls=dots.querySelectorAll("button");var disc=document.createElement("span");disc.className="disc";disc.setAttribute("aria-hidden","true");dots.prepend(disc);
+  function place(extra){var c=cards[idx];track.style.transform="translateX("+(car.clientWidth/2-(c.offsetLeft+c.offsetWidth/2)+(extra||0))+"px)"}
+  function go(i){idx=Math.max(0,Math.min(n-1,i));Array.prototype.forEach.call(cards,function(c,k){c.classList.toggle("on",k===idx)});Array.prototype.forEach.call(dotEls,function(d,k){d.classList.toggle("on",k===idx);d.classList.toggle("past",k<idx)});var cd=dotEls[idx];disc.style.translate=(cd.offsetLeft+cd.offsetWidth/2)+"px 0";count.textContent=String(idx+1).padStart(2,"0")+" / "+String(n).padStart(2,"0");place()}
+  function activate(i){if(!items[i].soon)openProject(items[i].id)}
+  $("#carprev").addEventListener("click",function(){go(idx-1)});$("#carnext").addEventListener("click",function(){go(idx+1)});
+  dots.addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(b)go(+b.dataset.i)});
+  car.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){go(idx+1);e.preventDefault()}if(e.key==="ArrowLeft"){go(idx-1);e.preventDefault()}if(e.key==="Enter")activate(idx)});
+  var sx=null,dx=0,moved=false;
+  car.addEventListener("pointerdown",function(e){if(e.button>0)return;sx=e.clientX;dx=0;moved=false});
+  addEventListener("pointermove",function(e){if(sx===null)return;dx=e.clientX-sx;if(!moved&&Math.abs(dx)>6){moved=true;car.classList.add("drag")}if(moved)place(dx)});
+  function end(){if(sx===null)return;car.classList.remove("drag");if(moved){var cw=cards[0].offsetWidth,w=cw*.3;if(dx<-w)go(idx+Math.max(1,Math.round(-dx/cw)));else if(dx>w)go(idx-Math.max(1,Math.round(dx/cw)));else place()}sx=null}
+  addEventListener("pointerup",end);addEventListener("pointercancel",end);
+  car.addEventListener("click",function(e){if(moved){moved=false;e.preventDefault();return}var c=e.target.closest(".card");if(!c)return;var i=+c.dataset.i;if(i===idx)activate(i);else go(i)});
+  var lock=0;car.addEventListener("wheel",function(e){var d=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:(e.shiftKey?e.deltaY:0);if(!d)return;e.preventDefault();var t=Date.now();if(t-lock<450)return;lock=t;go(idx+(d>0?1:-1))},{passive:false});
+  addEventListener("resize",function(){place()});
+  go(0);
+})();
+
+// ---------- hover preview over project rows ----------
+(function(){var pk=$("#peek"),pim=$("img",pk),x=0,y=0,tx=0,ty=0,raf=0;
+  if(!matchMedia("(hover:hover)").matches)return;
+  function loop(){x+=(tx-x)*.18;y+=(ty-y)*.18;pk.style.transform="translate("+(x+24)+"px,"+(y-pk.offsetHeight/2)+"px) rotate("+((tx-x)*.03)+"deg)";raf=requestAnimationFrame(loop)}
+  document.querySelectorAll(".work>button[data-open]").forEach(function(b){var p=P.find(function(q){return q.id===b.dataset.open});
+    b.addEventListener("mouseenter",function(e){pim.src=p.lead;tx=x=e.clientX;ty=y=e.clientY;pk.classList.add("on");if(!raf)loop()});
+    b.addEventListener("mousemove",function(e){tx=e.clientX;ty=e.clientY});
+    b.addEventListener("mouseleave",function(){pk.classList.remove("on");cancelAnimationFrame(raf);raf=0});
+    b.addEventListener("click",function(){pk.classList.remove("on")});
+  });
+})();
+
+// ---------- frame rails: stars + dashes; right rail lights up as progress ----------
+// Pattern set: the star, an eight-petal rosette, and a dot-diamond dash (horizontal + vertical)
+var PET=[0,45,90,135,180,225,270,315];
+var ROS=function(rev){return '<svg class="ros'+(rev?' rev':'')+'" width="30" height="30" viewBox="0 0 40 40">'+PET.map(function(a){return '<g transform="rotate('+a+' 20 20)"><path d="M20 20C17 14 17 7 20 2c3 5 3 12 0 18z"/><circle cx="20" cy="9" r="1.5" fill="var(--bg)"/></g>'}).join("")+'<circle cx="20" cy="20" r="3"/></svg>'};
+var HD='<svg width="56" height="12" viewBox="0 0 56 12"><circle cx="2" cy="6" r="1.2"/><circle cx="8" cy="6" r=".9"/><path d="M17 1.5l4.5 4.5-4.5 4.5-4.5-4.5zM28 2.5l3.5 3.5-3.5 3.5-3.5-3.5zM39 1.5l4.5 4.5-4.5 4.5-4.5-4.5z"/><circle cx="48" cy="6" r=".9"/><circle cx="54" cy="6" r="1.2"/></svg>';
+var VD='<svg width="12" height="56" viewBox="0 0 12 56"><circle cx="6" cy="2" r="1.2"/><circle cx="6" cy="8" r=".9"/><path d="M1.5 17l4.5-4.5 4.5 4.5-4.5 4.5zM2.5 28l3.5-3.5 3.5 3.5-3.5 3.5zM1.5 39l4.5-4.5 4.5 4.5-4.5 4.5z"/><circle cx="6" cy="48" r=".9"/><circle cx="6" cy="54" r="1.2"/></svg>';
+$("#ornT").innerHTML=[ROS(),HD,HD,ST,HD,HD,ROS(1),HD,HD,ST,HD,HD,ROS()].join("");
+var side=[ST,VD,VD,ROS(),VD,VD,ST,VD,VD,ROS(1),VD,VD,ST].map(function(s){return '<div'+(s===VD?' class="v"':'')+'>'+s+'</div>'}).join("");
+$("#ornL").innerHTML=side;$("#ornR").innerHTML=side;
+var rItems=document.querySelectorAll("#ornL>*,#ornR>*"),railN=document.querySelectorAll("#ornR>*").length;
+
+// ---------- hero drawings: engraved-style ornaments built from two primitives ----------
+// cusp: a concave four-point spike (out = outward length, inn = inward length, w = half width)
+function cusp(x,y,rot,out,inn,w){return '<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')" d="M0 '+(-out)+'Q0 0 '+w+' 0Q0 0 0 '+inn+'Q0 0 '+(-w)+' 0Q0 0 0 '+(-out)+'z"/>'}
+// lens: a filled ellipse with an optional ground-coloured eye
+function lens(x,y,rot,rx,ry,hole){return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')"><ellipse rx="'+rx+'" ry="'+ry+'"/>'+(hole?'<ellipse rx="'+(rx*.45)+'" ry="'+(ry*.5)+'" fill="var(--bg)"/>':'')+'</g>'}
+function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)]}
+(function(){
+  // fig 1 — orbit: rings, point-stars on the rim, orbiting dots and crescents, a ringed star at the core
+  var c=300,s="";
+  for(var r=40;r<=280;r+=30)s+='<circle cx="300" cy="300" r="'+r+'" fill="none" stroke="currentColor" stroke-width=".6" opacity="'+(r===280?.9:.45)+'"/>';
+  s+='<path d="M20 300H580M300 20V580" stroke="currentColor" stroke-width=".4" opacity=".35"/>';
+  for(var k=0;k<8;k++){var a=k*Math.PI/4,x=c+280*Math.cos(a),y=c+280*Math.sin(a);s+='<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')" d="M0-9l2.2 6.8L9 0l-6.8 2.2L0 9l-2.2-6.8L-9 0l6.8-2.2z"/>'}
+  var dots="",seed=[[70,.4],[100,2.1],[130,3.6],[160,1.2],[190,4.4],[220,5.3],[250,.9],[250,1.05],[160,5.9],[130,3.75]];
+  seed.forEach(function(d,i){var x=c+d[0]*Math.cos(d[1]),y=c+d[0]*Math.sin(d[1]);dots+=i===3||i===6?'<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')" d="M-7 0a7 7 0 1 0 7-7 5 5 0 1 1-7 7z"/>':'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="7"/>'});
+  var core='<g class="core"><circle cx="300" cy="300" r="22" fill="none" stroke="currentColor" stroke-width=".8"/><path transform="translate(300 300)" d="M0-16L3-5 11-11 5-3 16 0 5 3 11 11 3 5 0 16-3 5-11 11-5 3-16 0-5-3-11-11-3-5z"/></g>';
+  $("#dial").innerHTML='<svg viewBox="0 0 600 600" fill="currentColor"><g class="spin">'+s+'</g><g class="spin2">'+dots+'</g>'+core+'</svg>';
+})();
+
+// Every star turns with scroll (one CSS variable drives them all)
+// updates run straight from the scroll event (cheap), so nothing stalls if the page loaded in a background tab
+var root=document.documentElement;
+function onScroll(){
+  var max=root.scrollHeight-innerHeight,prog=max>0?Math.min(1,scrollY/max):0;
+  rItems.forEach(function(el,i){var k=i%railN;el.classList.toggle("on",k/(railN-1)<=prog+0.001)});
+  root.style.setProperty("--prog",prog.toFixed(4));
+  root.style.setProperty("--sr",(scrollY*0.25).toFixed(1));
+}
+addEventListener("resize",onScroll);
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+// ---------- reveal ----------
+if(!reduce&&"IntersectionObserver" in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.remove("pre");io.unobserve(e.target)}})},{rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll(".rv").forEach(function(el){if(el.getBoundingClientRect().top>innerHeight){el.classList.add("pre");io.observe(el)}});
+}
+
+// ---------- intro paragraph types out once on load (full text keeps its space so nothing jumps) ----------
+(function(){var p=$("#intro"),src=$("#introTxt"),txt=src.textContent;
+  p.style.display="grid";
+  var ghost=document.createElement("span");ghost.textContent=txt;ghost.style.cssText="grid-area:1/1;visibility:hidden";ghost.setAttribute("aria-hidden","true");
+  src.style.gridArea="1/1";src.textContent="";p.insertBefore(ghost,src);
+  var k=0;(function t(){k=Math.min(txt.length,k+2);src.innerHTML=esc(txt.slice(0,k))+(k<txt.length?'<span class="cur" style="height:1em"></span>':"");if(k<txt.length)setTimeout(t,18)})();
+})();
+
+// ---------- typed hero word ----------
+(function(){var el=$("#typed"),w=["climate","ecology","people","the city"],i=0,c=w[0].length,del=true;
+  (function t(){var s=w[i];if(del){el.textContent=s.slice(0,--c);if(!c){del=false;i=(i+1)%w.length}setTimeout(t,45)}else{el.textContent=w[i].slice(0,++c);if(c===w[i].length){del=true;setTimeout(t,2200)}else setTimeout(t,90)}})();
+})();
+
+// ---------- "Thanks for stopping by." types out when reached ----------
+// types out every time it comes into view; clears when it leaves so it types again next visit
+(function(){var el=$("#thx"),txt="Thanks for stopping by.",timer=0;
+  function paint(k){el.innerHTML=esc(txt.slice(0,k))+'<span class="cur"></span>'}
+  function run(){clearTimeout(timer);var k=0;(function t(){paint(++k);if(k<txt.length)timer=setTimeout(t,75)})()}
+  if(!("IntersectionObserver" in window))return paint(txt.length);
+  paint(0);
+  new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)run();else{clearTimeout(timer);paint(0)}})},{threshold:.5}).observe(el);
+})();
+
+// ---------- theme ----------
+(function(){var b=$("#theme");
+  function cur(){return root.dataset.theme||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark")}
+  function sync(){var n=cur()==="dark"?"light":"dark";b.textContent=n==="light"?"Light":"Dark";b.setAttribute("aria-label","Switch to "+n+" theme")}
+  try{var s=localStorage.getItem("hn-theme");if(s)root.dataset.theme=s}catch(e){}
+  sync();b.addEventListener("click",function(){var n=cur()==="dark"?"light":"dark";root.dataset.theme=n;try{localStorage.setItem("hn-theme",n)}catch(e){}sync()});
+})();
+
+// ---------- menu orb ----------
+(function(){var o=$("#orb"),b=$("#orbbtn");function set(v){o.classList.toggle("open",v);b.setAttribute("aria-expanded",v);b.textContent=v?"CLOSE":"MENU"}
+  b.addEventListener("click",function(){set(!o.classList.contains("open"))});
+  document.querySelectorAll("#menu a").forEach(function(a){a.addEventListener("click",function(){set(false)})});
+  addEventListener("keydown",function(e){if(e.key==="Escape")set(false)});
+})();
+
+// ---------- lightbox: browses the open project's images; lens on hover, zoom on click ----------
+(function(){var d=$("#lb"),im=$("#lbimg"),cap=$("#lbcap"),wrap=$("#lbwrap"),lp=$("#loupe"),zb=$("#zbadge"),set=[],idx=0,Z=2.5;
+  function lens(on){lp.classList.toggle("on",on);zb.classList.toggle("on",on)}
+  function show(i){idx=(i+set.length)%set.length;var t=set[idx];wrap.classList.remove("zoom");$("#lbzoom").textContent="ZOOM";lens(false);im.src=t.dataset.full;im.alt=t.dataset.cap||"";
+    cap.innerHTML=ST+"IMG_"+String(idx+1).padStart(2,"0")+"/"+String(set.length).padStart(2,"0")+" // "+esc(t.dataset.cap||"")}
+  function zoom(){var z=wrap.classList.toggle("zoom");lens(false);$("#lbzoom").textContent=z?"FIT":"ZOOM";if(z){wrap.scrollLeft=(wrap.scrollWidth-wrap.clientWidth)/2;wrap.scrollTop=(wrap.scrollHeight-wrap.clientHeight)/2}}
+  document.addEventListener("click",function(e){var t=e.target.closest("[data-full]");if(!t||d.contains(t))return;
+    set=pw.contains(t)?Array.prototype.slice.call(pwbody.querySelectorAll("[data-full]")):[t];
+    show(Math.max(0,set.indexOf(t)));try{d.showModal()}catch(_){d.setAttribute("open","")}});
+  im.addEventListener("mousemove",function(e){if(wrap.classList.contains("zoom"))return lens(false);
+    var r=im.getBoundingClientRect(),wr=wrap.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+    lp.style.backgroundImage='url("'+im.src+'")';lp.style.backgroundSize=(r.width*Z)+"px "+(r.height*Z)+"px";
+    lp.style.backgroundPosition=(-x*Z+110)+"px "+(-y*Z+110)+"px";lp.style.left=(e.clientX-wr.left+wrap.scrollLeft-110)+"px";lp.style.top=(e.clientY-wr.top+wrap.scrollTop-110)+"px";lens(true)});
+  im.addEventListener("mouseleave",function(){lens(false)});
+  $("#lbprev").addEventListener("click",function(){show(idx-1)});$("#lbnext").addEventListener("click",function(){show(idx+1)});
+  $("#lbzoom").addEventListener("click",zoom);im.addEventListener("click",zoom);
+  d.addEventListener("keydown",function(e){if(e.key==="ArrowRight")show(idx+1);if(e.key==="ArrowLeft")show(idx-1)});
+  $("#lbx").addEventListener("click",function(){d.close()});d.addEventListener("click",function(e){if(e.target===d)d.close()});
+  var sx=null;wrap.addEventListener("touchstart",function(e){sx=wrap.classList.contains("zoom")?null:e.touches[0].clientX},{passive:true});
+  wrap.addEventListener("touchend",function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)show(idx+(dx<0?1:-1));sx=null});
+  document.querySelectorAll("img").forEach(function(){});
+})();
+
+// ---------- copy buttons ----------
+function copyText(text,btn,label){
+  function sel(){btn.textContent="SELECT + COPY"}
+  try{navigator.clipboard.writeText(text).then(function(){btn.textContent="COPIED";setTimeout(function(){btn.textContent=label},1500)},sel)}catch(e){sel()}
+}
+document.querySelectorAll("[data-copy]").forEach(function(b){b.addEventListener("click",function(){copyText(document.getElementById(b.dataset.copy).textContent,b,b.textContent)})});
+
+// message-board card: bring the form into view and start the visitor typing
+$("#toBoard").addEventListener("click",function(e){e.preventDefault();$("#cform").scrollIntoView({behavior:reduce?"auto":"smooth",block:"center"});setTimeout(function(){$("#f-name").focus({preventScroll:true})},reduce?0:500)});
+
+// ---------- contact form: delivered to the inbox via FormSubmit; mail-app fallback where the host blocks it ----------
+(function(){var f=$("#cform"),st=$("#fstatus"),btn=$("#fsend"),TO="nluuhue303@gmail.com",busy=false;
+  function fallback(subject,body){
+    var a=document.createElement("a");a.href="mailto:"+TO+"?subject="+encodeURIComponent(subject)+"&body="+encodeURIComponent(body);document.body.appendChild(a);a.click();a.remove();
+    st.innerHTML="This preview can't deliver messages directly, so your email app should open with it ready. If it doesn't, copy it and send it to "+TO+'.<button type="button" id="fcopy">COPY MESSAGE</button>';
+    $("#fcopy").addEventListener("click",function(){copyText("To: "+TO+"\nSubject: "+subject+"\n\n"+body,this,"COPY MESSAGE")});
+  }
+  f.addEventListener("submit",function(e){e.preventDefault();if(busy)return;
+    if($("#f-hp").value)return; // bots fill the hidden field
+    var name=$("#f-name").value.trim(),mail=$("#f-mail").value.trim(),sub=$("#f-sub").value.trim(),msg=$("#f-msg").value.trim();
+    if(!name||!mail||!msg){st.textContent="Add your name, email and a message first.";return}
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){st.textContent="That email address doesn't look right. Check it and try again.";return}
+    var subject=sub||("Portfolio enquiry from "+name),body=msg+"\n\n"+name+"\n"+mail;
+    busy=true;btn.lastChild.textContent="SENDING";st.textContent="";
+    fetch("https://formsubmit.co/ajax/"+TO,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify({name:name,email:mail,_subject:subject,message:msg,_template:"table",_captcha:"false"})})
+    .then(function(r){return r.json().then(function(j){if(!r.ok||String(j.success)!=="true")throw new Error(j.message||"failed")})})
+    .then(function(){f.reset();st.textContent="Sent. Thanks, "+name+". I'll reply to "+mail+"."})
+    .catch(function(){fallback(subject,body)})
+    .then(function(){busy=false;btn.lastChild.textContent="SEND"});
+  });
+})();
+</script>
+
+</html>
