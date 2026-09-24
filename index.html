@@ -226,7 +226,9 @@ h2 .st{font-size:.42em;color:var(--acc)}
 .card.on .ci em{opacity:1}
 .carnav{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:22px}
 .carnav button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);font-size:18px;transition:border-color .3s,background .3s,scale .3s var(--ease)}
-.carnav button:hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,transparent);scale:1.08}
+@media (hover:hover){.carnav button:hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,transparent);scale:1.08}}
+.carnav button:active{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 22%,transparent);scale:.92}
+.carnav button::after{content:"";position:absolute;inset:-10px}.carnav button{position:relative}
 .carnav span{font:400 12px var(--pix);letter-spacing:.12em;color:var(--mute);min-width:84px;text-align:center}
 /* moon phases: small, quiet. passed = "(", ahead = ")", current = full.
    A solid disc slides behind the row to the chosen project, eclipsing it. */
@@ -610,7 +612,13 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-open
   function place(extra){var c=cards[idx];track.style.transform="translateX("+(car.clientWidth/2-(c.offsetLeft+c.offsetWidth/2)+(extra||0))+"px)"}
   function go(i){idx=Math.max(0,Math.min(n-1,i));Array.prototype.forEach.call(cards,function(c,k){c.classList.toggle("on",k===idx)});Array.prototype.forEach.call(dotEls,function(d,k){d.classList.toggle("on",k===idx);d.classList.toggle("past",k<idx)});var cd=dotEls[idx];disc.style.translate=(cd.offsetLeft+cd.offsetWidth/2)+"px 0";count.textContent=String(idx+1).padStart(2,"0")+" / "+String(n).padStart(2,"0");place()}
   function activate(i){if(!items[i].soon)openProject(items[i].id)}
-  $("#carprev").addEventListener("click",function(){go(idx-1)});$("#carnext").addEventListener("click",function(){go(idx+1)});
+  // arrows: on touch, act on finger-up (mobile browsers can swallow or delay the click); mouse/keyboard keep using click
+  function tap(el,fn){var p=null,x=0,y=0,t=0;
+    el.addEventListener("pointerdown",function(e){if(e.pointerType==="mouse")return;p=e.pointerId;x=e.clientX;y=e.clientY});
+    el.addEventListener("pointerup",function(e){if(e.pointerId!==p)return;p=null;if(Math.abs(e.clientX-x)<24&&Math.abs(e.clientY-y)<24){t=Date.now();fn()}});
+    el.addEventListener("pointercancel",function(){p=null});
+    el.addEventListener("click",function(){if(Date.now()-t>700)fn()})}
+  tap($("#carprev"),function(){go(idx-1)});tap($("#carnext"),function(){go(idx+1)});
   dots.addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(b)go(+b.dataset.i)});
   car.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){go(idx+1);e.preventDefault()}if(e.key==="ArrowLeft"){go(idx-1);e.preventDefault()}if(e.key==="Enter")activate(idx)});
   var sx=null,dx=0,moved=false;
@@ -781,5 +789,4 @@ $("#toBoard").addEventListener("click",function(e){e.preventDefault();$("#cform"
   });
 })();
 </script>
-
 </html>
