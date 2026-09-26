@@ -384,10 +384,10 @@ html.gate{overflow:hidden}
 #gate .gstars{position:absolute;left:-18%;right:-18%;top:4%;bottom:4%;display:grid;grid-template-columns:repeat(13,1fr);grid-template-rows:repeat(10,1fr);place-items:center;color:#8d99a6;-webkit-mask:radial-gradient(closest-side,transparent 62%,#000 80%);mask:radial-gradient(closest-side,transparent 62%,#000 80%)}
 #gate .gstars i{font:700 clamp(11px,2vmin,18px)/1 var(--pix);font-style:normal;opacity:0;animation:gTw var(--d,7s) ease-in-out var(--w,0s) infinite}
 @keyframes gTw{0%,100%{opacity:0}35%,65%{opacity:.34}}
-#gate .gfig{position:absolute;inset:0;color:#8d99a6;opacity:.66;filter:drop-shadow(1px 1.5px 0 rgba(0,0,0,.7)) drop-shadow(-.6px -.6px 0 rgba(255,255,255,.07))}
+#gate .gfig{position:absolute;top:0;bottom:0;left:-30%;right:-30%;color:#8d99a6;opacity:.66;filter:drop-shadow(1px 1.5px 0 rgba(0,0,0,.7)) drop-shadow(-.6px -.6px 0 rgba(255,255,255,.07))}
 #gate .gfig svg{width:100%;height:100%;display:block;overflow:visible}
 #gate.leaving .gstage{scale:1.06;opacity:0}
-@media (max-width:640px){#gate{--D:min(84vmin,600px)}#gate .gstars{left:-8%;right:-8%}}
+@media (max-width:640px){#gate{--D:min(84vmin,600px)}#gate .gstars{left:-8%;right:-8%}#gate .gfig{left:-6%;right:-6%}}
 #gate .gframe{position:absolute;inset:clamp(12px,2.6vmin,30px);color:#4f8dff;opacity:.42;font-size:18px;animation:gIn 1.8s var(--ease) .3s both;transition:opacity .5s}
 #gate .gframe>div{position:absolute;display:flex;justify-content:space-between;align-items:center}
 #gate .gframe .ft,#gate .gframe .fb2{left:0;right:0}#gate .gframe .ft{top:0}#gate .gframe .fb2{bottom:0}
@@ -754,30 +754,41 @@ var rItems=document.querySelectorAll("#ornL>*,#ornR>*"),railN=document.querySele
 function cusp(x,y,rot,out,inn,w){return '<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')" d="M0 '+(-out)+'Q0 0 '+w+' 0Q0 0 0 '+inn+'Q0 0 '+(-w)+' 0Q0 0 0 '+(-out)+'z"/>'}
 // lens: a filled ellipse with an optional ground-coloured eye
 function lens(x,y,rot,rx,ry,hole){return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')"><ellipse rx="'+rx+'" ry="'+ry+'"/>'+(hole?'<ellipse rx="'+(rx*.45)+'" ry="'+(ry*.5)+'" fill="var(--bg)"/>':'')+'</g>'}
-// welcome gate: a courtyard plan (after the Chateau de Coucy typology behind Technopark) drafts itself on a loop
+// welcome gate: a simplified sketch of the aquaponic farm plan (octagonal pond, gathering space, bridges, curved stores, farm block with tanks)
+// drafts itself on a loop: construction lines, then walls, then details, then the solids fill in as poche. No text or dimensions.
 function draft(){
-  var L=function(d,c,sw,t0,t1){return '<path class="dl" d="'+d+'" pathLength="1" fill="none" stroke="currentColor" stroke-width="'+sw+'" data-a="'+t0+'" data-b="'+t1+'"'+(c?' opacity="'+c+'"':'')+'/>'};
-  var T=function(x,y,t,t0,sz){return '<text class="df" x="'+x+'" y="'+y+'" data-a="'+t0+'" font-size="'+(sz||10)+'" text-anchor="middle" dominant-baseline="central">'+t+'</text>'};
-  var g="",i;
-  // 1. structural grid with axis bubbles
-  [170,250,330,410].forEach(function(x,k){g+=L("M"+x+" 122V478",.45,.5,.02+k*.02,.14+k*.02)+L("M"+x+" 113a9 9 0 1 0 .01 0",.6,.6,.08+k*.02,.16+k*.02)+T(x,104,"ABCD"[k],.16)});
-  [180,260,340,420].forEach(function(y,k){g+=L("M122 "+y+"H478",.45,.5,.04+k*.02,.16+k*.02)+L("M113 "+(y-9)+"a9 9 0 1 0 .01 0",.6,.6,.1+k*.02,.18+k*.02)+T(104,y,k+1,.18)});
-  // 2. walls: irregular trapezoid, courtyard, corner towers, keep
-  g+=L("M172 192L428 172L452 408L152 394Z","",2.4,.18,.36)+L("M206 226L396 212L413 374L190 362Z","",1.4,.26,.42);
-  [[172,192],[428,172],[452,408],[152,394]].forEach(function(p,k){g+=L("M"+p[0]+" "+(p[1]-27)+"a27 27 0 1 0 .01 0","",2,.34+k*.025,.46+k*.025)+'<circle class="dp" cx="'+p[0]+'" cy="'+p[1]+'" r="27" data-a=".6"/>'});
-  g+=L("M300 256a44 44 0 1 0 .01 0","",2,.42,.52)+L("M300 270a30 30 0 1 0 .01 0","",1,.46,.55)+'<circle class="dp" cx="300" cy="300" r="30" data-a=".62"/>';
-  // 3. openings: door swings and window ticks
-  g+=L("M286 401V379A22 22 0 0 1 308 401",.9,.8,.52,.58)+L("M209 266H231A22 22 0 0 1 209 288",.9,.8,.54,.6)+L("M398 250H376A22 22 0 0 0 398 272",.9,.8,.56,.62);
-  for(i=0;i<4;i++){var x=225+i*52,y=190-i*4.1;g+=L("M"+x+" "+(y-5)+"v10M"+(x+6)+" "+(y-5.4)+"v10",.8,.8,.56+i*.012,.6+i*.012)}
-  // 4. dimensions, section cut, north point
-  g+=L("M172 142H428M172 134V150M428 134V150M166 148L178 136M422 148L434 136",.8,.7,.6,.68)+T(300,132,"92.0",.68,11);
-  g+=L("M112 192V394M104 192H120M104 394H120M106 198L118 186M106 400L118 388",.8,.7,.62,.7)+T(96,293,"50.0",.7,11);
-  g+=L("M132 300H468",.7,.6,.64,.72)+'<path class="dp" d="M132 300l14-8v16zM468 300l-14-8v16z" data-a=".72"/>'+T(132,318,"A",.73,11)+T(468,318,"A",.73,11);
-  g+=L("M480 474a14 14 0 1 0 .01 0",.8,.7,.66,.72)+'<path class="dp" d="M480 462l6 22-6-5-6 5z" data-a=".72"/>'+T(480,452,"N",.74,10);
+  var L=function(d,op,sw,t0,t1){return '<path class="dl" d="'+d+'" pathLength="1" fill="none" stroke="currentColor" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round" data-a="'+t0+'" data-b="'+t1+'"'+(op?' opacity="'+op+'"':'')+'/>'};
+  var F=function(d,t0,ev){return '<path class="dp" d="'+d+'" data-a="'+t0+'"'+(ev?' fill-rule="evenodd"':'')+'/>'};
+  var cx=330,cy=290,g="",i,k;
+  function oct(R){var s="";for(k=0;k<8;k++){var an=(22.5+45*k)*Math.PI/180;s+=(k?"L":"M")+(cx+R*Math.cos(an)).toFixed(1)+" "+(cy+R*Math.sin(an)).toFixed(1)}return s+"Z"}
+  // 1. construction lines: the pond's edges run long, like a sketch
+  for(k=0;k<8;k++){var a1=(22.5+45*k)*Math.PI/180,a2=(22.5+45*(k+1))*Math.PI/180,x1=cx+190*Math.cos(a1),y1=cy+190*Math.sin(a1),x2=cx+190*Math.cos(a2),y2=cy+190*Math.sin(a2),ux=(x2-x1)/145,uy=(y2-y1)/145;
+    g+=L("M"+(x1-ux*28).toFixed(1)+" "+(y1-uy*28).toFixed(1)+"L"+(x2+ux*28).toFixed(1)+" "+(y2+uy*28).toFixed(1),.28,.5,.0+k*.008,.08+k*.008)}
+  g+=L("M40 "+cy+"H940M"+cx+" 60V560",.18,.4,.02,.12);
+  // 2. pond, walkway ring and the gathering octagon
+  g+=L(oct(190),"",2.2,.06,.2)+L(oct(182),.6,.7,.1,.22)+L(oct(80),"",1.2,.16,.26)+L(oct(62),"",1.8,.18,.28)+F(oct(62),.7);
+  // 3. bridges: four straight and four diagonal, each ending in a flight of stairs
+  for(k=0;k<8;k++){var diag=k%2,w=diag?13:15,len=diag?214:222,st="";
+    for(i=0;i<6;i++)st+="M"+(cx-w)+" "+(cy-len+i*5)+"H"+(cx+w);
+    g+='<g transform="rotate('+(k*45)+' '+cx+' '+cy+')">'+L("M"+(cx-w)+" "+(cy-62)+"V"+(cy-len)+"M"+(cx+w)+" "+(cy-62)+"V"+(cy-len),"",1,.22+k*.012,.32+k*.012)+L(st,.7,.6,.3+k*.01,.36+k*.01)+"</g>"}
+  // 4. curved stores: outer and inner walls, a glazed chord with a line of columns
+  var st1="M205 428A135 105 0 0 0 330 548",st1i="M216 434A122 94 0 0 0 330 536",st2="M455 428A135 105 0 0 1 330 548",st2i="M444 434A122 94 0 0 1 330 536";
+  g+=L(st1,"",2,.3,.42)+L(st1i,"",1.1,.34,.44)+L(st2,"",2,.32,.44)+L(st2i,"",1.1,.36,.46)+L("M205 428L330 548L455 428",.8,.9,.38,.48);
+  g+=F(st1+"L330 536A122 94 0 0 1 216 434Z",.72)+F(st2+"L330 536A122 94 0 0 0 444 434Z",.72);
+  for(i=1;i<6;i++){var t=i/6,xa=205+125*t,ya=428+120*t,xb=455-125*t;g+=F("M"+xa+" "+(ya-6)+"l6 6-6 6-6-6zM"+xb+" "+(ya-6)+"l6 6-6 6-6-6z",.44+i*.01)}
+  // 5. corridor and the harvesting area's column grid
+  g+=L("M510 252L600 228H700M510 332H700",.9,1.2,.42,.52);
+  for(i=0;i<3;i++)for(k=0;k<3;k++)g+=F("M"+(566+i*42)+" "+(258+k*36)+"h6v6h-6z",.5+i*.01);
+  // 6. farm block: double walls, hallway, tank rooms and a service strip
+  g+=L("M700 150H930V450H700Z","",2.2,.48,.6)+L("M706 156H924V444H706Z",.8,.9,.5,.62)+L("M706 282H862M706 302H862M862 156V444",.9,1,.56,.64);
+  g+=F("M700 150H930V450H700ZM706 156V444H924V156Z",.74,1);
+  [[736,196],[783,196],[830,196],[736,242],[830,242],[736,340],[783,340],[830,340],[736,386],[783,386],[830,386]].forEach(function(c,n){
+    g+=L("M"+c[0]+" "+(c[1]-19)+"a19 19 0 1 0 .01 0","",1.2,.58+n*.008,.64+n*.008)+L("M"+c[0]+" "+(c[1]-11)+"a11 11 0 1 0 .01 0",.6,.6,.6+n*.008,.66+n*.008)+F("M"+c[0]+" "+(c[1]-6)+"a6 6 0 1 0 .01 0",.76)});
+  var tr="";[172,192,212,232,322,342,362].forEach(function(y){tr+="M874 "+y+"h42v13h-42z"});g+=L(tr,.8,.8,.64,.72);
+  var sh="";for(i=0;i<7;i++)sh+="M870 "+(404+i*5.5)+"H924";g+=L(sh,.7,.6,.68,.74);
   // parallel rule sweeping down the board while the drawing is laid out
-  g+='<g class="drule"><path d="M40 0H560" stroke="currentColor" stroke-width="1.2" opacity=".5"/><path d="M40 4H560" stroke="currentColor" stroke-width=".4" opacity=".35"/></g>';
-  return '<svg viewBox="0 0 600 600" aria-hidden="true" fill="currentColor">'+g+'</svg>'}
-function draftPlay(root){
+  g+='<g class="drule"><path d="M20 0H940" stroke="currentColor" stroke-width="1.2" opacity=".5"/><path d="M20 4H940" stroke="currentColor" stroke-width=".4" opacity=".35"/></g>';
+  return '<svg viewBox="0 0 960 600" aria-hidden="true" fill="currentColor"><g transform="translate(-60 0)">'+g+'</g></svg>'}function draftPlay(root){
   var D=16000,end=.86,out=.95,o={duration:D,iterations:Infinity,easing:"linear"};
   root.querySelectorAll(".dl").forEach(function(el){var a=+el.dataset.a,b=+el.dataset.b;el.style.strokeDasharray="1";
     el.animate([{strokeDashoffset:1,opacity:1,offset:0},{strokeDashoffset:1,offset:a},{strokeDashoffset:0,offset:b},{strokeDashoffset:0,opacity:1,offset:end},{strokeDashoffset:0,opacity:0,offset:out},{strokeDashoffset:1,opacity:0,offset:1}],o)});
