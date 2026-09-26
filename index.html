@@ -228,7 +228,11 @@ h2 .st{font-size:.42em;color:var(--acc)}
 .carnav button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);font-size:18px;transition:border-color .3s,background .3s,scale .3s var(--ease)}
 @media (hover:hover){.carnav button:hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,transparent);scale:1.08}}
 .carnav button:active{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 22%,transparent);scale:.92}
-.carnav button::after{content:"";position:absolute;inset:-10px}.carnav button{position:relative}
+.carnav button::after{content:"";position:absolute;inset:-10px}.carnav button{position:relative;display:grid;place-items:center}
+.carnav .play svg{width:14px;height:14px;fill:currentColor}.carnav .play .i-play,.carnav .play[aria-pressed="false"] .i-pause{display:none}.carnav .play[aria-pressed="false"] .i-play{display:block}
+.carnav .play .ring{position:absolute;top:-1px;left:-1px;width:calc(100% + 2px);height:calc(100% + 2px);rotate:-90deg;fill:none;stroke:var(--acc);stroke-width:1.5;stroke-dasharray:145;stroke-dashoffset:145;pointer-events:none}
+.carnav .play.run .ring{animation:carfill var(--dur,4200ms) linear forwards}
+@keyframes carfill{to{stroke-dashoffset:0}}
 .carnav span{font:400 12px var(--pix);letter-spacing:.12em;color:var(--mute);min-width:84px;text-align:center}
 /* moon phases: small, quiet. passed = "(", ahead = ")", current = full.
    A solid disc slides behind the row to the chosen project, eclipsing it. */
@@ -415,7 +419,7 @@ footer .st{color:var(--acc)}
   <section id="all" aria-labelledby="all-h">
     <div class="head rv" style="margin-inline:var(--g)"><h2 id="all-h"><i class="st rev"></i>All projects</h2><span class="lbl">Drag · swipe · arrows</span></div>
     <div class="car" id="car" tabindex="0" role="region" aria-roledescription="carousel" aria-label="All projects, use arrow keys or drag"><div class="track" id="track"></div></div>
-    <div class="carnav"><button type="button" id="carprev" aria-label="Previous project">←</button><span id="carcount">01 / 01</span><button type="button" id="carnext" aria-label="Next project">→</button></div>
+    <div class="carnav"><button type="button" id="carprev" aria-label="Previous project">←</button><span id="carcount">01 / 01</span><button type="button" id="carnext" aria-label="Next project">→</button><button type="button" id="carplay" class="play" aria-pressed="true" aria-label="Pause auto-scroll"><svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="1.5" width="3" height="11" rx="1"/><rect x="8.5" y="1.5" width="3" height="11" rx="1"/></svg><svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 1.8v10.4a.6.6 0 0 0 .9.5l8.2-5.2a.6.6 0 0 0 0-1L4.4 1.3a.6.6 0 0 0-.9.5z"/></svg><svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23"/></svg></button></div>
     <div class="dots" id="dots"></div>
   </section>
 
@@ -610,15 +614,28 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-open
   dots.innerHTML=items.map(function(p,i){return '<button type="button" aria-label="Go to '+esc(p.t)+'" data-i="'+i+'"></button>'}).join("");
   var cards=track.children,dotEls=dots.querySelectorAll("button");var disc=document.createElement("span");disc.className="disc";disc.setAttribute("aria-hidden","true");dots.prepend(disc);
   function place(extra){var c=cards[idx];track.style.transform="translateX("+(car.clientWidth/2-(c.offsetLeft+c.offsetWidth/2)+(extra||0))+"px)"}
-  function go(i){idx=Math.max(0,Math.min(n-1,i));Array.prototype.forEach.call(cards,function(c,k){c.classList.toggle("on",k===idx)});Array.prototype.forEach.call(dotEls,function(d,k){d.classList.toggle("on",k===idx);d.classList.toggle("past",k<idx)});var cd=dotEls[idx];disc.style.translate=(cd.offsetLeft+cd.offsetWidth/2)+"px 0";count.textContent=String(idx+1).padStart(2,"0")+" / "+String(n).padStart(2,"0");place()}
+  function go(i){idx=Math.max(0,Math.min(n-1,i));Array.prototype.forEach.call(cards,function(c,k){c.classList.toggle("on",k===idx)});Array.prototype.forEach.call(dotEls,function(d,k){d.classList.toggle("on",k===idx);d.classList.toggle("past",k<idx)});var cd=dotEls[idx];disc.style.translate=(cd.offsetLeft+cd.offsetWidth/2)+"px 0";count.textContent=String(idx+1).padStart(2,"0")+" / "+String(n).padStart(2,"0");place();sched(AUTO*1.6)}
   function activate(i){if(!items[i].soon)openProject(items[i].id)}
-  // arrows: on touch, act on finger-up (mobile browsers can swallow or delay the click); mouse/keyboard keep using click
-  function tap(el,fn){var p=null,x=0,y=0,t=0;
-    el.addEventListener("pointerdown",function(e){if(e.pointerType==="mouse")return;p=e.pointerId;x=e.clientX;y=e.clientY});
-    el.addEventListener("pointerup",function(e){if(e.pointerId!==p)return;p=null;if(Math.abs(e.clientX-x)<24&&Math.abs(e.clientY-y)<24){t=Date.now();fn()}});
-    el.addEventListener("pointercancel",function(){p=null});
+  // buttons: on touch, act on touchend and cancel the emulated click (phones can swallow, delay or hover-eat it); mouse/keyboard keep using click
+  function tap(el,fn){var x=0,y=0,t=0;
+    el.addEventListener("touchstart",function(e){var p=e.changedTouches[0];x=p.clientX;y=p.clientY},{passive:true});
+    el.addEventListener("touchend",function(e){var p=e.changedTouches[0];if(Math.abs(p.clientX-x)<24&&Math.abs(p.clientY-y)<24){e.preventDefault();t=Date.now();fn()}});
     el.addEventListener("click",function(){if(Date.now()-t>700)fn()})}
-  tap($("#carprev"),function(){go(idx-1)});tap($("#carnext"),function(){go(idx+1)});
+  // arrows wrap around, so the last card never feels like a dead button
+  function next(){go(idx<n-1?idx+1:0)}
+  tap($("#carprev"),function(){go(idx>0?idx-1:n-1)});tap($("#carnext"),next);
+  // auto-scroll: runs only while the carousel is on screen; any manual move gives a longer beat before it resumes
+  var play=$("#carplay"),AUTO=4200,auto=!reduce,inView=false,hov=false,timer=0;
+  function sched(d){clearTimeout(timer);play.classList.remove("run");if(!auto||!inView||hov||document.hidden)return;d=d||AUTO;
+    play.style.setProperty("--dur",d+"ms");void play.offsetWidth;play.classList.add("run");
+    timer=setTimeout(function(){if(sx!==null)return sched();next();sched()},d)}
+  function setAuto(on){auto=on;play.setAttribute("aria-pressed",on);play.setAttribute("aria-label",on?"Pause auto-scroll":"Play auto-scroll");sched()}
+  tap(play,function(){setAuto(!auto)});setAuto(auto);
+  new IntersectionObserver(function(es){inView=es[0].isIntersecting;sched()},{threshold:.35}).observe(car);
+  document.addEventListener("visibilitychange",function(){sched()});
+  car.addEventListener("pointerenter",function(e){if(e.pointerType==="mouse"){hov=true;sched()}});
+  car.addEventListener("pointerleave",function(e){if(e.pointerType==="mouse"){hov=false;sched()}});
+  car.addEventListener("focusin",function(){if(car.matches(":focus-visible")||car.querySelector(":focus-visible")){hov=true;sched()}});car.addEventListener("focusout",function(){hov=false;sched()});
   dots.addEventListener("click",function(e){var b=e.target.closest("[data-i]");if(b)go(+b.dataset.i)});
   car.addEventListener("keydown",function(e){if(e.key==="ArrowRight"){go(idx+1);e.preventDefault()}if(e.key==="ArrowLeft"){go(idx-1);e.preventDefault()}if(e.key==="Enter")activate(idx)});
   var sx=null,dx=0,moved=false;
