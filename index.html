@@ -384,8 +384,9 @@ html.gate{overflow:hidden}
 #gate .gstars{position:absolute;left:-18%;right:-18%;top:4%;bottom:4%;display:grid;grid-template-columns:repeat(13,1fr);grid-template-rows:repeat(10,1fr);place-items:center;color:#8d99a6;-webkit-mask:radial-gradient(closest-side,transparent 62%,#000 80%);mask:radial-gradient(closest-side,transparent 62%,#000 80%)}
 #gate .gstars i{font:700 clamp(11px,2vmin,18px)/1 var(--pix);font-style:normal;opacity:0;animation:gTw var(--d,7s) ease-in-out var(--w,0s) infinite}
 @keyframes gTw{0%,100%{opacity:0}35%,65%{opacity:.34}}
-#gate .gfig{position:absolute;top:0;bottom:0;left:-30%;right:-30%;color:#8d99a6;opacity:.66;filter:drop-shadow(1px 1.5px 0 rgba(0,0,0,.7)) drop-shadow(-.6px -.6px 0 rgba(255,255,255,.07))}
+#gate .gfig{position:absolute;top:0;bottom:0;left:-30%;right:-30%;color:#8d99a6;opacity:.72;filter:drop-shadow(1px 1.5px 0 rgba(0,0,0,.7)) drop-shadow(-.6px -.6px 0 rgba(255,255,255,.07))}
 #gate .gfig svg{width:100%;height:100%;display:block;overflow:visible}
+#gate .gfig .sw{transform-box:fill-box;transform-origin:50% 0}
 #gate.leaving .gstage{scale:1.06;opacity:0}
 @media (max-width:640px){#gate{--D:min(84vmin,600px)}#gate .gstars{left:-8%;right:-8%}#gate .gfig{left:-6%;right:-6%}}
 #gate .gframe{position:absolute;inset:clamp(12px,2.6vmin,30px);color:#4f8dff;opacity:.42;font-size:18px;animation:gIn 1.8s var(--ease) .3s both;transition:opacity .5s}
@@ -754,47 +755,59 @@ var rItems=document.querySelectorAll("#ornL>*,#ornR>*"),railN=document.querySele
 function cusp(x,y,rot,out,inn,w){return '<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')" d="M0 '+(-out)+'Q0 0 '+w+' 0Q0 0 0 '+inn+'Q0 0 '+(-w)+' 0Q0 0 0 '+(-out)+'z"/>'}
 // lens: a filled ellipse with an optional ground-coloured eye
 function lens(x,y,rot,rx,ry,hole){return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')"><ellipse rx="'+rx+'" ry="'+ry+'"/>'+(hole?'<ellipse rx="'+(rx*.45)+'" ry="'+(ry*.5)+'" fill="var(--bg)"/>':'')+'</g>'}
-// welcome gate: a simplified sketch of the aquaponic farm plan (octagonal pond, gathering space, bridges, curved stores, farm block with tanks)
-// drafts itself on a loop: construction lines, then walls, then details, then the solids fill in as poche. No text or dimensions.
+// welcome gate: three vaulted arches (an interior vignette). Each loop: people stroll across, the arches draw themselves in,
+// the vaults and side walls wash in blue, then the life of the rooms fades in (trees, a seated figure, chairs, planters, lamp, sofa).
 function draft(){
+  var B="#4f8dff";
   var L=function(d,op,sw,t0,t1){return '<path class="dl" d="'+d+'" pathLength="1" fill="none" stroke="currentColor" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round" data-a="'+t0+'" data-b="'+t1+'"'+(op?' opacity="'+op+'"':'')+'/>'};
-  var F=function(d,t0,ev){return '<path class="dp" d="'+d+'" data-a="'+t0+'"'+(ev?' fill-rule="evenodd"':'')+'/>'};
-  var cx=330,cy=290,g="",i,k;
-  function oct(R){var s="";for(k=0;k<8;k++){var an=(22.5+45*k)*Math.PI/180;s+=(k?"L":"M")+(cx+R*Math.cos(an)).toFixed(1)+" "+(cy+R*Math.sin(an)).toFixed(1)}return s+"Z"}
-  // 1. construction lines: the pond's edges run long, like a sketch
-  for(k=0;k<8;k++){var a1=(22.5+45*k)*Math.PI/180,a2=(22.5+45*(k+1))*Math.PI/180,x1=cx+190*Math.cos(a1),y1=cy+190*Math.sin(a1),x2=cx+190*Math.cos(a2),y2=cy+190*Math.sin(a2),ux=(x2-x1)/145,uy=(y2-y1)/145;
-    g+=L("M"+(x1-ux*28).toFixed(1)+" "+(y1-uy*28).toFixed(1)+"L"+(x2+ux*28).toFixed(1)+" "+(y2+uy*28).toFixed(1),.28,.5,.0+k*.008,.08+k*.008)}
-  g+=L("M40 "+cy+"H940M"+cx+" 60V560",.18,.4,.02,.12);
-  // 2. pond, walkway ring and the gathering octagon
-  g+=L(oct(190),"",2.2,.06,.2)+L(oct(182),.6,.7,.1,.22)+L(oct(80),"",1.2,.16,.26)+L(oct(62),"",1.8,.18,.28)+F(oct(62),.7);
-  // 3. bridges: four straight and four diagonal, each ending in a flight of stairs
-  for(k=0;k<8;k++){var diag=k%2,w=diag?13:15,len=diag?214:222,st="";
-    for(i=0;i<6;i++)st+="M"+(cx-w)+" "+(cy-len+i*5)+"H"+(cx+w);
-    g+='<g transform="rotate('+(k*45)+' '+cx+' '+cy+')">'+L("M"+(cx-w)+" "+(cy-62)+"V"+(cy-len)+"M"+(cx+w)+" "+(cy-62)+"V"+(cy-len),"",1,.22+k*.012,.32+k*.012)+L(st,.7,.6,.3+k*.01,.36+k*.01)+"</g>"}
-  // 4. curved stores: outer and inner walls, a glazed chord with a line of columns
-  var st1="M205 428A135 105 0 0 0 330 548",st1i="M216 434A122 94 0 0 0 330 536",st2="M455 428A135 105 0 0 1 330 548",st2i="M444 434A122 94 0 0 1 330 536";
-  g+=L(st1,"",2,.3,.42)+L(st1i,"",1.1,.34,.44)+L(st2,"",2,.32,.44)+L(st2i,"",1.1,.36,.46)+L("M205 428L330 548L455 428",.8,.9,.38,.48);
-  g+=F(st1+"L330 536A122 94 0 0 1 216 434Z",.72)+F(st2+"L330 536A122 94 0 0 0 444 434Z",.72);
-  for(i=1;i<6;i++){var t=i/6,xa=205+125*t,ya=428+120*t,xb=455-125*t;g+=F("M"+xa+" "+(ya-6)+"l6 6-6 6-6-6zM"+xb+" "+(ya-6)+"l6 6-6 6-6-6z",.44+i*.01)}
-  // 5. corridor and the harvesting area's column grid
-  g+=L("M510 252L600 228H700M510 332H700",.9,1.2,.42,.52);
-  for(i=0;i<3;i++)for(k=0;k<3;k++)g+=F("M"+(566+i*42)+" "+(258+k*36)+"h6v6h-6z",.5+i*.01);
-  // 6. farm block: double walls, hallway, tank rooms and a service strip
-  g+=L("M700 150H930V450H700Z","",2.2,.48,.6)+L("M706 156H924V444H706Z",.8,.9,.5,.62)+L("M706 282H862M706 302H862M862 156V444",.9,1,.56,.64);
-  g+=F("M700 150H930V450H700ZM706 156V444H924V156Z",.74,1);
-  [[736,196],[783,196],[830,196],[736,242],[830,242],[736,340],[783,340],[830,340],[736,386],[783,386],[830,386]].forEach(function(c,n){
-    g+=L("M"+c[0]+" "+(c[1]-19)+"a19 19 0 1 0 .01 0","",1.2,.58+n*.008,.64+n*.008)+L("M"+c[0]+" "+(c[1]-11)+"a11 11 0 1 0 .01 0",.6,.6,.6+n*.008,.66+n*.008)+F("M"+c[0]+" "+(c[1]-6)+"a6 6 0 1 0 .01 0",.76)});
-  var tr="";[172,192,212,232,322,342,362].forEach(function(y){tr+="M874 "+y+"h42v13h-42z"});g+=L(tr,.8,.8,.64,.72);
-  var sh="";for(i=0;i<7;i++)sh+="M870 "+(404+i*5.5)+"H924";g+=L(sh,.7,.6,.68,.74);
-  // parallel rule sweeping down the board while the drawing is laid out
-  g+='<g class="drule"><path d="M20 0H940" stroke="currentColor" stroke-width="1.2" opacity=".5"/><path d="M20 4H940" stroke="currentColor" stroke-width=".4" opacity=".35"/></g>';
-  return '<svg viewBox="0 0 960 600" aria-hidden="true" fill="currentColor"><g transform="translate(-60 0)">'+g+'</g></svg>'}function draftPlay(root){
-  var D=16000,end=.86,out=.95,o={duration:D,iterations:Infinity,easing:"linear"};
+  var F=function(d,t0,o,c){return '<path class="dp" d="'+d+'" fill="'+(c||B)+'" data-a="'+t0+'" data-o="'+(o||.6)+'"/>'};
+  var C=function(x,y,r){return "M"+x+" "+(y-r)+"a"+r+" "+r+" 0 1 0 .01 0"};
+  var S=function(d,t0,o,w){return '<path class="dp" d="'+d+'" fill="none" stroke="'+B+'" stroke-width="'+(w||2)+'" stroke-linecap="round" data-a="'+t0+'" data-o="'+(o||.6)+'"/>'};
+  var g="",i;
+  // a walking figure: head, torso, and swinging arms and legs (opposite phases)
+  function man(sc,col){return '<g transform="scale('+sc+')" fill="'+col+'" stroke="'+col+'" stroke-linecap="round">'+
+    '<circle cx="0" cy="-57" r="6.5" stroke="none"/><path d="M-7-48Q0-51 7-48L6-23H-6Z" stroke="none"/>'+
+    '<path class="sw" data-d="0" d="M-2-24V0" stroke-width="3.6" fill="none"/><path class="sw" data-d="400" d="M2-24V0" stroke-width="3.6" fill="none"/>'+
+    '<path class="sw" data-d="400" d="M-6-46V-29" stroke-width="3" fill="none"/><path class="sw" data-d="0" d="M6-46V-29" stroke-width="3" fill="none"/></g>'}
+  var W=function(y,sc,s,e,r){return '<g class="walker" data-s="'+s+'" data-e="'+e+'" data-r="'+(r?1:0)+'"><g transform="translate(0 '+y+')">'+man(sc,B)+'</g></g>'};
+  // 1. people strolling across the front
+  g+=W(540,1,.0,.36,0)+W(552,1.08,.07,.46,1)+W(530,.72,.15,.52,0);
+  // 2. the three arches: front frame, inner reveal, back opening, floor plane
+  [[220,380],[400,560],[580,740]].forEach(function(b,k){var x0=b[0],x1=b[1],bx0=x0+26,bx1=x1-26,d=k*.035;
+    g+=L("M"+x0+" 470V250A80 80 0 0 1 "+x1+" 250V470","",1.6,.16+d,.3+d)+L("M"+(x0+8)+" 470V250A72 72 0 0 1 "+(x1-8)+" 250V470",.7,.8,.2+d,.33+d);
+    g+=L("M"+bx0+" 432V262A54 54 0 0 1 "+bx1+" 262V432",.85,1,.26+d,.38+d)+L("M"+x0+" 470H"+x1+"M"+(x0+8)+" 470L"+bx0+" 432H"+bx1+"L"+(x1-8)+" 470",.7,.8,.3+d,.4+d);
+    // 3. vault (the band between the front arch and the back opening) and the shaded side wall
+    g+=F("M"+(x0+8)+" 250A72 72 0 0 1 "+(x1-8)+" 250L"+bx1+" 262A54 54 0 0 0 "+bx0+" 262Z",.42+d*.5,.55);
+    g+=F("M"+(x1-8)+" 250V470L"+bx1+" 432V262Z",.45+d*.5,.22)});
+  // 4. life in the rooms
+  // tree outside the first bay
+  g+=S("M170 482V360",.52,.6,2.4)+F(C(160,350,22)+C(183,330,18)+C(150,316,16)+C(175,300,14)+C(192,358,15)+C(146,366,13),.53,.55);
+  // bay 1: a seated figure on a rug, and a small tree
+  g+=F("M252 454H332L322 441H262Z",.56,.3)+F(C(292,410,6.5)+"M280 440Q292 416 304 440ZM274 441Q292 432 310 441Z",.58,.65);
+  g+=S("M352 452V362",.57,.55,1.8)+F(C(347,356,14)+C(360,341,12)+C(343,331,10)+C(357,372,11),.58,.5);
+  // bay 2: hanging planter, a pair of shell chairs, a faint tree between them
+  g+=S("M480 192V258",.6,.55,1)+F("M467 260Q480 280 493 260Z"+C(474,256,5)+C(486,255,5),.61,.6);
+  g+=F("M430 431Q437 407 452 411L456 431Z",.63,.65)+S("M435 431L431 453M453 431L457 453",.63,.65,2);
+  g+=F("M530 431Q523 407 508 411L504 431Z",.64,.65)+S("M525 431L529 453M507 431L503 453",.64,.65,2);
+  g+=S("M480 442V384",.62,.25,1.4)+F(C(480,378,12)+C(469,392,9)+C(491,394,9),.62,.22);
+  // bay 3: hanging basket, potted plant, a metal chair
+  g+=S("M672 188V246",.66,.55,1)+F("M657 248Q672 272 687 248Z",.67,.6)+S("M662 250Q652 270 650 286M682 250Q692 270 694 288",.68,.5,1.4);
+  g+=F("M602 436H622L619 453H605Z",.69,.6)+S("M612 436Q598 410 589 399M612 436Q606 404 610 391M612 436Q625 408 636 401M612 436Q594 424 584 424",.69,.55,1.8);
+  g+=S("M690 410H712M692 410V453M710 410V453M690 432H712",.7,.6,2.2);
+  // outside: floor lamp and a sofa, and a child standing in front
+  g+=S("M772 482V384M763 482H781",.72,.55,2)+F("M757 384H787L780 356H764Z",.72,.45);
+  g+=F("M792 472V441Q792 428 804 433L807 451H875L878 433Q890 428 890 441V472Z",.74,.55)+S("M798 472V482M884 472V482",.74,.55,2.4);
+  g+=F(C(560,470,7)+"M552 479H568L566 506H554Z",.76,.65)+S("M556 506V529M564 506V529",.76,.65,3);
+  return '<svg viewBox="0 0 960 600" aria-hidden="true" fill="currentColor">'+g+'</svg>'}function draftPlay(root){
+  var D=19000,end=.91,out=.975,o={duration:D,iterations:Infinity,easing:"linear"};
   root.querySelectorAll(".dl").forEach(function(el){var a=+el.dataset.a,b=+el.dataset.b;el.style.strokeDasharray="1";
     el.animate([{strokeDashoffset:1,opacity:1,offset:0},{strokeDashoffset:1,offset:a},{strokeDashoffset:0,offset:b},{strokeDashoffset:0,opacity:1,offset:end},{strokeDashoffset:0,opacity:0,offset:out},{strokeDashoffset:1,opacity:0,offset:1}],o)});
-  root.querySelectorAll(".df,.dp").forEach(function(el){var a=+el.dataset.a,top=el.classList.contains("dp")?.5:1;
-    el.animate([{opacity:0,offset:0},{opacity:0,offset:a},{opacity:top,offset:Math.min(a+.05,end)},{opacity:top,offset:end},{opacity:0,offset:out},{opacity:0,offset:1}],o)});
-  var r=root.querySelector(".drule");if(r)r.animate([{transform:"translateY(90px)",opacity:0,offset:0},{opacity:1,offset:.04},{transform:"translateY(510px)",opacity:1,offset:.7},{transform:"translateY(510px)",opacity:0,offset:.76},{transform:"translateY(510px)",opacity:0,offset:1}],o)}function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)]}
+  root.querySelectorAll(".dp").forEach(function(el){var a=+el.dataset.a,top=+el.dataset.o||.5;
+    el.animate([{opacity:0,offset:0},{opacity:0,offset:a},{opacity:top,offset:Math.min(a+.06,end)},{opacity:top,offset:end},{opacity:0,offset:out},{opacity:0,offset:1}],o)});
+  // walkers cross the whole width; limbs swing on their own short cycle
+  root.querySelectorAll(".walker").forEach(function(el){var s=+el.dataset.s,e=+el.dataset.e,rv=el.dataset.r==="1",x0=rv?1020:-60,x1=rv?-60:1020;
+    el.animate([{transform:"translateX("+x0+"px)",opacity:0,offset:0},{transform:"translateX("+x0+"px)",opacity:0,offset:s},{opacity:.75,offset:s+.03},{opacity:.75,offset:e-.03},{transform:"translateX("+x1+"px)",opacity:0,offset:e},{transform:"translateX("+x1+"px)",opacity:0,offset:1}],o)});
+  root.querySelectorAll(".sw").forEach(function(el){el.animate([{transform:"rotate(-24deg)"},{transform:"rotate(24deg)"}],{duration:800,iterations:Infinity,direction:"alternate",easing:"ease-in-out",delay:-(+el.dataset.d||0)})})}function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)]}
 (function(){
   // fig 1 — orbit: rings, point-stars on the rim, orbiting dots and crescents, a ringed star at the core
   var c=300,s="";
