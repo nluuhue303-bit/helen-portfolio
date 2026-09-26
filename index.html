@@ -13,7 +13,7 @@
 @font-face{font-family:"HN Display";font-weight:400;src:local("PP Fragment Glare Regular"),local("PPFragment-GlareRegular"),local("PP Fragment Serif Regular"),local("PPFragment-SerifRegular")}
 :root{
   color-scheme:dark;
-  --bg:#07090c;--s1:#0f1318;--s2:#161b22;--line:#222a33;--ink:#e8edf2;--mute:#8d99a6;--acc:#4f8dff;--acc-ink:#04101f;
+  --bg:#07090c;--s1:#0f1318;--s2:#161b22;--line:#222a33;--ink:#e8edf2;--mute:#8d99a6;--acc:#4f8dff;--acc-ink:#04101f;--err:#ff7a7a;
   --disp:"HN Display",Georgia,serif;
   --pix:"Space Grotesk",system-ui,sans-serif;
   --sans:"Space Grotesk",system-ui,sans-serif;
@@ -21,8 +21,8 @@
   /* the system glyph: four diamonds on a cross, four point-dots */
   --star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M20 1l2 3-2 3-2-3zM20 33l2 3-2 3-2-3zM1 20l3-2 3 2-3 2zM33 20l3-2 3 2-3 2zM20 8l4 6-4 6-4-6zM20 20l4 6-4 6-4-6zM8 20l6-4 6 4-6 4zM20 20l6-4 6 4-6 4z'/%3E%3C/svg%3E");
 }
-@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){color-scheme:light;--bg:#f3f4f2;--s1:#fff;--s2:#eceeec;--line:#d6dad8;--ink:#101418;--mute:#5a6470;--acc:#1f5fd6;--acc-ink:#fff}}
-:root[data-theme="light"]{color-scheme:light;--bg:#f3f4f2;--s1:#fff;--s2:#eceeec;--line:#d6dad8;--ink:#101418;--mute:#5a6470;--acc:#1f5fd6;--acc-ink:#fff}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){color-scheme:light;--bg:#f3f4f2;--s1:#fff;--s2:#eceeec;--line:#d6dad8;--ink:#101418;--mute:#5a6470;--acc:#1f5fd6;--acc-ink:#fff;--err:#c42b2b}}
+:root[data-theme="light"]{color-scheme:light;--bg:#f3f4f2;--s1:#fff;--s2:#eceeec;--line:#d6dad8;--ink:#101418;--mute:#5a6470;--acc:#1f5fd6;--acc-ink:#fff;--err:#c42b2b}
 @media (min-width:861px){:root{--rail:64px;--g:calc(var(--rail) + clamp(20px,3vw,44px))}}
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar) + 12px)}
@@ -229,10 +229,8 @@ h2 .st{font-size:.42em;color:var(--acc)}
 @media (hover:hover){.carnav button:hover{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,transparent);scale:1.08}}
 .carnav button:active{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 22%,transparent);scale:.92}
 .carnav button::after{content:"";position:absolute;inset:-10px}.carnav button{position:relative;display:grid;place-items:center}
-.carnav .play svg{width:14px;height:14px;fill:currentColor}.carnav .play .i-play,.carnav .play[aria-pressed="false"] .i-pause{display:none}.carnav .play[aria-pressed="false"] .i-play{display:block}
-.carnav .play .ring{position:absolute;top:-1px;left:-1px;width:calc(100% + 2px);height:calc(100% + 2px);rotate:-90deg;fill:none;stroke:var(--acc);stroke-width:1.5;stroke-dasharray:145;stroke-dashoffset:145;pointer-events:none}
-.carnav .play.run .ring{animation:carfill var(--dur,4200ms) linear forwards}
-@keyframes carfill{to{stroke-dashoffset:0}}
+.car.glide .track{transition:transform 1s linear}
+.car.glide .card{transition-duration:1s,.6s,.6s,.3s,.6s}
 .carnav span{font:400 12px var(--pix);letter-spacing:.12em;color:var(--mute);min-width:84px;text-align:center}
 /* moon phases: small, quiet. passed = "(", ahead = ")", current = full.
    A solid disc slides behind the row to the chosen project, eclipsing it. */
@@ -297,6 +295,15 @@ h2 .st{font-size:.42em;color:var(--acc)}
 .form input,.form textarea{font:400 16px/1.5 var(--sans);color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:8px 0;border-radius:0;transition:border-color .3s}
 .form textarea{border:1px solid var(--line);border-radius:8px;padding:12px;min-height:150px;resize:vertical}
 .form input:focus,.form textarea:focus{outline:none;border-color:var(--acc)}
+.form .req{color:var(--acc);font-weight:400}
+.form .fnote{margin:-10px 0 0;font:400 11px/1 var(--pix);letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.form .ferr{font:400 13px/1.35 var(--sans);letter-spacing:0;color:var(--err)}
+.form .ferr:empty{display:none}
+.form label.bad input,.form label.bad textarea{border-color:var(--err)}
+.form label.bad{color:var(--err)}
+.form label.shake{animation:fshake .4s}
+@keyframes fshake{20%,60%{translate:-5px 0}40%,80%{translate:5px 0}}
+.fstatus.bad{color:var(--err)}.fstatus.ok{color:var(--acc)}
 .fbot{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
 .fbot small{font-size:13px;color:var(--mute);max-width:46ch}
 .send{display:inline-flex;align-items:center;gap:10px;font:400 12px/1 var(--pix);letter-spacing:.12em;padding:16px 26px;background:var(--acc);color:var(--acc-ink);border-radius:4px;transition:filter .3s,translate .3s var(--ease)}
@@ -374,7 +381,56 @@ footer .st{color:var(--acc)}
   .cur,.scrolltab svg,.scrolltab .ring::after{animation:none}
   .rv.pre{opacity:1;translate:none;clip-path:none}
 }
-</style>
+/* opening gate: typed welcome, then the picked pill flies into the header theme switch while the site fades up (after al3xx.li's hand-off) */
+html.gate{overflow:hidden}
+#gate{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:34px;padding:24px;color:#f2f4f6}
+#gate .gbg{position:absolute;inset:0;z-index:-1;background:#000;transition:opacity .9s cubic-bezier(.4,0,.2,1) .25s}
+#gate .gbg::before{content:"";position:absolute;left:50%;top:50%;width:min(96vw,440px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:rgba(255,255,255,.05);filter:blur(48px);transition:opacity .5s}
+#gate .gl{margin:0;display:flex;align-items:center;gap:16px;font:300 clamp(21px,4.6vw,40px)/1.2 var(--sans);letter-spacing:-.01em;white-space:nowrap;transition:opacity .5s,filter .5s,translate .5s}
+#gate .gl .pr{font:700 .45em/1 var(--pix);color:#737373}
+#gate .gl .cur{display:inline-block;width:.55em;height:.09em;margin-left:.1em;align-self:flex-end;margin-bottom:.22em;background:currentColor;animation:blink 1s steps(1) infinite}
+#gate .gb{display:flex;gap:14px;opacity:0;translate:0 16px;pointer-events:none;transition:opacity .7s var(--ease),translate .7s var(--ease)}
+#gate.ready .gb{opacity:1;translate:none;pointer-events:auto}
+#gate.leaving{pointer-events:none}
+#gate.leaving .gbg{opacity:0}
+#gate.leaving .gbg::before,#gate.leaving .gl{opacity:0}
+#gate.leaving .gl{filter:blur(4px);translate:0 -6px}
+#gate.leaving .gb{visibility:hidden;transition:none}
+.gpill{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:42px;padding:0 26px;border-radius:999px;font:600 12px/1 var(--pix);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;transition:scale .3s var(--ease),box-shadow .3s,background .3s,color .3s,border-color .3s}
+.gpill svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;transition:color .3s,rotate .3s}
+.gpill.g-dark{background:rgba(0,0,0,.9);color:#fff;border:1px solid rgba(255,255,255,.2);box-shadow:0 0 20px rgba(0,0,0,.8)}.gpill.g-dark svg{color:#4f8dff}
+.gpill.g-light{background:#fff;color:#171717;border:1px solid rgba(255,255,255,.8);box-shadow:0 0 20px rgba(255,255,255,.25)}.gpill.g-light svg{color:#f0a020}
+#gate .gpill:hover,#gate .gpill:focus-visible{scale:1.05;outline:none}#gate .gpill:active{scale:.95}
+#gate .g-dark:hover,#gate .g-dark:focus-visible{background:#4f8dff;border-color:#4f8dff;box-shadow:0 0 30px rgba(79,141,255,.55)}#gate .g-dark:hover svg,#gate .g-dark:focus-visible svg{color:#fff}
+#gate .g-light:hover,#gate .g-light:focus-visible{background:#f0a020;border-color:#f0a020;color:#fff;box-shadow:0 0 30px rgba(240,160,32,.5)}#gate .g-light:hover svg,#gate .g-light:focus-visible svg{color:#fff;rotate:45deg}
+/* the flying copy of the picked pill */
+.gfly{position:fixed;z-index:101;margin:0;pointer-events:none;overflow:hidden;will-change:left,top,width,height;transition:left .7s cubic-bezier(.16,1,.3,1),top .7s cubic-bezier(.16,1,.3,1),width .7s cubic-bezier(.16,1,.3,1),height .7s cubic-bezier(.16,1,.3,1),padding .7s cubic-bezier(.16,1,.3,1),box-shadow .7s,opacity .45s}
+.gfly>svg,.gfly>span{transition:opacity .2s,scale .2s}
+.gfly.go{padding:0}
+.gfly.go>svg,.gfly.go>span{opacity:0;scale:.5}
+.gfly .gdot{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;scale:0;opacity:0;transition:scale .5s var(--ease),opacity .5s}
+.gfly.g-dark .gdot{background:#4f8dff;box-shadow:0 0 14px #4f8dff,0 0 28px rgba(79,141,255,.5)}
+.gfly.g-light .gdot{background:#f0a020;box-shadow:0 0 14px #f0a020,0 0 28px rgba(240,160,32,.5)}
+.gfly.go .gdot{scale:1;opacity:1}
+.gfly.g-dark.go{box-shadow:0 0 20px rgba(79,141,255,.35);border-color:rgba(79,141,255,.4)}
+.gfly.g-light.go{box-shadow:0 0 20px rgba(240,160,32,.35);border-color:rgba(240,160,32,.4)}
+.gfly.done{opacity:0}
+/* the site settles in underneath */
+html.entering .top{animation:gateTop .9s var(--ease) .35s both}
+html.entering .hero{animation:gateUp 1.2s var(--ease) .3s both}
+@keyframes gateTop{from{opacity:0}}
+@keyframes gateUp{from{opacity:0;translate:0 28px;filter:blur(8px)}}
+@media (prefers-reduced-motion:reduce){#gate .gbg,#gate .gl{transition:opacity .3s}#gate.leaving .gl{filter:none;translate:none}html.entering .top,html.entering .hero{animation:none}}</style>
+<noscript><style>#gate{display:none}html.gate{overflow:auto}</style></noscript>
+
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"></div>
+  <p class="gl"><span class="pr" aria-hidden="true">›</span><span><span id="gtxt" aria-label="Welcome to my portfolio :)"></span><span class="cur" aria-hidden="true"></span></span></p>
+  <div class="gb">
+    <button type="button" class="gpill g-dark" data-theme-pick="dark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z"/></svg><span>Dark</span></button>
+    <button type="button" class="gpill g-light" data-theme-pick="light"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.8"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1"/></svg><span>Light</span></button>
+  </div>
+</div>
+<script>(function(){var seen=false;try{seen=sessionStorage.getItem("hn-gate")==="1"}catch(e){}if(seen){var g=document.getElementById("gate");g.parentNode.removeChild(g)}else document.documentElement.classList.add("gate")})()</script>
 
 <header class="top">
   <a class="brand" href="#top"><i class="st"></i>HELEN NGUYEN</a>
@@ -419,7 +475,7 @@ footer .st{color:var(--acc)}
   <section id="all" aria-labelledby="all-h">
     <div class="head rv" style="margin-inline:var(--g)"><h2 id="all-h"><i class="st rev"></i>All projects</h2><span class="lbl">Drag · swipe · arrows</span></div>
     <div class="car" id="car" tabindex="0" role="region" aria-roledescription="carousel" aria-label="All projects, use arrow keys or drag"><div class="track" id="track"></div></div>
-    <div class="carnav"><button type="button" id="carprev" aria-label="Previous project">←</button><span id="carcount">01 / 01</span><button type="button" id="carnext" aria-label="Next project">→</button><button type="button" id="carplay" class="play" aria-pressed="true" aria-label="Pause auto-scroll"><svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="1.5" width="3" height="11" rx="1"/><rect x="8.5" y="1.5" width="3" height="11" rx="1"/></svg><svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 1.8v10.4a.6.6 0 0 0 .9.5l8.2-5.2a.6.6 0 0 0 0-1L4.4 1.3a.6.6 0 0 0-.9.5z"/></svg><svg class="ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23"/></svg></button></div>
+    <div class="carnav"><button type="button" id="carprev" aria-label="Previous project">←</button><span id="carcount">01 / 01</span><button type="button" id="carnext" aria-label="Next project">→</button></div>
     <div class="dots" id="dots"></div>
   </section>
 
@@ -468,10 +524,11 @@ footer .st{color:var(--acc)}
       </div>
       <form class="panel form rv" id="cform" novalidate>
         <h3 class="full">Let's get in touch</h3>
-        <label>NAME<input id="f-name" name="name" autocomplete="name" required></label>
-        <label>EMAIL<input id="f-mail" name="email" type="email" autocomplete="email" required></label>
-        <label class="full">SUBJECT<input id="f-sub" name="subject"></label>
-        <label class="full">MESSAGE<textarea id="f-msg" name="message" required></textarea></label>
+        <p class="full fnote">All fields are required <b class="req" aria-hidden="true">*</b></p>
+        <label>NAME <b class="req" aria-hidden="true">*</b><input id="f-name" name="name" autocomplete="name" required aria-required="true" aria-describedby="e-name"><span class="ferr" id="e-name"></span></label>
+        <label>EMAIL <b class="req" aria-hidden="true">*</b><input id="f-mail" name="email" type="email" autocomplete="email" required aria-required="true" aria-describedby="e-mail"><span class="ferr" id="e-mail"></span></label>
+        <label class="full">SUBJECT <b class="req" aria-hidden="true">*</b><input id="f-sub" name="subject" required aria-required="true" aria-describedby="e-sub"><span class="ferr" id="e-sub"></span></label>
+        <label class="full">MESSAGE <b class="req" aria-hidden="true">*</b><textarea id="f-msg" name="message" required aria-required="true" aria-describedby="e-msg"></textarea><span class="ferr" id="e-msg"></span></label>
         <input type="text" name="_honey" id="f-hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
         <div class="fbot" style="justify-content:flex-end"><button class="send" type="submit" id="fsend"><i class="st"></i>SEND</button></div>
         <p class="fstatus" id="fstatus" role="status" aria-live="polite"></p>
@@ -614,7 +671,7 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-open
   dots.innerHTML=items.map(function(p,i){return '<button type="button" aria-label="Go to '+esc(p.t)+'" data-i="'+i+'"></button>'}).join("");
   var cards=track.children,dotEls=dots.querySelectorAll("button");var disc=document.createElement("span");disc.className="disc";disc.setAttribute("aria-hidden","true");dots.prepend(disc);
   function place(extra){var c=cards[idx];track.style.transform="translateX("+(car.clientWidth/2-(c.offsetLeft+c.offsetWidth/2)+(extra||0))+"px)"}
-  function go(i){idx=Math.max(0,Math.min(n-1,i));Array.prototype.forEach.call(cards,function(c,k){c.classList.toggle("on",k===idx)});Array.prototype.forEach.call(dotEls,function(d,k){d.classList.toggle("on",k===idx);d.classList.toggle("past",k<idx)});var cd=dotEls[idx];disc.style.translate=(cd.offsetLeft+cd.offsetWidth/2)+"px 0";count.textContent=String(idx+1).padStart(2,"0")+" / "+String(n).padStart(2,"0");place();sched(AUTO*1.6)}
+  function go(i,a){idx=Math.max(0,Math.min(n-1,i));car.classList.toggle("glide",!!a);Array.prototype.forEach.call(cards,function(c,k){c.classList.toggle("on",k===idx)});Array.prototype.forEach.call(dotEls,function(d,k){d.classList.toggle("on",k===idx);d.classList.toggle("past",k<idx)});var cd=dotEls[idx];disc.style.translate=(cd.offsetLeft+cd.offsetWidth/2)+"px 0";count.textContent=String(idx+1).padStart(2,"0")+" / "+String(n).padStart(2,"0");place();sched(a?AUTO:3500)}
   function activate(i){if(!items[i].soon)openProject(items[i].id)}
   // buttons: on touch, act on touchend and cancel the emulated click (phones can swallow, delay or hover-eat it); mouse/keyboard keep using click
   function tap(el,fn){var x=0,y=0,t=0;
@@ -622,15 +679,12 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-open
     el.addEventListener("touchend",function(e){var p=e.changedTouches[0];if(Math.abs(p.clientX-x)<24&&Math.abs(p.clientY-y)<24){e.preventDefault();t=Date.now();fn()}});
     el.addEventListener("click",function(){if(Date.now()-t>700)fn()})}
   // arrows wrap around, so the last card never feels like a dead button
-  function next(){go(idx<n-1?idx+1:0)}
-  tap($("#carprev"),function(){go(idx>0?idx-1:n-1)});tap($("#carnext"),next);
-  // auto-scroll: runs only while the carousel is on screen; any manual move gives a longer beat before it resumes
-  var play=$("#carplay"),AUTO=4200,auto=!reduce,inView=false,hov=false,timer=0;
-  function sched(d){clearTimeout(timer);play.classList.remove("run");if(!auto||!inView||hov||document.hidden)return;d=d||AUTO;
-    play.style.setProperty("--dur",d+"ms");void play.offsetWidth;play.classList.add("run");
-    timer=setTimeout(function(){if(sx!==null)return sched();next();sched()},d)}
-  function setAuto(on){auto=on;play.setAttribute("aria-pressed",on);play.setAttribute("aria-label",on?"Pause auto-scroll":"Play auto-scroll");sched()}
-  tap(play,function(){setAuto(!auto)});setAuto(auto);
+  function next(a){if(idx<n-1)go(idx+1,a);else{go(0);if(a)sched(1600)}} // auto: eased rewind at the end, then keep drifting
+  tap($("#carprev"),function(){go(idx>0?idx-1:n-1)});tap($("#carnext"),function(){next()});
+  // auto-scroll: starts by itself once the carousel is on screen and glides about one project per second (linear, so it reads as one smooth drift); touch, hover or any manual move holds it briefly
+  var AUTO=1000,auto=!reduce,inView=false,hov=false,timer=0;
+  function sched(d){clearTimeout(timer);if(!auto||!inView||hov||document.hidden)return;
+    timer=setTimeout(function(){if(sx!==null)return sched(600);next(true)},d||AUTO)}
   new IntersectionObserver(function(es){inView=es[0].isIntersecting;sched()},{threshold:.35}).observe(car);
   document.addEventListener("visibilitychange",function(){sched()});
   car.addEventListener("pointerenter",function(e){if(e.pointerType==="mouse"){hov=true;sched()}});
@@ -641,7 +695,7 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-open
   var sx=null,dx=0,moved=false;
   // gesture: a tap stays a tap (finger jitter allowed), a sideways swipe drags, a vertical swipe is left to page scrolling
   var sy=0,dy=0,t0=0;
-  car.addEventListener("pointerdown",function(e){if(e.button>0)return;sx=e.clientX;sy=e.clientY;dx=dy=0;moved=false;t0=Date.now()});
+  car.addEventListener("pointerdown",function(e){if(e.button>0)return;sx=e.clientX;sy=e.clientY;dx=dy=0;moved=false;t0=Date.now();car.classList.remove("glide")});
   addEventListener("pointermove",function(e){if(sx===null)return;dx=e.clientX-sx;dy=e.clientY-sy;
     if(!moved){if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){sx=null;return}if(Math.abs(dx)>12&&Math.abs(dx)>Math.abs(dy)){moved=true;car.classList.add("drag")}}
     if(moved)place(dx)});
@@ -717,7 +771,8 @@ if(!reduce&&"IntersectionObserver" in window){
   p.style.display="grid";
   var ghost=document.createElement("span");ghost.textContent=txt;ghost.style.cssText="grid-area:1/1;visibility:hidden";ghost.setAttribute("aria-hidden","true");
   src.style.gridArea="1/1";src.textContent="";p.insertBefore(ghost,src);
-  var k=0;(function t(){k=Math.min(txt.length,k+2);src.innerHTML=esc(txt.slice(0,k))+(k<txt.length?'<span class="cur" style="height:1em"></span>':"");if(k<txt.length)setTimeout(t,18)})();
+  var k=0;function t(){k=Math.min(txt.length,k+2);src.innerHTML=esc(txt.slice(0,k))+(k<txt.length?'<span class="cur" style="height:1em"></span>':"");if(k<txt.length)setTimeout(t,18)}
+  if($("#gate"))addEventListener("hn:enter",function(){setTimeout(t,500)},{once:true});else t(); // wait for the opening gate
 })();
 
 // ---------- typed hero word ----------
@@ -740,8 +795,32 @@ if(!reduce&&"IntersectionObserver" in window){
   function cur(){return root.dataset.theme||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark")}
   function sync(){var n=cur()==="dark"?"light":"dark";b.textContent=n==="light"?"Light":"Dark";b.setAttribute("aria-label","Switch to "+n+" theme")}
   try{var s=localStorage.getItem("hn-theme");if(s)root.dataset.theme=s}catch(e){}
-  sync();b.addEventListener("click",function(){var n=cur()==="dark"?"light":"dark";root.dataset.theme=n;try{localStorage.setItem("hn-theme",n)}catch(e){}sync()});
-})();
+  function set(n){root.dataset.theme=n;try{localStorage.setItem("hn-theme",n)}catch(e){}sync()}
+  sync();b.addEventListener("click",function(){set(cur()==="dark"?"light":"dark")});
+  // opening gate: type the welcome; the picked pill then flies into the header theme switch while the gate dissolves and the site settles in
+  var g=$("#gate");if(!g)return;
+  var txt="Welcome to my portfolio :)",out=$("#gtxt"),k=0,gone=false;
+  function ready(){g.classList.add("ready")}
+  if(reduce){out.textContent=txt;ready()}else setTimeout(function t(){out.textContent=txt.slice(0,++k);if(k<txt.length)setTimeout(t,/[ ,]/.test(txt[k-1])?110:38+Math.random()*30);else setTimeout(ready,350)},300);
+  function enter(p){if(gone)return;gone=true;
+    try{sessionStorage.setItem("hn-gate","1")}catch(e){}
+    var r=p.getBoundingClientRect(),tb=b,fly=p.cloneNode(true);
+    fly.classList.add("gfly");fly.removeAttribute("data-theme-pick");fly.setAttribute("aria-hidden","true");fly.tabIndex=-1;
+    fly.insertAdjacentHTML("beforeend",'<i class="gdot"></i>');
+    function box(x){fly.style.left=x.left+"px";fly.style.top=x.top+"px";fly.style.width=x.width+"px";fly.style.height=x.height+"px"}
+    box(r);document.body.appendChild(fly);
+    set(p.dataset.themePick);tb.style.opacity="0";
+    g.classList.add("leaving");root.classList.remove("gate");root.classList.add("entering");dispatchEvent(new Event("hn:enter"));
+    var T=reduce?0:1;
+    requestAnimationFrame(function(){requestAnimationFrame(function(){var t=tb.getBoundingClientRect();
+      if(!t.width)t={left:innerWidth-58,top:14,width:44,height:44};
+      box({left:t.left,top:t.top,width:t.width,height:t.height});fly.classList.add("go")})});
+    setTimeout(function(){tb.style.transition="opacity .45s";tb.style.opacity="";fly.classList.add("done")},760*T);
+    setTimeout(function(){fly.remove();g.remove();tb.style.transition="";root.classList.remove("entering")},1600*T+350)}
+  g.addEventListener("click",function(e){var p=e.target.closest("[data-theme-pick]");if(p)enter(p)});
+  addEventListener("keydown",function(e){if(gone||!g.classList.contains("ready"))return;
+    if((e.key==="Enter"||e.key===" ")&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest(".gpill"))){e.preventDefault();enter(g.querySelector('[data-theme-pick="'+cur()+'"]'))}});
+  addEventListener("keydown",function(e){if(!gone&&e.key==="Tab"){var bs=g.querySelectorAll("button"),f=bs[0],l=bs[bs.length-1];if(!g.contains(document.activeElement)){f.focus();e.preventDefault()}else if(e.shiftKey&&document.activeElement===f){l.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===l){f.focus();e.preventDefault()}}});})();
 
 // ---------- menu orb ----------
 (function(){var o=$("#orb"),b=$("#orbbtn");function set(v){o.classList.toggle("open",v);b.setAttribute("aria-expanded",v);b.textContent=v?"CLOSE":"MENU"}
@@ -790,17 +869,24 @@ $("#toBoard").addEventListener("click",function(e){e.preventDefault();$("#cform"
     st.innerHTML="This preview can't deliver messages directly, so your email app should open with it ready. If it doesn't, copy it and send it to "+TO+'.<button type="button" id="fcopy">COPY MESSAGE</button>';
     $("#fcopy").addEventListener("click",function(){copyText("To: "+TO+"\nSubject: "+subject+"\n\n"+body,this,"COPY MESSAGE")});
   }
+  // every field is required: each empty or invalid box is outlined and says what it needs; errors clear as they're fixed
+  var F=[["f-name","e-name","Name","Please fill in your name."],["f-mail","e-mail","Email","Please fill in your email."],["f-sub","e-sub","Subject","Please add a subject."],["f-msg","e-msg","Message","Please write a message."]],tried=false;
+  function check(d){var el=$("#"+d[0]),v=el.value.trim(),m=!v?d[3]:(d[0]==="f-mail"&&!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(v)?"That email doesn't look right. Try something like name@example.com.":"");
+    $("#"+d[1]).textContent=m;el.setAttribute("aria-invalid",m?"true":"false");el.parentNode.classList.toggle("bad",!!m);return !m}
+  F.forEach(function(d){$("#"+d[0]).addEventListener("input",function(){if(tried){check(d);var left=F.filter(function(x){return $("#"+x[0]).parentNode.classList.contains("bad")});if(!left.length){st.textContent="";st.className="fstatus"}}})});
   f.addEventListener("submit",function(e){e.preventDefault();if(busy)return;
     if($("#f-hp").value)return; // bots fill the hidden field
+    tried=true;var bad=F.filter(function(d){return !check(d)});
+    if(bad.length){st.className="fstatus bad";st.textContent=bad.length===1?"Almost there. "+$("#"+bad[0][1]).textContent:"Please check the highlighted boxes: "+bad.map(function(d){return d[2]}).join(", ")+".";
+      bad.forEach(function(d){var l=$("#"+d[0]).parentNode;l.classList.remove("shake");void l.offsetWidth;l.classList.add("shake")});
+      $("#"+bad[0][0]).focus();return}
     var name=$("#f-name").value.trim(),mail=$("#f-mail").value.trim(),sub=$("#f-sub").value.trim(),msg=$("#f-msg").value.trim();
-    if(!name||!mail||!msg){st.textContent="Add your name, email and a message first.";return}
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)){st.textContent="That email address doesn't look right. Check it and try again.";return}
-    var subject=sub||("Portfolio enquiry from "+name),body=msg+"\n\n"+name+"\n"+mail;
-    busy=true;btn.lastChild.textContent="SENDING";st.textContent="";
+    var subject=sub,body=msg+"\n\n"+name+"\n"+mail;
+    busy=true;btn.lastChild.textContent="SENDING";st.className="fstatus";st.textContent="";
     fetch("https://formsubmit.co/ajax/"+TO,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},
       body:JSON.stringify({name:name,email:mail,_subject:subject,message:msg,_template:"table",_captcha:"false"})})
     .then(function(r){return r.json().then(function(j){if(!r.ok||String(j.success)!=="true")throw new Error(j.message||"failed")})})
-    .then(function(){f.reset();st.textContent="Sent. Thanks, "+name+". I'll reply to "+mail+"."})
+    .then(function(){f.reset();tried=false;st.className="fstatus ok";st.textContent="Sent. Thanks, "+name+". I'll reply to "+mail+"."})
     .catch(function(){fallback(subject,body)})
     .then(function(){busy=false;btn.lastChild.textContent="SEND"});
   });
