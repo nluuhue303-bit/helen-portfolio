@@ -381,21 +381,26 @@ footer .st{color:var(--acc)}
   .cur,.scrolltab svg,.scrolltab .ring::after{animation:none}
   .rv.pre{opacity:1;translate:none;clip-path:none}
 }
-/* opening gate: typed welcome, then the picked pill flies into the header theme switch while the site fades up (after al3xx.li's hand-off) */
+/* opening gate: the orbit turns slowly behind a typed welcome; the picked pill becomes a star and flies into the orbit's core on the hero */
 html.gate{overflow:hidden}
-#gate{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:34px;padding:24px;color:#f2f4f6}
-#gate .gbg{position:absolute;inset:0;z-index:-1;background:#000;transition:opacity .9s cubic-bezier(.4,0,.2,1) .25s}
-#gate .gbg::before{content:"";position:absolute;left:50%;top:50%;width:min(96vw,440px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:rgba(255,255,255,.05);filter:blur(48px);transition:opacity .5s}
-#gate .gl{margin:0;display:flex;align-items:center;gap:16px;font:300 clamp(21px,4.6vw,40px)/1.2 var(--sans);letter-spacing:-.01em;white-space:nowrap;transition:opacity .5s,filter .5s,translate .5s}
-#gate .gl .pr{font:700 .45em/1 var(--pix);color:#737373}
-#gate .gl .cur{display:inline-block;width:.55em;height:.09em;margin-left:.1em;align-self:flex-end;margin-bottom:.22em;background:currentColor;animation:blink 1s steps(1) infinite}
+#gate{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:36px;padding:24px;color:#f2f4f6}
+#gate .gbg{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(60% 55% at 50% 48%,#0b1220,#05070a 75%);transition:opacity .9s cubic-bezier(.4,0,.2,1) .35s}
+#gate .gfig{position:absolute;left:50%;top:50%;width:max(118vmin,560px);aspect-ratio:1;translate:-50% -50%;color:#8d99a6;opacity:.42;-webkit-mask:radial-gradient(closest-side,#000 70%,transparent 102%);mask:radial-gradient(closest-side,#000 70%,transparent 102%);transition:opacity .8s,scale 1.4s var(--ease)}
+#gate .gfig svg{width:100%;height:100%;display:block}
+#gate .gfig .g1{transform-origin:300px 300px;animation:gspin 140s linear infinite}
+#gate .gfig .g2{transform-origin:300px 300px;animation:gspin 90s linear infinite reverse}
+@keyframes gspin{to{rotate:360deg}}
+#gate .gl{margin:0;display:flex;align-items:center;gap:clamp(10px,1.6vw,18px);font:400 clamp(21px,5.9vw,58px)/1.15 var(--disp);letter-spacing:-.01em;white-space:nowrap;transition:opacity .5s,filter .5s,translate .5s}
+#gate .gl .pr{font:700 clamp(12px,1.4vw,16px)/1 var(--pix);color:#737373}
+#gate .gl .cur{display:inline-block;width:.42em;height:.06em;margin-left:.1em;align-self:flex-end;margin-bottom:.2em;background:currentColor;animation:blink 1s steps(1) infinite}
 #gate .gb{display:flex;gap:14px;opacity:0;translate:0 16px;pointer-events:none;transition:opacity .7s var(--ease),translate .7s var(--ease)}
 #gate.ready .gb{opacity:1;translate:none;pointer-events:auto}
 #gate.leaving{pointer-events:none}
 #gate.leaving .gbg{opacity:0}
-#gate.leaving .gbg::before,#gate.leaving .gl{opacity:0}
-#gate.leaving .gl{filter:blur(4px);translate:0 -6px}
-#gate.leaving .gb{visibility:hidden;transition:none}
+#gate.leaving .gfig{scale:1.06}
+#gate.leaving .gl{opacity:0;filter:blur(4px);translate:0 -6px}
+#gate.leaving .gb button:not(.picked){opacity:0;scale:.9;transition:opacity .35s,scale .35s}
+#gate.leaving .gb .picked{visibility:hidden}
 .gpill{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:42px;padding:0 26px;border-radius:999px;font:600 12px/1 var(--pix);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;transition:scale .3s var(--ease),box-shadow .3s,background .3s,color .3s,border-color .3s}
 .gpill svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;transition:color .3s,rotate .3s}
 .gpill.g-dark{background:rgba(0,0,0,.9);color:#fff;border:1px solid rgba(255,255,255,.2);box-shadow:0 0 20px rgba(0,0,0,.8)}.gpill.g-dark svg{color:#4f8dff}
@@ -403,27 +408,30 @@ html.gate{overflow:hidden}
 #gate .gpill:hover,#gate .gpill:focus-visible{scale:1.05;outline:none}#gate .gpill:active{scale:.95}
 #gate .g-dark:hover,#gate .g-dark:focus-visible{background:#4f8dff;border-color:#4f8dff;box-shadow:0 0 30px rgba(79,141,255,.55)}#gate .g-dark:hover svg,#gate .g-dark:focus-visible svg{color:#fff}
 #gate .g-light:hover,#gate .g-light:focus-visible{background:#f0a020;border-color:#f0a020;color:#fff;box-shadow:0 0 30px rgba(240,160,32,.5)}#gate .g-light:hover svg,#gate .g-light:focus-visible svg{color:#fff;rotate:45deg}
-/* the flying copy of the picked pill */
-.gfly{position:fixed;z-index:101;margin:0;pointer-events:none;overflow:hidden;will-change:left,top,width,height;transition:left .7s cubic-bezier(.16,1,.3,1),top .7s cubic-bezier(.16,1,.3,1),width .7s cubic-bezier(.16,1,.3,1),height .7s cubic-bezier(.16,1,.3,1),padding .7s cubic-bezier(.16,1,.3,1),box-shadow .7s,opacity .45s}
-.gfly>svg,.gfly>span{transition:opacity .2s,scale .2s}
-.gfly.go{padding:0}
-.gfly.go>svg,.gfly.go>span{opacity:0;scale:.5}
-.gfly .gdot{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;scale:0;opacity:0;transition:scale .5s var(--ease),opacity .5s}
-.gfly.g-dark .gdot{background:#4f8dff;box-shadow:0 0 14px #4f8dff,0 0 28px rgba(79,141,255,.5)}
-.gfly.g-light .gdot{background:#f0a020;box-shadow:0 0 14px #f0a020,0 0 28px rgba(240,160,32,.5)}
-.gfly.go .gdot{scale:1;opacity:1}
-.gfly.g-dark.go{box-shadow:0 0 20px rgba(79,141,255,.35);border-color:rgba(79,141,255,.4)}
-.gfly.g-light.go{box-shadow:0 0 20px rgba(240,160,32,.35);border-color:rgba(240,160,32,.4)}
-.gfly.done{opacity:0}
+/* the picked pill: collapses, blooms into a star, then flies to the hero orbit's core */
+.gstar{position:fixed;z-index:101;margin:0;padding:0;pointer-events:none;overflow:visible;transition:left .45s cubic-bezier(.65,0,.35,1),top .45s cubic-bezier(.65,0,.35,1),width .45s cubic-bezier(.65,0,.35,1),height .45s cubic-bezier(.65,0,.35,1),background .35s,border-color .35s,box-shadow .35s}
+.gstar>svg,.gstar>span{transition:opacity .18s,scale .18s}
+.gstar .gs{position:absolute;inset:0;width:100%;height:100%;opacity:0;scale:0;rotate:-90deg;transition:opacity .4s .15s,scale .55s cubic-bezier(.34,1.56,.64,1) .15s,rotate .6s var(--ease) .15s;overflow:visible}
+.gstar.g-dark{--gc:#4f8dff}.gstar.g-light{--gc:#f0a020}
+.gstar .gs path{fill:var(--gc);filter:drop-shadow(0 0 6px var(--gc)) drop-shadow(0 0 16px var(--gc))}
+.gstar.morph{background:transparent;border-color:transparent;box-shadow:none}
+.gstar.morph>svg:not(.gs),.gstar.morph>span{opacity:0;scale:.4}
+.gstar.morph .gs{opacity:1;scale:1;rotate:0deg}
+.gstar.fly,.gstar.fly .gs{transition:none}
+.gstar.land .gs{transition:opacity .5s,scale .5s var(--ease);opacity:0;scale:1.8}
+.dial.land .core path{animation:coreLand 1s var(--ease)}
+.dial.land .core circle{animation:coreRing 1s var(--ease)}
+@keyframes coreLand{0%{fill:var(--acc);filter:drop-shadow(0 0 8px var(--acc))}100%{fill:currentColor;filter:none}}
+@keyframes coreRing{0%{stroke:var(--acc);r:22}40%{r:30;opacity:.5}100%{r:22;opacity:1}}
 /* the site settles in underneath */
-html.entering .top{animation:gateTop .9s var(--ease) .35s both}
-html.entering .hero{animation:gateUp 1.2s var(--ease) .3s both}
+html.entering .top{animation:gateTop .9s var(--ease) .4s both}
+html.entering .hero{animation:gateUp 1.2s var(--ease) .35s both}
 @keyframes gateTop{from{opacity:0}}
-@keyframes gateUp{from{opacity:0;translate:0 28px;filter:blur(8px)}}
-@media (prefers-reduced-motion:reduce){#gate .gbg,#gate .gl{transition:opacity .3s}#gate.leaving .gl{filter:none;translate:none}html.entering .top,html.entering .hero{animation:none}}</style>
+@keyframes gateUp{from{opacity:0;filter:blur(8px)}}
+@media (prefers-reduced-motion:reduce){#gate .gfig .g1,#gate .gfig .g2{animation:none}#gate .gbg,#gate .gl{transition:opacity .3s}#gate.leaving .gl{filter:none;translate:none}html.entering .top,html.entering .hero{animation:none}}</style>
 <noscript><style>#gate{display:none}html.gate{overflow:auto}</style></noscript>
 
-<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"></div>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"><div class="gfig" id="gfig"></div></div>
   <p class="gl"><span class="pr" aria-hidden="true">›</span><span><span id="gtxt" aria-label="Welcome to my portfolio :)"></span><span class="cur" aria-hidden="true"></span></span></p>
   <div class="gb">
     <button type="button" class="gpill g-dark" data-theme-pick="dark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z"/></svg><span>Dark</span></button>
@@ -628,9 +636,10 @@ var P=[
   meta:[["Type","Technology park: dwelling, pleasure, production"],["Site","East of Emerald, QLD (919 ha)"],["Typology","Château de Coucy"],["Systems","Vertical farming, kinetic facade, rainwater filtration"]],
   txt:["A masterplan for a technology park on 919 hectares of former agricultural land east of Emerald, Queensland. Five precedents were analysed for parti, symmetry, proportion, hierarchy, circulation and repetition. Château de Coucy, an irregular trapezoid with cylindrical corner towers around a central keep, became the typology for all three buildings.",
        "The trapezoid was reworked three ways: a Place of Dwelling, a six-storey apartment ring around a shared courtyard with pop-out windows and a rooftop garden; a Place of Pleasure, a fitness centre and bar with a vertical garden and slanted roofs; and a Place of Production, a company building behind an open-and-close facade. A personal manifesto set the rules: curves meeting angular forms, visible exoskeletons, green walls, a central viewing point in each building, and brutalist materials with pops of colour.",
+       "The shape came out of the typology in steps. The castle plan was broken down into its parti, symmetry, proportion, hierarchy, circulation and repeated units, then redrawn by hand, again and again, in coloured pen until the keep, towers and outer wall read as simple parts. Those parts were then pulled apart for each building: the dwelling keeps the trapezoid and opens it into a courtyard ring; the pleasure building turns the towers into hexagon pavilions around a central court; and the production building stretches the outer wall into a long bent frame. Set side by side on the site, the three flows lock together into one campus.",
        "Systems tie the park back to its farming past: indoor vertical farming under LED light, a hexagonal facade panel that opens and closes to control sun, and a rainwater filter for the vertical gardens run by a NodeMCU controller, relay and pump."],
   tags:["Masterplan","Typology","Rendering"],
-  imgs:[["tp-site.jpg","Site plan",1],["tp-dev-dwelling.jpg","Form development: dwelling",1],["tp-dev-production.jpg","Form development: production",1],["tp-dwelling-court.jpg","Place of Dwelling: courtyard"],["tp-dwelling-roof.jpg","Place of Dwelling: rooftop"],["tp-dwelling-plan.jpg","Place of Dwelling: ground floor",1],["tp-dwelling-elev.jpg","Place of Dwelling: elevations",1],["tp-dwelling-section.jpg","Place of Dwelling: sections",1],["tp-pleasure-bar.jpg","Place of Pleasure: bar at night"],["tp-gym.jpg","Place of Pleasure: gym"],["tp-pleasure-plan.jpg","Place of Pleasure: ground floor",1],["tp-pleasure-elev.jpg","Place of Pleasure: elevations",1],["tp-production-aerial.jpg","Place of Production: aerial"],["tp-production-plan.jpg","Place of Production: ground floor",1],["tp-production-section.jpg","Place of Production: sections",1],["tp-water-filter.jpg","Rainwater filter for the vertical gardens",1]]}
+  imgs:[["tp-site.jpg","Site plan",1],["tp-proc-analysis.jpg","Process 1: typological analysis of Château de Coucy",1],["tp-proc-sketches.jpg","Process 2: hand sketches, playing with the shape",1],["tp-dev-dwelling.jpg","Process 3: dwelling, the trapezoid opened into a courtyard ring",1],["tp-dev-pleasure.jpg","Process 4: pleasure, towers become hexagon pavilions",1],["tp-dev-production.jpg","Process 5: production, the frame bent into a triangle",1],["tp-proc-flow.jpg","Process 6: the three flows set together on the site",1],["tp-dwelling-court.jpg","Place of Dwelling: courtyard"],["tp-dwelling-plan.jpg","Place of Dwelling: ground floor",1],["tp-dwelling-elev.jpg","Place of Dwelling: elevations",1],["tp-dwelling-section.jpg","Place of Dwelling: sections",1],["tp-pleasure-bar.jpg","Place of Pleasure: bar at night"],["tp-pleasure-plan.jpg","Place of Pleasure: ground floor",1],["tp-pleasure-elev.jpg","Place of Pleasure: elevations",1],["tp-production-aerial.jpg","Place of Production: aerial"],["tp-production-plan.jpg","Place of Production: ground floor",1],["tp-production-section.jpg","Place of Production: sections",1],["tp-water-filter.jpg","Rainwater filter for the vertical gardens",1]]}
 ];
 // In progress: listed, not openable yet
 var SOON=[{id:"office",t:"Building Science: Office",k:"Coming soon"},{id:"songline",t:"Songline Apartment",k:"Coming soon"},{id:"dream",t:"Library of the Dream",k:"Coming soon"}];
@@ -748,11 +757,13 @@ function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r
   var c=300,s="";
   for(var r=40;r<=280;r+=30)s+='<circle cx="300" cy="300" r="'+r+'" fill="none" stroke="currentColor" stroke-width=".6" opacity="'+(r===280?.9:.45)+'"/>';
   s+='<path d="M20 300H580M300 20V580" stroke="currentColor" stroke-width=".4" opacity=".35"/>';
+  var rings=s; // the welcome gate reuses the rings and orbiting dots, without the stars
   for(var k=0;k<8;k++){var a=k*Math.PI/4,x=c+280*Math.cos(a),y=c+280*Math.sin(a);s+='<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')" d="M0-9l2.2 6.8L9 0l-6.8 2.2L0 9l-2.2-6.8L-9 0l6.8-2.2z"/>'}
   var dots="",seed=[[70,.4],[100,2.1],[130,3.6],[160,1.2],[190,4.4],[220,5.3],[250,.9],[250,1.05],[160,5.9],[130,3.75]];
   seed.forEach(function(d,i){var x=c+d[0]*Math.cos(d[1]),y=c+d[0]*Math.sin(d[1]);dots+=i===3||i===6?'<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')" d="M-7 0a7 7 0 1 0 7-7 5 5 0 1 1-7 7z"/>':'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="7"/>'});
   var core='<g class="core"><circle cx="300" cy="300" r="22" fill="none" stroke="currentColor" stroke-width=".8"/><path transform="translate(300 300)" d="M0-16L3-5 11-11 5-3 16 0 5 3 11 11 3 5 0 16-3 5-11 11-5 3-16 0-5-3-11-11-3-5z"/></g>';
   $("#dial").innerHTML='<svg viewBox="0 0 600 600" fill="currentColor"><g class="spin">'+s+'</g><g class="spin2">'+dots+'</g>'+core+'</svg>';
+  var gf=$("#gfig");if(gf)gf.innerHTML='<svg viewBox="0 0 600 600" fill="currentColor" aria-hidden="true"><g class="g1">'+rings+'</g><g class="g2">'+dots+'</g></svg>';
 })();
 
 // Every star turns with scroll (one CSS variable drives them all)
@@ -809,22 +820,27 @@ if(!reduce&&"IntersectionObserver" in window){
   var txt="Welcome to my portfolio :)",out=$("#gtxt"),k=0,gone=false;
   function ready(){g.classList.add("ready")}
   if(reduce){out.textContent=txt;ready()}else setTimeout(function t(){out.textContent=txt.slice(0,++k);if(k<txt.length)setTimeout(t,/[ ,]/.test(txt[k-1])?110:38+Math.random()*30);else setTimeout(ready,350)},300);
+  // exit: the picked pill collapses and blooms into a star, flies (tracking the live target) into the orbit's core star on the hero, and lands with a pulse
   function enter(p){if(gone)return;gone=true;
     try{sessionStorage.setItem("hn-gate","1")}catch(e){}
-    var r=p.getBoundingClientRect(),tb=b,fly=p.cloneNode(true);
-    fly.classList.add("gfly");fly.removeAttribute("data-theme-pick");fly.setAttribute("aria-hidden","true");fly.tabIndex=-1;
-    fly.insertAdjacentHTML("beforeend",'<i class="gdot"></i>');
-    function box(x){fly.style.left=x.left+"px";fly.style.top=x.top+"px";fly.style.width=x.width+"px";fly.style.height=x.height+"px"}
-    box(r);document.body.appendChild(fly);
-    set(p.dataset.themePick);tb.style.opacity="0";
-    g.classList.add("leaving");root.classList.remove("gate");root.classList.add("entering");dispatchEvent(new Event("hn:enter"));
-    var T=reduce?0:1;
-    requestAnimationFrame(function(){requestAnimationFrame(function(){var t=tb.getBoundingClientRect();
-      if(!t.width)t={left:innerWidth-58,top:14,width:44,height:44};
-      box({left:t.left,top:t.top,width:t.width,height:t.height});fly.classList.add("go")})});
-    setTimeout(function(){tb.style.transition="opacity .45s";tb.style.opacity="";fly.classList.add("done")},760*T);
-    setTimeout(function(){fly.remove();g.remove();tb.style.transition="";root.classList.remove("entering")},1600*T+350)}
-  g.addEventListener("click",function(e){var p=e.target.closest("[data-theme-pick]");if(p)enter(p)});
+    var r=p.getBoundingClientRect(),st=p.cloneNode(true),mode=p.dataset.themePick;
+    st.className="gpill g-"+mode+" gstar";st.removeAttribute("data-theme-pick");st.setAttribute("aria-hidden","true");st.tabIndex=-1;
+    st.insertAdjacentHTML("beforeend",'<svg class="gs" viewBox="-17 -17 34 34"><path d="M0-16L3-5 11-11 5-3 16 0 5 3 11 11 3 5 0 16-3 5-11 11-5 3-16 0-5-3-11-11-3-5z"/></svg>');
+    function box(x,y,w,h){st.style.left=x+"px";st.style.top=y+"px";st.style.width=w+"px";st.style.height=h+"px"}
+    box(r.left,r.top,r.width,r.height);document.body.appendChild(st);p.classList.add("picked");
+    set(mode);g.classList.add("leaving");root.classList.remove("gate");root.classList.add("entering");dispatchEvent(new Event("hn:enter"));
+    var cx=r.left+r.width/2,cy=r.top+r.height/2,S=46;
+    function done(){st.remove();g.remove();root.classList.remove("entering")}
+    if(reduce){st.remove();setTimeout(done,350);return}
+    requestAnimationFrame(function(){requestAnimationFrame(function(){box(cx-S/2,cy-S/2,S,S);st.classList.add("morph")})});
+    // where to land: the hero orbit's core star if it's on screen, else the brand star in the header
+    function target(){var c=$("#dial .core path"),t=c&&c.getBoundingClientRect();
+      if(!t||!t.width||t.bottom<0||t.top>innerHeight){var bs=$(".brand .st");t=bs&&bs.getBoundingClientRect()}
+      return t&&t.width?t:{left:innerWidth/2,top:24,width:18,height:18}}
+    setTimeout(function(){st.classList.add("fly");var t0=performance.now(),D=950;
+      (function step(now){var k=Math.min(1,(now-t0)/D),e=k===1?1:1-Math.pow(2,-10*k),t=target(),tx=t.left+t.width/2,ty=t.top+t.height/2,ts=t.width*1.15;
+        var x=cx+(tx-cx)*e,y=cy+(ty-cy)*e,w=S+(ts-S)*e;box(x-w/2,y-w/2,w,w);st.querySelector(".gs").style.rotate=(e*360)+"deg";
+        if(k<1)requestAnimationFrame(step);else{st.classList.add("land");var d=$("#dial");if(d){d.classList.remove("land");void d.offsetWidth;d.classList.add("land")}setTimeout(done,600)}})(t0)},700)}  g.addEventListener("click",function(e){var p=e.target.closest("[data-theme-pick]");if(p)enter(p)});
   addEventListener("keydown",function(e){if(gone||!g.classList.contains("ready"))return;
     if((e.key==="Enter"||e.key===" ")&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest(".gpill"))){e.preventDefault();enter(g.querySelector('[data-theme-pick="'+cur()+'"]'))}});
   addEventListener("keydown",function(e){if(!gone&&e.key==="Tab"){var bs=g.querySelectorAll("button"),f=bs[0],l=bs[bs.length-1];if(!g.contains(document.activeElement)){f.focus();e.preventDefault()}else if(e.shiftKey&&document.activeElement===f){l.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===l){f.focus();e.preventDefault()}}});})();
