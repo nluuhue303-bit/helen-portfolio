@@ -375,41 +375,30 @@ footer .st{color:var(--acc)}
   .card .ci b{font-size:clamp(20px,1.8vw,28px)}
   .panel h3{font-size:clamp(34px,3.2vw,50px)}
 }
-/* opening gate: the orbit turns slowly behind a typed welcome; the picked pill becomes a star and flies into the orbit's core on the hero */
+/* opening gate: looking up through a lattice gridshell, the typed welcome sits in the oculus; the picked pill becomes a star and flies on an arc into the hero orbit's core */
 html.gate{overflow:hidden}
 #gate{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:36px;padding:24px;color:#f2f4f6}
-#gate .gbg{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(60% 55% at 50% 48%,#0b1220,#05070a 75%);transition:opacity .9s cubic-bezier(.4,0,.2,1) .35s}
-#gate{--D:min(74vmin,600px);--orn:#8d99a6}
-/* ornament frame, crescents, twinkling asterisk grid and an embossed disc: a quiet echo of an engraved title page */
-#gate .gframe{position:absolute;inset:clamp(14px,3.2vmin,36px);color:var(--orn);opacity:.3;animation:gIn 1.8s var(--ease) both}
+#gate .gbg{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(circle at 50% 50%,#131c2a 0,#0b111a 26%,#05070a 70%);transition:opacity 1.1s cubic-bezier(.4,0,.2,1) .45s}
+#gate .glat{position:absolute;inset:0;width:100%;height:100%;display:block}
+#gate .gframe{position:absolute;inset:clamp(12px,2.6vmin,30px);color:#4f8dff;opacity:.42;font-size:18px;animation:gIn 1.8s var(--ease) .3s both;transition:opacity .5s}
 #gate .gframe>div{position:absolute;display:flex;justify-content:space-between;align-items:center}
-#gate .gframe .ft,#gate .gframe .fb2{left:0;right:0;height:56px}#gate .gframe .ft{top:0}#gate .gframe .fb2{bottom:0}
-#gate .gframe .fl,#gate .gframe .fr{top:15%;bottom:15%;width:56px;flex-direction:column}#gate .gframe .fl{left:0}#gate .gframe .fr{right:0}
-#gate .gframe svg{display:block;fill:currentColor;stroke:currentColor;overflow:visible}
-#gate .o-d{width:64px;height:12px}#gate .fl .o-d,#gate .fr .o-d{rotate:90deg}
-#gate .o-x{width:52px;height:52px}#gate .o-c{width:14px;height:14px}
-#gate .gstage{position:absolute;left:50%;top:50%;width:var(--D);height:var(--D);translate:-50% -50%;transition:scale 1.4s var(--ease)}
-#gate .gstars{position:absolute;left:-16%;right:-16%;top:6%;bottom:6%;display:grid;grid-template-columns:repeat(13,1fr);grid-template-rows:repeat(10,1fr);place-items:center;color:var(--orn)}
-#gate .gstars i{font:700 clamp(11px,2vmin,18px)/1 var(--pix);font-style:normal;opacity:0;animation:gTw var(--d,7s) ease-in-out var(--w,0s) infinite}
-@keyframes gTw{0%,100%{opacity:0}35%,65%{opacity:.34}}
-#gate .gbr{position:absolute;top:50%;width:calc(var(--D)*.075);height:calc(var(--D)*1.12);translate:0 -50%;fill:var(--orn);opacity:.42;animation:gIn 1.6s var(--ease) .2s both}
-#gate .gbr.l{left:calc(var(--D)*-.3)}#gate .gbr.r{right:calc(var(--D)*-.3);scale:-1 1}
-#gate .gdisc{position:absolute;inset:0;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 36% 30%,#151d2a,#0a0e15 72%);box-shadow:inset 7px 9px 22px rgba(255,255,255,.035),inset -12px -16px 34px rgba(0,0,0,.6),0 40px 90px -30px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.035);animation:gDisc 1.6s var(--ease) both}
-@keyframes gDisc{from{opacity:0;scale:.9}}
+#gate .gframe .ft,#gate .gframe .fb2{left:0;right:0}#gate .gframe .ft{top:0}#gate .gframe .fb2{bottom:0}
+#gate .gframe .fl,#gate .gframe .fr{top:70px;bottom:70px;flex-direction:column}#gate .gframe .fl{left:0}#gate .gframe .fr{right:0}
+#gate .gframe svg{display:block;fill:currentColor}
+#gate .gframe .ros{animation:gspin 48s linear infinite}#gate .gframe .ros.rev{animation-direction:reverse}
+@keyframes gspin{to{rotate:360deg}}
 @keyframes gIn{from{opacity:0}}
-#gate .gfig{position:absolute;inset:5%;color:var(--orn);opacity:.62;filter:drop-shadow(1px 1.5px 0 rgba(0,0,0,.7)) drop-shadow(-.6px -.6px 0 rgba(255,255,255,.07))}
-#gate .gfig svg{width:100%;height:100%;display:block}
-@media (max-width:640px){#gate{--D:min(76vmin,600px)}#gate .gframe .d2,#gate .gframe .fl,#gate .gframe .fr{display:none}#gate .gstars{left:-9%;right:-9%}#gate .gbr{width:calc(var(--D)*.06)}#gate .gbr.l{left:calc(var(--D)*-.1)}#gate .gbr.r{right:calc(var(--D)*-.1)}}@keyframes gspin{to{rotate:360deg}}
-#gate .gl{margin:0;display:flex;align-items:center;gap:clamp(10px,1.6vw,18px);font:400 clamp(21px,5.9vw,50px)/1.15 var(--disp);text-shadow:0 2px 18px #05070a;letter-spacing:-.01em;white-space:nowrap;transition:opacity .5s,filter .5s,translate .5s}
+@media (max-width:640px){#gate .gframe .d2{display:none}#gate .gframe .fl,#gate .gframe .fr{top:56px;bottom:56px}}
+#gate .gl{margin:0;display:flex;align-items:center;gap:clamp(10px,1.6vw,18px);font:400 clamp(21px,5.9vw,50px)/1.15 var(--disp);letter-spacing:-.01em;white-space:nowrap;text-shadow:0 2px 18px #05070a;transition:opacity .45s,filter .45s,translate .6s var(--ease)}
 #gate .gl .pr{font:700 clamp(12px,1.4vw,16px)/1 var(--pix);color:#737373}
 #gate .gl .cur{display:inline-block;width:.42em;height:.06em;margin-left:.1em;align-self:flex-end;margin-bottom:.2em;background:currentColor;animation:blink 1s steps(1) infinite}
 #gate .gb{display:flex;gap:14px;opacity:0;translate:0 16px;pointer-events:none;transition:opacity .7s var(--ease),translate .7s var(--ease)}
 #gate.ready .gb{opacity:1;translate:none;pointer-events:auto}
 #gate.leaving{pointer-events:none}
 #gate.leaving .gbg{opacity:0}
-#gate.leaving .gstage{scale:1.05}
-#gate.leaving .gl{opacity:0;filter:blur(4px);translate:0 -6px}
-#gate.leaving .gb button:not(.picked){opacity:0;scale:.9;transition:opacity .35s,scale .35s}
+#gate.leaving .gframe{opacity:0}
+#gate.leaving .gl{opacity:0;filter:blur(6px);translate:0 -14px}
+#gate.leaving .gb button:not(.picked){opacity:0;scale:.9;filter:blur(3px);transition:opacity .35s,scale .45s var(--ease),filter .35s}
 #gate.leaving .gb .picked{visibility:hidden}
 .gpill{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:42px;padding:0 26px;border-radius:999px;font:600 12px/1 var(--pix);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;transition:scale .3s var(--ease),box-shadow .3s,background .3s,color .3s,border-color .3s}
 .gpill svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;transition:color .3s,rotate .3s}
@@ -418,30 +407,25 @@ html.gate{overflow:hidden}
 #gate .gpill:hover,#gate .gpill:focus-visible{scale:1.05;outline:none}#gate .gpill:active{scale:.95}
 #gate .g-dark:hover,#gate .g-dark:focus-visible{background:#4f8dff;border-color:#4f8dff;box-shadow:0 0 30px rgba(79,141,255,.55)}#gate .g-dark:hover svg,#gate .g-dark:focus-visible svg{color:#fff}
 #gate .g-light:hover,#gate .g-light:focus-visible{background:#f0a020;border-color:#f0a020;color:#fff;box-shadow:0 0 30px rgba(240,160,32,.5)}#gate .g-light:hover svg,#gate .g-light:focus-visible svg{color:#fff;rotate:45deg}
-/* the picked pill: collapses, blooms into a star, then flies to the hero orbit's core */
-.gstar{position:fixed;z-index:101;margin:0;padding:0;pointer-events:none;overflow:visible;transition:left .45s cubic-bezier(.65,0,.35,1),top .45s cubic-bezier(.65,0,.35,1),width .45s cubic-bezier(.65,0,.35,1),height .45s cubic-bezier(.65,0,.35,1),background .35s,border-color .35s,box-shadow .35s}
-.gstar>svg,.gstar>span{transition:opacity .18s,scale .18s}
-.gstar .gs{position:absolute;inset:0;width:100%;height:100%;opacity:0;scale:0;rotate:-90deg;transition:opacity .4s .15s,scale .55s cubic-bezier(.34,1.56,.64,1) .15s,rotate .6s var(--ease) .15s;overflow:visible}
-.gstar.g-dark{--gc:#4f8dff}.gstar.g-light{--gc:#f0a020}
-.gstar .gs path{fill:var(--gc);filter:drop-shadow(0 0 6px var(--gc)) drop-shadow(0 0 16px var(--gc))}
-.gstar.morph{background:transparent;border-color:transparent;box-shadow:none}
-.gstar.morph>svg:not(.gs),.gstar.morph>span{opacity:0;scale:.4}
-.gstar.morph .gs{opacity:1;scale:1;rotate:0deg}
-.gstar.fly,.gstar.fly .gs{transition:none}
-.gstar.land .gs{transition:opacity .5s,scale .5s var(--ease);opacity:0;scale:1.8}
-.dial.land .core path{animation:coreLand 1s var(--ease)}
-.dial.land .core circle{animation:coreRing 1s var(--ease)}
+/* the exit: pill squashes (anticipation), pinches to a disc, the star springs out of it, then arcs across the screen with a spark trail and lands with an overshoot and a ripple */
+.gpfly{position:fixed;z-index:101;margin:0;pointer-events:none;will-change:transform,clip-path}
+.gfly{position:fixed;z-index:102;pointer-events:none;will-change:transform}
+.gfly svg{width:100%;height:100%;display:block;overflow:visible}
+.gfly path{fill:var(--gc);filter:drop-shadow(0 0 4px var(--gc)) drop-shadow(0 0 14px var(--gc))}
+.gspark{position:fixed;z-index:101;border-radius:50%;pointer-events:none;will-change:transform,opacity}
+.gripple{position:fixed;z-index:101;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--gc);box-shadow:0 0 14px var(--gc),inset 0 0 8px var(--gc);pointer-events:none}
+.dial.land .core path{animation:coreLand 1.1s var(--ease)}
+.dial.land .core circle{animation:coreRing 1.1s var(--ease)}
 @keyframes coreLand{0%{fill:var(--acc);filter:drop-shadow(0 0 8px var(--acc))}100%{fill:currentColor;filter:none}}
 @keyframes coreRing{0%{stroke:var(--acc);r:22}40%{r:30;opacity:.5}100%{r:22;opacity:1}}
 /* the site settles in underneath */
-html.entering .top{animation:gateTop .9s var(--ease) .4s both}
-html.entering .hero{animation:gateUp 1.2s var(--ease) .35s both}
+html.entering .top{animation:gateTop .9s var(--ease) .45s both}
+html.entering .hero{animation:gateUp 1.3s var(--ease) .4s both}
 @keyframes gateTop{from{opacity:0}}
-@keyframes gateUp{from{opacity:0;filter:blur(8px)}}
-</style>
+@keyframes gateUp{from{opacity:0;filter:blur(8px)}}</style>
 <noscript><style>#gate{display:none}html.gate{overflow:auto}</style></noscript>
 
-<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"><div class="gframe" id="gframe"></div><div class="gstage"><div class="gstars" id="gstars"></div><svg class="gbr l" viewBox="0 0 60 400"><path d="M58 0C-18 110-18 290 58 400 8 290 8 110 58 0z"/></svg><svg class="gbr r" viewBox="0 0 60 400"><path d="M58 0C-18 110-18 290 58 400 8 290 8 110 58 0z"/></svg><div class="gdisc"><div class="gfig" id="gfig"></div></div></div></div>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"><canvas class="glat" id="glat"></canvas><div class="gframe" id="gframe"></div></div>
   <p class="gl"><span class="pr" aria-hidden="true">›</span><span><span id="gtxt" aria-label="Welcome to my portfolio :)"></span><span class="cur" aria-hidden="true"></span></span></p>
   <div class="gb">
     <button type="button" class="gpill g-dark" data-theme-pick="dark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z"/></svg><span>Dark</span></button>
@@ -759,36 +743,25 @@ var rItems=document.querySelectorAll("#ornL>*,#ornR>*"),railN=document.querySele
 function cusp(x,y,rot,out,inn,w){return '<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')" d="M0 '+(-out)+'Q0 0 '+w+' 0Q0 0 0 '+inn+'Q0 0 '+(-w)+' 0Q0 0 0 '+(-out)+'z"/>'}
 // lens: a filled ellipse with an optional ground-coloured eye
 function lens(x,y,rot,rx,ry,hole){return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')"><ellipse rx="'+rx+'" ry="'+ry+'"/>'+(hole?'<ellipse rx="'+(rx*.45)+'" ry="'+(ry*.5)+'" fill="var(--bg)"/>':'')+'</g>'}
-// welcome gate: a courtyard plan (after the Chateau de Coucy typology behind Technopark) drafts itself on a loop
-function draft(){
-  var L=function(d,c,sw,t0,t1){return '<path class="dl" d="'+d+'" pathLength="1" fill="none" stroke="currentColor" stroke-width="'+sw+'" data-a="'+t0+'" data-b="'+t1+'"'+(c?' opacity="'+c+'"':'')+'/>'};
-  var T=function(x,y,t,t0,sz){return '<text class="df" x="'+x+'" y="'+y+'" data-a="'+t0+'" font-size="'+(sz||10)+'" text-anchor="middle" dominant-baseline="central">'+t+'</text>'};
-  var g="",i;
-  // 1. structural grid with axis bubbles
-  [170,250,330,410].forEach(function(x,k){g+=L("M"+x+" 122V478",.45,.5,.02+k*.02,.14+k*.02)+L("M"+x+" 113a9 9 0 1 0 .01 0",.6,.6,.08+k*.02,.16+k*.02)+T(x,104,"ABCD"[k],.16)});
-  [180,260,340,420].forEach(function(y,k){g+=L("M122 "+y+"H478",.45,.5,.04+k*.02,.16+k*.02)+L("M113 "+(y-9)+"a9 9 0 1 0 .01 0",.6,.6,.1+k*.02,.18+k*.02)+T(104,y,k+1,.18)});
-  // 2. walls: irregular trapezoid, courtyard, corner towers, keep
-  g+=L("M172 192L428 172L452 408L152 394Z","",2.4,.18,.36)+L("M206 226L396 212L413 374L190 362Z","",1.4,.26,.42);
-  [[172,192],[428,172],[452,408],[152,394]].forEach(function(p,k){g+=L("M"+p[0]+" "+(p[1]-27)+"a27 27 0 1 0 .01 0","",2,.34+k*.025,.46+k*.025)+'<circle class="dp" cx="'+p[0]+'" cy="'+p[1]+'" r="27" data-a=".6"/>'});
-  g+=L("M300 256a44 44 0 1 0 .01 0","",2,.42,.52)+L("M300 270a30 30 0 1 0 .01 0","",1,.46,.55)+'<circle class="dp" cx="300" cy="300" r="30" data-a=".62"/>';
-  // 3. openings: door swings and window ticks
-  g+=L("M286 401V379A22 22 0 0 1 308 401",.9,.8,.52,.58)+L("M209 266H231A22 22 0 0 1 209 288",.9,.8,.54,.6)+L("M398 250H376A22 22 0 0 0 398 272",.9,.8,.56,.62);
-  for(i=0;i<4;i++){var x=225+i*52,y=190-i*4.1;g+=L("M"+x+" "+(y-5)+"v10M"+(x+6)+" "+(y-5.4)+"v10",.8,.8,.56+i*.012,.6+i*.012)}
-  // 4. dimensions, section cut, north point
-  g+=L("M172 142H428M172 134V150M428 134V150M166 148L178 136M422 148L434 136",.8,.7,.6,.68)+T(300,132,"92.0",.68,11);
-  g+=L("M112 192V394M104 192H120M104 394H120M106 198L118 186M106 400L118 388",.8,.7,.62,.7)+T(96,293,"50.0",.7,11);
-  g+=L("M132 300H468",.7,.6,.64,.72)+'<path class="dp" d="M132 300l14-8v16zM468 300l-14-8v16z" data-a=".72"/>'+T(132,318,"A",.73,11)+T(468,318,"A",.73,11);
-  g+=L("M480 474a14 14 0 1 0 .01 0",.8,.7,.66,.72)+'<path class="dp" d="M480 462l6 22-6-5-6 5z" data-a=".72"/>'+T(480,452,"N",.74,10);
-  // parallel rule sweeping down the board while the drawing is laid out
-  g+='<g class="drule"><path d="M40 0H560" stroke="currentColor" stroke-width="1.2" opacity=".5"/><path d="M40 4H560" stroke="currentColor" stroke-width=".4" opacity=".35"/></g>';
-  return '<svg viewBox="0 0 600 600" aria-hidden="true" fill="currentColor">'+g+'</svg>'}
-function draftPlay(root){
-  var D=16000,end=.86,out=.95,o={duration:D,iterations:Infinity,easing:"linear"};
-  root.querySelectorAll(".dl").forEach(function(el){var a=+el.dataset.a,b=+el.dataset.b;el.style.strokeDasharray="1";
-    el.animate([{strokeDashoffset:1,opacity:1,offset:0},{strokeDashoffset:1,offset:a},{strokeDashoffset:0,offset:b},{strokeDashoffset:0,opacity:1,offset:end},{strokeDashoffset:0,opacity:0,offset:out},{strokeDashoffset:1,opacity:0,offset:1}],o)});
-  root.querySelectorAll(".df,.dp").forEach(function(el){var a=+el.dataset.a,top=el.classList.contains("dp")?.5:1;
-    el.animate([{opacity:0,offset:0},{opacity:0,offset:a},{opacity:top,offset:Math.min(a+.05,end)},{opacity:top,offset:end},{opacity:0,offset:out},{opacity:0,offset:1}],o)});
-  var r=root.querySelector(".drule");if(r)r.animate([{transform:"translateY(90px)",opacity:0,offset:0},{opacity:1,offset:.04},{transform:"translateY(510px)",opacity:1,offset:.7},{transform:"translateY(510px)",opacity:0,offset:.76},{transform:"translateY(510px)",opacity:0,offset:1}],o)}function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)]}
+// welcome gate: a lattice gridshell seen from below (a hyperboloid tower's rings and triangulated struts) with the welcome in its oculus.
+// Rings grow out on entry, twist slowly back and forth, and rush outward as the visitor enters, as if rising through the tower.
+function lattice(cv){
+  var ctx=cv.getContext("2d"),W=0,H=0,dpr=1,t0=performance.now(),leaveAt=0,run=true,M=44,q=1.17;
+  function size(){dpr=Math.min(2,window.devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr)}
+  size();addEventListener("resize",size);
+  function frame(now){if(!run)return;
+    var t=(now-t0)/1000,cx=W/2,cy=H/2,base=Math.max(150,Math.min(Math.min(W,H)*.36,W*.3,340));
+    var ie=1-Math.pow(1-Math.min(1,t/2.2),3),lv=leaveAt?Math.min(1,(now-leaveAt)/1500):0,le=lv*lv*(3-2*lv);
+    var r0=base*(.6+.4*ie)*(1+1.8*le),maxR=Math.hypot(W,H)*.62*(1+1.8*le),al=(.3+.7*ie)*(1-le);
+    var twist=Math.sin(t*.21)*.55,spin=t*.028,rings=[],k,j,r;
+    for(k=0,r=r0;r<maxR;k++,r*=q){var ph=spin+twist*k*.05+(k%2)*Math.PI/M,pts=[];for(j=0;j<M;j++){var an=ph+j*2*Math.PI/M;pts.push([cx+r*Math.cos(an),cy+r*Math.sin(an)])}rings.push({r:r,p:pts})}
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.lineCap="round";
+    for(k=0;k<rings.length-1;k++){var A=rings[k].p,B=rings[k+1].p,od=k%2;ctx.lineWidth=Math.min(2.6,.45+rings[k].r/r0*.32);ctx.strokeStyle="rgba(141,153,166,"+(.17*al)+")";ctx.beginPath();
+      for(j=0;j<M;j++){var a1=A[j],c1=B[j],c2=B[(j+(od?1:M-1))%M];ctx.moveTo(a1[0],a1[1]);ctx.lineTo(c1[0],c1[1]);ctx.moveTo(a1[0],a1[1]);ctx.lineTo(c2[0],c2[1])}ctx.stroke()}
+    for(k=0;k<rings.length;k++){var P=rings[k].p,main=k%3===0;ctx.lineWidth=Math.min(4,(main?1.1:.5)+rings[k].r/r0*(main?.55:.2));ctx.strokeStyle="rgba(141,153,166,"+((main?.34:.2)*al)+")";ctx.beginPath();ctx.moveTo(P[0][0],P[0][1]);for(j=1;j<M;j++)ctx.lineTo(P[j][0],P[j][1]);ctx.closePath();ctx.stroke()}
+    requestAnimationFrame(frame)}
+  requestAnimationFrame(frame);
+  return {leave:function(){leaveAt=performance.now()},stop:function(){run=false;removeEventListener("resize",size)}}}function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)]}
 (function(){
   // fig 1 — orbit: rings, point-stars on the rim, orbiting dots and crescents, a ringed star at the core
   var c=300,s="";
@@ -799,16 +772,6 @@ function draftPlay(root){
   seed.forEach(function(d,i){var x=c+d[0]*Math.cos(d[1]),y=c+d[0]*Math.sin(d[1]);dots+=i===3||i===6?'<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+')" d="M-7 0a7 7 0 1 0 7-7 5 5 0 1 1-7 7z"/>':'<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="7"/>'});
   var core='<g class="core"><circle cx="300" cy="300" r="22" fill="none" stroke="currentColor" stroke-width=".8"/><path transform="translate(300 300)" d="M0-16L3-5 11-11 5-3 16 0 5 3 11 11 3 5 0 16-3 5-11 11-5 3-16 0-5-3-11-11-3-5z"/></g>';
   $("#dial").innerHTML='<svg viewBox="0 0 600 600" fill="currentColor"><g class="spin">'+s+'</g><g class="spin2">'+dots+'</g>'+core+'</svg>';
-  var gf=$("#gfig");if(gf){gf.innerHTML=draft();if(gf.animate)draftPlay(gf);
-    // gate frame: divider (line through two crossed rings), cross of four crossed rings, star corners
-    var ring=function(x,y){return '<circle cx="'+x+'" cy="'+y+'" r="4.2" fill="none" stroke-width=".9"/><path d="M'+x+' '+(y-4.2)+'v8.4M'+(x-4.2)+' '+y+'h8.4" stroke-width=".6"/>'};
-    var D='<svg class="o-d" viewBox="0 0 64 12"><path d="M3 6H61" stroke-width=".8" fill="none"/>'+ring(22,6)+ring(42,6)+'<circle cx="3" cy="6" r="1.5" stroke="none"/><circle cx="61" cy="6" r="1.5" stroke="none"/><circle cx="32" cy="6" r="1.2" stroke="none"/></svg>';
-    var X='<svg class="o-x" viewBox="0 0 52 52"><path d="M26 2V50M2 26H50" stroke-width=".8" fill="none"/>'+ring(26,13)+ring(26,39)+ring(13,26)+ring(39,26)+'<circle cx="26" cy="26" r="1.8" stroke="none"/></svg>';
-    var C='<svg class="o-c" viewBox="-7 -7 14 14"><path d="M0-7L1.5-1.5 7 0 1.5 1.5 0 7-1.5 1.5-7 0-1.5-1.5z" stroke="none"/></svg>';
-    var row=C+D+'<span class="d2">'+D+'</span>'+X+'<span class="d2">'+D+'</span>'+D+C,col=D+'<span class="d2">'+D+'</span>'+X+'<span class="d2">'+D+'</span>'+D;
-    $("#gframe").innerHTML='<div class="ft">'+row+'</div><div class="fb2">'+row+'</div><div class="fl">'+col+'</div><div class="fr">'+col+'</div>';
-    // asterisk grid: each one fades in and out on its own clock, like type being set and lifted
-    var h="";for(var q=0;q<130;q++)h+='<i style="--d:'+(5+Math.random()*6).toFixed(1)+'s;--w:'+(-Math.random()*10).toFixed(1)+'s">*</i>';$("#gstars").innerHTML=h}
 })();
 
 // Every star turns with scroll (one CSS variable drives them all)
@@ -862,30 +825,58 @@ if(!reduce&&"IntersectionObserver" in window){
   sync();b.addEventListener("click",function(){set(cur()==="dark"?"light":"dark")});
   // opening gate: type the welcome; the picked pill then flies into the header theme switch while the gate dissolves and the site settles in
   var g=$("#gate");if(!g)return;
+  var lat=$("#glat")&&$("#glat").getContext?lattice($("#glat")):null;
+  // frame: the site's own rail pattern (rosettes, stars, dot-diamond dashes) in the accent blue
+  var gfr=$("#gframe");if(gfr){var sp=function(x){return '<span class="d2">'+x+'</span>'};
+    var row=[ROS(),HD,sp(HD),ST,sp(HD),HD,ROS(1),HD,sp(HD),ST,sp(HD),HD,ROS()].join(""),col=[VD,sp(VD),ST,VD,ROS(1),VD,ST,sp(VD),VD].join("");
+    gfr.innerHTML='<div class="ft">'+row+'</div><div class="fb2">'+row+'</div><div class="fl">'+col+'</div><div class="fr">'+col+'</div>'}
   var txt="Welcome to my portfolio :)",out=$("#gtxt"),k=0,gone=false;
   function ready(){g.classList.add("ready")}
   if(reduce){out.textContent=txt;ready()}else setTimeout(function t(){out.textContent=txt.slice(0,++k);if(k<txt.length)setTimeout(t,/[ ,]/.test(txt[k-1])?110:38+Math.random()*30);else setTimeout(ready,350)},300);
-  // exit: the picked pill collapses and blooms into a star, flies (tracking the live target) into the orbit's core star on the hero, and lands with a pulse
+  // exit, built on classic animation principles: anticipation (the pill squashes), squash-and-stretch into a disc, a spring bloom (overshoot, settle),
+  // a flight along a curved arc (never a straight line) with slow-in/slow-out and a spark trail, then an overshoot landing with a ripple
+  var STAR='<svg viewBox="-17 -17 34 34"><path d="M0-16L3-5 11-11 5-3 16 0 5 3 11 11 3 5 0 16-3 5-11 11-5 3-16 0-5-3-11-11-3-5z"/></svg>';
+  var SPRING="linear(0,.009,.035 2.1%,.141 4.4%,.723 12.9%,.938 16.7%,1.017 19.4%,1.077,1.121 24.2%,1.14 26.2%,1.14 28.3%,1.123 30.5%,1.051 36.1%,1.018 39.2%,.994 42.1%,.982 45%,.983 50.5%,.999 61.3%,1.003 70.9%,1)";
+  if(!(window.CSS&&CSS.supports&&CSS.supports("animation-timing-function",SPRING)))SPRING="cubic-bezier(.34,1.56,.64,1)";
   function enter(p){if(gone)return;gone=true;
     try{sessionStorage.setItem("hn-gate","1")}catch(e){}
-    var r=p.getBoundingClientRect(),st=p.cloneNode(true),mode=p.dataset.themePick;
-    st.className="gpill g-"+mode+" gstar";st.removeAttribute("data-theme-pick");st.setAttribute("aria-hidden","true");st.tabIndex=-1;
-    st.insertAdjacentHTML("beforeend",'<svg class="gs" viewBox="-17 -17 34 34"><path d="M0-16L3-5 11-11 5-3 16 0 5 3 11 11 3 5 0 16-3 5-11 11-5 3-16 0-5-3-11-11-3-5z"/></svg>');
-    function box(x,y,w,h){st.style.left=x+"px";st.style.top=y+"px";st.style.width=w+"px";st.style.height=h+"px"}
-    box(r.left,r.top,r.width,r.height);document.body.appendChild(st);p.classList.add("picked");
-    set(mode);g.classList.add("leaving");root.classList.remove("gate");root.classList.add("entering");dispatchEvent(new Event("hn:enter"));
-    var cx=r.left+r.width/2,cy=r.top+r.height/2,S=46;
-    function done(){st.remove();g.remove();root.classList.remove("entering")}
-    if(reduce){st.remove();setTimeout(done,350);return}
-    requestAnimationFrame(function(){requestAnimationFrame(function(){box(cx-S/2,cy-S/2,S,S);st.classList.add("morph")})});
-    // where to land: the hero orbit's core star if it's on screen, else the brand star in the header
+    var mode=p.dataset.themePick,col=mode==="dark"?"#4f8dff":"#f0a020",r=p.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,S=46,ease="cubic-bezier(.65,0,.35,1)";
+    var pill=p.cloneNode(true);pill.className="gpill g-"+mode+" gpfly";pill.removeAttribute("data-theme-pick");pill.setAttribute("aria-hidden","true");pill.tabIndex=-1;
+    pill.style.cssText="left:"+r.left+"px;top:"+r.top+"px;width:"+r.width+"px;height:"+r.height+"px";document.body.appendChild(pill);p.classList.add("picked");
+    var star=document.createElement("div");star.className="gfly";star.style.cssText="left:"+(cx-S/2)+"px;top:"+(cy-S/2)+"px;width:"+S+"px;height:"+S+"px;--gc:"+col;star.innerHTML=STAR;document.body.appendChild(star);
+    var svg=star.firstChild;svg.style.opacity="0";
+    set(mode);g.classList.add("leaving");root.classList.remove("gate");root.classList.add("entering");dispatchEvent(new Event("hn:enter"));if(lat)lat.leave();
+    function done(){star.remove();pill.remove();g.remove();root.classList.remove("entering");if(lat)lat.stop()}
+    if(!pill.animate){done();return}
+    var H=r.height/2,ins=Math.max(0,(r.width-r.height)/2)+"px";
+    // 1. anticipation + pinch: squash down, then the capsule closes into a glowing disc and vanishes into the star
+    pill.animate([{transform:"scale(1)",clipPath:"inset(0px 0px round "+H+"px)",boxShadow:"0 0 0 0 transparent"},
+      {transform:"scale(1.03,.86)",clipPath:"inset(0px 0px round "+H+"px)",offset:.2},
+      {transform:"scale(1.06)",clipPath:"inset(0px "+ins+" round "+H+"px)",boxShadow:"0 0 30px 4px "+col,offset:.62},
+      {transform:"scale(.35)",clipPath:"inset(0px "+ins+" round "+H+"px)",boxShadow:"0 0 40px 8px "+col,opacity:0}],{duration:820,easing:ease,fill:"forwards"});
+    pill.querySelectorAll("span,svg").forEach(function(el){el.animate([{opacity:1,filter:"blur(0px)"},{opacity:0,filter:"blur(5px)"}],{duration:240,fill:"forwards"})});
+    // 2. bloom: the star springs out of the disc, spinning into place
+    svg.animate([{opacity:0,transform:"scale(0) rotate(-160deg)"},{opacity:1,transform:"scale(1) rotate(0deg)"}],{duration:900,delay:430,easing:SPRING,fill:"forwards"});
+    // 3. flight along a quadratic arc toward the live target (the hero orbit's core star, or the brand star if the core is off screen)
     function target(){var c=$("#dial .core path"),t=c&&c.getBoundingClientRect();
       if(!t||!t.width||t.bottom<0||t.top>innerHeight){var bs=$(".brand .st");t=bs&&bs.getBoundingClientRect()}
       return t&&t.width?t:{left:innerWidth/2,top:24,width:18,height:18}}
-    setTimeout(function(){st.classList.add("fly");var t0=performance.now(),D=950;
-      (function step(now){var k=Math.min(1,(now-t0)/D),e=k===1?1:1-Math.pow(2,-10*k),t=target(),tx=t.left+t.width/2,ty=t.top+t.height/2,ts=t.width*1.15;
-        var x=cx+(tx-cx)*e,y=cy+(ty-cy)*e,w=S+(ts-S)*e;box(x-w/2,y-w/2,w,w);st.querySelector(".gs").style.rotate=(e*360)+"deg";
-        if(k<1)requestAnimationFrame(step);else{st.classList.add("land");var d=$("#dial");if(d){d.classList.remove("land");void d.offsetWidth;d.classList.add("land")}setTimeout(done,600)}})(t0)},700)}  g.addEventListener("click",function(e){var p=e.target.closest("[data-theme-pick]");if(p)enter(p)});
+    function spark(x,y,sc){var d=document.createElement("i"),z=(2.5+Math.random()*3.5)*Math.max(.55,sc);d.className="gspark";
+      d.style.cssText="left:"+(x-z/2)+"px;top:"+(y-z/2)+"px;width:"+z+"px;height:"+z+"px;background:"+col+";box-shadow:0 0 8px "+col;document.body.appendChild(d);
+      d.animate([{opacity:.9,transform:"translate(0,0) scale(1)"},{opacity:0,transform:"translate("+((Math.random()-.5)*14)+"px,"+((Math.random()-.5)*14+6)+"px) scale(.1)"}],{duration:520+Math.random()*260,easing:"cubic-bezier(.2,.7,.1,1)",fill:"forwards"}).onfinish=function(){d.remove()}}
+    setTimeout(function(){var t0=performance.now(),D=1250,last=0;
+      (function step(now){var k=Math.min(1,(now-t0)/D),e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2,t=target(),tx=t.left+t.width/2,ty=t.top+t.height/2,ts=Math.max(14,t.width*1.2);
+        var dx=tx-cx,dy=ty-cy,len=Math.hypot(dx,dy)||1,nx=-dy/len,ny=dx/len;if(ny>0){nx=-nx;ny=-ny}
+        var bx=(cx+tx)/2+nx*len*.32,by=(cy+ty)/2+ny*len*.32,u=1-e,x=u*u*cx+2*u*e*bx+e*e*tx,y=u*u*cy+2*u*e*by+e*e*ty,sc=(S+(ts-S)*e)/S;
+        star.style.transform="translate("+(x-cx)+"px,"+(y-cy)+"px) scale("+sc+")";svg.style.rotate=(e*450)+"deg";
+        if(now-last>16&&k>.03&&k<.97){last=now;spark(x,y,sc)}
+        if(k<1)requestAnimationFrame(step);else land(tx,ty)})(t0)},1080);
+    // 4. landing: overshoot, a ripple ring, and the core star flashes as it takes over
+    function land(tx,ty){svg.animate([{transform:"scale(1)",opacity:1},{transform:"scale(1.5)",opacity:1,offset:.22},{transform:"scale(.7)",opacity:0}],{duration:640,easing:"cubic-bezier(.2,.7,.1,1)",fill:"forwards",composite:"add"});
+      var ring=document.createElement("i");ring.className="gripple";ring.style.cssText="left:"+(tx-11)+"px;top:"+(ty-11)+"px;--gc:"+col;document.body.appendChild(ring);
+      ring.animate([{transform:"scale(.2)",opacity:.95},{transform:"scale(3.4)",opacity:0}],{duration:950,easing:"cubic-bezier(.2,.7,.1,1)",fill:"forwards"}).onfinish=function(){ring.remove()};
+      var d=$("#dial");if(d){d.classList.remove("land");void d.offsetWidth;d.classList.add("land")}
+      setTimeout(done,720)}}  g.addEventListener("click",function(e){var p=e.target.closest("[data-theme-pick]");if(p)enter(p)});
   addEventListener("keydown",function(e){if(gone||!g.classList.contains("ready"))return;
     if((e.key==="Enter"||e.key===" ")&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest(".gpill"))){e.preventDefault();enter(g.querySelector('[data-theme-pick="'+cur()+'"]'))}});
   addEventListener("keydown",function(e){if(!gone&&e.key==="Tab"){var bs=g.querySelectorAll("button"),f=bs[0],l=bs[bs.length-1];if(!g.contains(document.activeElement)){f.focus();e.preventDefault()}else if(e.shiftKey&&document.activeElement===f){l.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===l){f.focus();e.preventDefault()}}});})();
