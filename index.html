@@ -377,18 +377,14 @@ footer .st{color:var(--acc)}
 }
 /* opening gate: a courtyard plan drafts itself behind the typed welcome, framed by the rail pattern; the picked pill becomes a star and flies on an arc into the hero orbit's core */
 html.gate{overflow:hidden}
-#gate{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:36px;padding:24px;color:#f2f4f6}
+#gate{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:clamp(20px,3.4vh,34px);padding:24px;color:#f2f4f6}
 #gate .gbg{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(circle at 50% 50%,#131c2a 0,#0b111a 26%,#05070a 70%);transition:opacity 1.1s cubic-bezier(.4,0,.2,1) .45s}
-#gate{--D:min(74vmin,600px)}
-#gate .gstage{position:absolute;left:50%;top:50%;width:var(--D);height:var(--D);translate:-50% -50%;transition:scale 1.4s var(--ease),opacity .9s}
-#gate .gstars{position:absolute;left:-18%;right:-18%;top:4%;bottom:4%;display:grid;grid-template-columns:repeat(13,1fr);grid-template-rows:repeat(10,1fr);place-items:center;color:#8d99a6;-webkit-mask:radial-gradient(closest-side,transparent 62%,#000 80%);mask:radial-gradient(closest-side,transparent 62%,#000 80%)}
-#gate .gstars i{font:700 clamp(11px,2vmin,18px)/1 var(--pix);font-style:normal;opacity:0;animation:gTw var(--d,7s) ease-in-out var(--w,0s) infinite}
-@keyframes gTw{0%,100%{opacity:0}35%,65%{opacity:.34}}
-#gate .gfig{position:absolute;top:0;bottom:0;left:-30%;right:-30%;color:#8d99a6;opacity:.72;filter:drop-shadow(1px 1.5px 0 rgba(0,0,0,.7)) drop-shadow(-.6px -.6px 0 rgba(255,255,255,.07))}
-#gate .gfig svg{width:100%;height:100%;display:block;overflow:visible}
-#gate .gfig .sw{transform-box:fill-box;transform-origin:50% 0}
-#gate.leaving .gstage{scale:1.06;opacity:0}
-@media (max-width:640px){#gate{--D:min(84vmin,600px)}#gate .gstars{left:-8%;right:-8%}#gate .gfig{left:-6%;right:-6%}}
+/* the welcome card: a panoramic elevation drawn in vertical hatching on canvas, in a light framed card */
+#gate .gcard{position:relative;width:min(1024px,92vw);padding:clamp(10px,1.8vw,22px);background:#eef1f4;border:1px solid rgba(255,255,255,.22);border-radius:14px;box-shadow:0 0 0 6px rgba(255,255,255,.03),0 40px 90px -30px rgba(0,0,0,.9);animation:gCard 1.2s var(--ease) both}
+#gate .gcard::before{content:"";position:absolute;inset:6px;border:1px solid rgba(20,26,36,.13);border-radius:9px;pointer-events:none}
+#gate .gcard canvas{display:block;width:100%;aspect-ratio:1930/486;cursor:crosshair;touch-action:pan-y}
+@keyframes gCard{from{opacity:0;translate:0 14px;scale:.98}}
+#gate.leaving .gcard{opacity:0;scale:.97;filter:blur(4px);transition:opacity .5s,scale .7s var(--ease),filter .5s}
 #gate .gframe{position:absolute;inset:clamp(12px,2.6vmin,30px);color:#4f8dff;opacity:.42;font-size:18px;animation:gIn 1.8s var(--ease) .3s both;transition:opacity .5s}
 #gate .gframe>div{position:absolute;display:flex;justify-content:space-between;align-items:center}
 #gate .gframe .ft,#gate .gframe .fb2{left:0;right:0}#gate .gframe .ft{top:0}#gate .gframe .fb2{bottom:0}
@@ -437,8 +433,9 @@ html.entering .hero{animation:gateUp 1.3s var(--ease) .4s both}
 @keyframes gateUp{from{opacity:0;filter:blur(8px)}}</style>
 <noscript><style>#gate{display:none}html.gate{overflow:auto}</style></noscript>
 
-<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"><div class="gframe" id="gframe"></div><div class="gstage"><div class="gstars" id="gstars"></div><div class="gfig" id="gfig"></div></div></div>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"><div class="gframe" id="gframe"></div></div>
   <p class="gl"><span class="pr" aria-hidden="true">›</span><span><span id="gtxt" aria-label="Welcome to my portfolio :)"></span><span class="cur" aria-hidden="true"></span></span></p>
+  <div class="gcard"><canvas id="gelev" aria-hidden="true"></canvas></div>
   <div class="gb">
     <button type="button" class="gpill g-dark" data-theme-pick="dark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z"/></svg><span>Dark</span></button>
     <button type="button" class="gpill g-light" data-theme-pick="light"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.8"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1"/></svg><span>Light</span></button>
@@ -755,59 +752,65 @@ var rItems=document.querySelectorAll("#ornL>*,#ornR>*"),railN=document.querySele
 function cusp(x,y,rot,out,inn,w){return '<path transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')" d="M0 '+(-out)+'Q0 0 '+w+' 0Q0 0 0 '+inn+'Q0 0 '+(-w)+' 0Q0 0 0 '+(-out)+'z"/>'}
 // lens: a filled ellipse with an optional ground-coloured eye
 function lens(x,y,rot,rx,ry,hole){return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') rotate('+rot+')"><ellipse rx="'+rx+'" ry="'+ry+'"/>'+(hole?'<ellipse rx="'+(rx*.45)+'" ry="'+(ry*.5)+'" fill="var(--bg)"/>':'')+'</g>'}
-// welcome gate: three vaulted arches (an interior vignette). Each loop: people stroll across, the arches draw themselves in,
-// the vaults and side walls wash in blue, then the life of the rooms fades in (trees, a seated figure, chairs, planters, lamp, sofa).
-function draft(){
-  var B="#4f8dff";
-  var L=function(d,op,sw,t0,t1){return '<path class="dl" d="'+d+'" pathLength="1" fill="none" stroke="currentColor" stroke-width="'+sw+'" stroke-linecap="round" stroke-linejoin="round" data-a="'+t0+'" data-b="'+t1+'"'+(op?' opacity="'+op+'"':'')+'/>'};
-  var F=function(d,t0,o,c){return '<path class="dp" d="'+d+'" fill="'+(c||B)+'" data-a="'+t0+'" data-o="'+(o||.6)+'"/>'};
-  var C=function(x,y,r){return "M"+x+" "+(y-r)+"a"+r+" "+r+" 0 1 0 .01 0"};
-  var S=function(d,t0,o,w){return '<path class="dp" d="'+d+'" fill="none" stroke="'+B+'" stroke-width="'+(w||2)+'" stroke-linecap="round" data-a="'+t0+'" data-o="'+(o||.6)+'"/>'};
-  var g="",i;
-  // a walking figure: head, torso, and swinging arms and legs (opposite phases)
-  function man(sc,col){return '<g transform="scale('+sc+')" fill="'+col+'" stroke="'+col+'" stroke-linecap="round">'+
-    '<circle cx="0" cy="-57" r="6.5" stroke="none"/><path d="M-7-48Q0-51 7-48L6-23H-6Z" stroke="none"/>'+
-    '<path class="sw" data-d="0" d="M-2-24V0" stroke-width="3.6" fill="none"/><path class="sw" data-d="400" d="M2-24V0" stroke-width="3.6" fill="none"/>'+
-    '<path class="sw" data-d="400" d="M-6-46V-29" stroke-width="3" fill="none"/><path class="sw" data-d="0" d="M6-46V-29" stroke-width="3" fill="none"/></g>'}
-  var W=function(y,sc,s,e,r){return '<g class="walker" data-s="'+s+'" data-e="'+e+'" data-r="'+(r?1:0)+'"><g transform="translate(0 '+y+')">'+man(sc,B)+'</g></g>'};
-  // 1. people strolling across the front
-  g+=W(540,1,.0,.36,0)+W(552,1.08,.07,.46,1)+W(530,.72,.15,.52,0);
-  // 2. the three arches: front frame, inner reveal, back opening, floor plane
-  [[220,380],[400,560],[580,740]].forEach(function(b,k){var x0=b[0],x1=b[1],bx0=x0+26,bx1=x1-26,d=k*.035;
-    g+=L("M"+x0+" 470V250A80 80 0 0 1 "+x1+" 250V470","",1.6,.16+d,.3+d)+L("M"+(x0+8)+" 470V250A72 72 0 0 1 "+(x1-8)+" 250V470",.7,.8,.2+d,.33+d);
-    g+=L("M"+bx0+" 432V262A54 54 0 0 1 "+bx1+" 262V432",.85,1,.26+d,.38+d)+L("M"+x0+" 470H"+x1+"M"+(x0+8)+" 470L"+bx0+" 432H"+bx1+"L"+(x1-8)+" 470",.7,.8,.3+d,.4+d);
-    // 3. vault (the band between the front arch and the back opening) and the shaded side wall
-    g+=F("M"+(x0+8)+" 250A72 72 0 0 1 "+(x1-8)+" 250L"+bx1+" 262A54 54 0 0 0 "+bx0+" 262Z",.42+d*.5,.55);
-    g+=F("M"+(x1-8)+" 250V470L"+bx1+" 432V262Z",.45+d*.5,.22)});
-  // 4. life in the rooms
-  // tree outside the first bay
-  g+=S("M170 482V360",.52,.6,2.4)+F(C(160,350,22)+C(183,330,18)+C(150,316,16)+C(175,300,14)+C(192,358,15)+C(146,366,13),.53,.55);
-  // bay 1: a seated figure on a rug, and a small tree
-  g+=F("M252 454H332L322 441H262Z",.56,.3)+F(C(292,410,6.5)+"M280 440Q292 416 304 440ZM274 441Q292 432 310 441Z",.58,.65);
-  g+=S("M352 452V362",.57,.55,1.8)+F(C(347,356,14)+C(360,341,12)+C(343,331,10)+C(357,372,11),.58,.5);
-  // bay 2: hanging planter, a pair of shell chairs, a faint tree between them
-  g+=S("M480 192V258",.6,.55,1)+F("M467 260Q480 280 493 260Z"+C(474,256,5)+C(486,255,5),.61,.6);
-  g+=F("M430 431Q437 407 452 411L456 431Z",.63,.65)+S("M435 431L431 453M453 431L457 453",.63,.65,2);
-  g+=F("M530 431Q523 407 508 411L504 431Z",.64,.65)+S("M525 431L529 453M507 431L503 453",.64,.65,2);
-  g+=S("M480 442V384",.62,.25,1.4)+F(C(480,378,12)+C(469,392,9)+C(491,394,9),.62,.22);
-  // bay 3: hanging basket, potted plant, a metal chair
-  g+=S("M672 188V246",.66,.55,1)+F("M657 248Q672 272 687 248Z",.67,.6)+S("M662 250Q652 270 650 286M682 250Q692 270 694 288",.68,.5,1.4);
-  g+=F("M602 436H622L619 453H605Z",.69,.6)+S("M612 436Q598 410 589 399M612 436Q606 404 610 391M612 436Q625 408 636 401M612 436Q594 424 584 424",.69,.55,1.8);
-  g+=S("M690 410H712M692 410V453M710 410V453M690 432H712",.7,.6,2.2);
-  // outside: floor lamp and a sofa, and a child standing in front
-  g+=S("M772 482V384M763 482H781",.72,.55,2)+F("M757 384H787L780 356H764Z",.72,.45);
-  g+=F("M792 472V441Q792 428 804 433L807 451H875L878 433Q890 428 890 441V472Z",.74,.55)+S("M798 472V482M884 472V482",.74,.55,2.4);
-  g+=F(C(560,470,7)+"M552 479H568L566 506H554Z",.76,.65)+S("M556 506V529M564 506V529",.76,.65,3);
-  return '<svg viewBox="0 0 960 600" aria-hidden="true" fill="currentColor">'+g+'</svg>'}function draftPlay(root){
-  var D=19000,end=.91,out=.975,o={duration:D,iterations:Infinity,easing:"linear"};
-  root.querySelectorAll(".dl").forEach(function(el){var a=+el.dataset.a,b=+el.dataset.b;el.style.strokeDasharray="1";
-    el.animate([{strokeDashoffset:1,opacity:1,offset:0},{strokeDashoffset:1,offset:a},{strokeDashoffset:0,offset:b},{strokeDashoffset:0,opacity:1,offset:end},{strokeDashoffset:0,opacity:0,offset:out},{strokeDashoffset:1,opacity:0,offset:1}],o)});
-  root.querySelectorAll(".dp").forEach(function(el){var a=+el.dataset.a,top=+el.dataset.o||.5;
-    el.animate([{opacity:0,offset:0},{opacity:0,offset:a},{opacity:top,offset:Math.min(a+.06,end)},{opacity:top,offset:end},{opacity:0,offset:out},{opacity:0,offset:1}],o)});
-  // walkers cross the whole width; limbs swing on their own short cycle
-  root.querySelectorAll(".walker").forEach(function(el){var s=+el.dataset.s,e=+el.dataset.e,rv=el.dataset.r==="1",x0=rv?1020:-60,x1=rv?-60:1020;
-    el.animate([{transform:"translateX("+x0+"px)",opacity:0,offset:0},{transform:"translateX("+x0+"px)",opacity:0,offset:s},{opacity:.75,offset:s+.03},{opacity:.75,offset:e-.03},{transform:"translateX("+x1+"px)",opacity:0,offset:e},{transform:"translateX("+x1+"px)",opacity:0,offset:1}],o)});
-  root.querySelectorAll(".sw").forEach(function(el){el.animate([{transform:"rotate(-24deg)"},{transform:"rotate(24deg)"}],{duration:800,iterations:Infinity,direction:"alternate",easing:"ease-in-out",delay:-(+el.dataset.d||0)})})}function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)]}
+// welcome card: a panoramic elevation (a domed hall between gabled wings and end pavilions) rendered as dense vertical hatching.
+// The building is a mask; every frame the hatch lines are drawn and clipped to it. A blue light scans left to right, the pointer
+// sends ripples through the lines, and on entry the lines rise from the ground.
+function elevation(cv){
+  var VB={x:40,y:92,w:1930,h:486},GY=563,AX=1005,ctx=cv.getContext("2d"),mask=null,dpr=1,t0=performance.now(),run=true,rip=[],hx=-1,hy=-1,last=0;
+  function sym(c,fn){fn();c.save();c.translate(2*AX,0);c.scale(-1,1);fn();c.restore()}
+  function R(c,x0,y0,x1,y1){c.rect(x0,y0,x1-x0,y1-y0)}
+  function ogive(c,cx,w,spring,apex,bottom){var l=cx-w/2,r=cx+w/2;c.moveTo(l,bottom);c.lineTo(l,spring);c.quadraticCurveTo(l,apex+(spring-apex)*.25,cx,apex);c.quadraticCurveTo(r,apex+(spring-apex)*.25,r,spring);c.lineTo(r,bottom)}
+  function build(){
+    mask=document.createElement("canvas");mask.width=cv.width;mask.height=cv.height;var c=mask.getContext("2d"),k=cv.width/VB.w;
+    c.setTransform(k,0,0,k,-VB.x*k,-VB.y*k);c.fillStyle="#000";c.strokeStyle="#000";c.lineJoin="round";
+    // solids
+    c.beginPath();
+    sym(c,function(){R(c,63,533,130,GY);c.moveTo(143,GY);c.lineTo(143,290);c.lineTo(225,243);c.lineTo(305,290);c.lineTo(305,GY);c.closePath();
+      R(c,300,243,548,GY);c.moveTo(553,GY);c.lineTo(553,330);c.lineTo(700,243);c.lineTo(785,283);c.lineTo(785,GY);c.closePath()});
+    c.fill();
+    c.beginPath();c.moveTo(AX-245,GY);c.lineTo(AX-245,400);c.ellipse(AX,400,245,270,0,Math.PI,0);c.lineTo(AX+245,GY);c.closePath();c.fill();
+    c.beginPath();R(c,AX-11,106,AX+11,134);R(c,590,400,2*AX-590,GY);R(c,930,378,2*AX-930,GY);c.fill();
+    c.beginPath();c.moveTo(AX-62,380);c.ellipse(AX,362,62,62,0,Math.PI,0);c.closePath();R(c,AX-4,262,AX+4,300);c.fill();
+    c.beginPath();c.moveTo(AX,248);c.lineTo(AX+8,262);c.lineTo(AX,270);c.lineTo(AX-8,262);c.closePath();c.fill();
+    // openings and the white drawn lines
+    c.globalCompositeOperation="destination-out";
+    c.beginPath();sym(c,function(){R(c,168,300,300,410);R(c,548,243,553,GY);
+      for(var x=358;x<=482;x+=62)for(var y=345;y<=528;y+=12)R(c,x-2,y,x+2,y+6)});c.fill();
+    c.lineWidth=5;c.beginPath();
+    sym(c,function(){c.moveTo(168,440);c.lineTo(280,560);c.moveTo(303,292);c.lineTo(303,GY);R(c,318,272,530,540);
+      c.moveTo(560,334);c.lineTo(700,252);c.lineTo(780,289);
+      ogive(c,677,44,372,332,402);ogive(c,857,44,372,330,402);c.moveTo(640,404);c.lineTo(900,404);
+      [[655,46],[715,46],[796,34],[842,38],[888,38]].forEach(function(a){ogive(c,a[0],a[1],474,440,GY)});
+      c.moveTo(AX-4,136);c.quadraticCurveTo(AX-118,200,AX-122,400);c.moveTo(AX-6,140);c.quadraticCurveTo(AX-205,210,AX-230,400)});
+    c.moveTo(590,404);c.lineTo(2*AX-590,404);c.moveTo(590,426);c.lineTo(2*AX-590,426);c.moveTo(AX-70,160);c.lineTo(AX+70,160);
+    R(c,930,380,2*AX-930,GY);c.moveTo(AX-62,380);c.ellipse(AX,362,62,62,0,Math.PI,0);
+    [955,AX,2*AX-955].forEach(function(x){ogive(c,x,36,440,404,GY)});c.stroke();
+    c.lineWidth=3;c.beginPath();for(var i=0;i<4;i++){c.moveTo(890,536+i*7);c.lineTo(2*AX-890,536+i*7)}c.stroke()}
+  function size(){dpr=Math.min(2,window.devicePixelRatio||1);var w=Math.max(1,cv.clientWidth),h=Math.max(1,cv.clientHeight);cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);build()}
+  size();addEventListener("resize",size);
+  function pos(e){var r=cv.getBoundingClientRect();return [(e.clientX-r.left)*dpr,(e.clientY-r.top)*dpr]}
+  cv.addEventListener("pointermove",function(e){var q=pos(e);hx=q[0];hy=q[1];var n=performance.now();if(n-last>90){last=n;rip.push({x:hx,y:hy,t:n});if(rip.length>7)rip.shift()}});
+  cv.addEventListener("pointerleave",function(){hx=hy=-1});
+  cv.addEventListener("pointerdown",function(e){var q=pos(e);rip.push({x:q[0],y:q[1],t:performance.now(),big:1})});
+  function frame(now){if(!run)return;
+    var Wd=cv.width,Hd=cv.height,k=Wd/VB.w,gy=(GY-VB.y)*k,t=(now-t0)/1000,rise=1-Math.pow(1-Math.min(1,t/1.9),3),top=gy-rise*gy;
+    var sp=Math.max(2.1,cv.clientWidth/440)*dpr,sx=((t*.14)%1.35-.18)*Wd,sw=Wd*.07,hs=70*dpr,v=260*dpr,band=20*dpr;
+    rip=rip.filter(function(r){return now-r.t<1500});
+    ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,Wd,Hd);ctx.lineCap="butt";
+    for(var x=sp/2;x<Wd;x+=sp){
+      var d=(x-sx)/sw,glow=Math.exp(-d*d),hv=hx>=0?Math.exp(-(x-hx)*(x-hx)/(2*hs*hs)):0,m=Math.min(1,glow+hv*.6);
+      ctx.strokeStyle="rgb("+Math.round(24+(31-24)*m)+","+Math.round(30+(95-30)*m)+","+Math.round(40+(214-40)*m)+")";
+      ctx.lineWidth=dpr*(.8+.75*glow+.45*hv);ctx.beginPath();
+      var near=false;for(var j=0;j<rip.length&&!near;j++){var a=(now-rip[j].t)/1000;if(Math.abs(x-rip[j].x)<a*v+band*3)near=true}
+      if(!near){ctx.moveTo(x,top);ctx.lineTo(x,gy)}
+      else{var st=5*dpr;for(var y=top;y<=gy+.5;y+=st){var dx=0;for(j=0;j<rip.length;j++){var rp=rip[j],ag=(now-rp.t)/1000,ex=x-rp.x,ey=y-rp.y,dd=Math.sqrt(ex*ex+ey*ey)||1,rr=ag*v,amp=(rp.big?9:4.5)*dpr*Math.exp(-ag*2.2)*Math.exp(-(dd-rr)*(dd-rr)/(2*band*band));dx+=amp*ex/dd}
+        if(y===top)ctx.moveTo(x+dx,y);else ctx.lineTo(x+dx,y)}}
+      ctx.stroke()}
+    ctx.globalCompositeOperation="destination-in";ctx.drawImage(mask,0,0);ctx.globalCompositeOperation="source-over";
+    ctx.fillStyle="rgba(24,30,40,.85)";ctx.fillRect(0,gy,Wd*rise,Math.max(1,dpr));
+    requestAnimationFrame(frame)}
+  requestAnimationFrame(frame);
+  return {leave:function(){},stop:function(){run=false;removeEventListener("resize",size)}}}function polar(r,deg){var a=(deg-90)*Math.PI/180;return [300+r*Math.cos(a),300+r*Math.sin(a)]}
 (function(){
   // fig 1 — orbit: rings, point-stars on the rim, orbiting dots and crescents, a ringed star at the core
   var c=300,s="";
@@ -871,10 +874,7 @@ if(!reduce&&"IntersectionObserver" in window){
   sync();b.addEventListener("click",function(){set(cur()==="dark"?"light":"dark")});
   // opening gate: type the welcome; the picked pill then flies into the header theme switch while the gate dissolves and the site settles in
   var g=$("#gate");if(!g)return;
-  var lat=null,gf=$("#gfig");
-  if(gf){gf.innerHTML=draft();if(gf.animate)draftPlay(gf)}
-  // asterisk grid around the drawing: each one fades in and out on its own clock, like type being set and lifted
-  var gs=$("#gstars");if(gs){var hs="";for(var q=0;q<130;q++)hs+='<i style="--d:'+(5+Math.random()*6).toFixed(1)+'s;--w:'+(-Math.random()*10).toFixed(1)+'s">*</i>';gs.innerHTML=hs}
+  var ev=$("#gelev"),lat=ev&&ev.getContext?elevation(ev):null;
   // frame: the site's own rail pattern (rosettes, stars, dot-diamond dashes) in the accent blue
   var gfr=$("#gframe");if(gfr){var sp=function(x){return '<span class="d2">'+x+'</span>'};
     var row=[ROS(),HD,sp(HD),ST,sp(HD),HD,ROS(1),HD,sp(HD),ST,sp(HD),HD,ROS()].join(""),col=[VD,sp(VD),ST,VD,ROS(1),VD,ST,sp(VD),VD].join("");
