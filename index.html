@@ -400,6 +400,7 @@ html.gate{overflow:hidden}
 #gate .gseg .g-dark svg,#gate .gseg .g-dark:hover svg{color:#9db6e0}#gate .gseg .g-dark.on svg{color:#2d5fc4}
 #gate .gseg .g-light svg,#gate .gseg .g-light:hover svg{color:#f0a020;rotate:none}
 #gate.leaving .gthumb{opacity:0}
+#gate.leaving .gseg{opacity:0;filter:none;transition:none}
 /* side patterns: hanging lanterns and star chains flanking the composition */
 #gate .gside{position:absolute;top:0;height:min(76vh,640px);width:110px;animation:gIn 2s var(--ease) .6s both}
 #gate .gside.l{left:max(8px,calc(50% - min(47vw,650px)))}#gate .gside.r{right:max(8px,calc(50% - min(47vw,650px)));scale:-1 1}
@@ -893,21 +894,14 @@ if(!reduce&&"IntersectionObserver" in window){
     try{sessionStorage.setItem("hn-gate","1")}catch(e){}
     var mode=p.dataset.themePick,col=mode==="dark"?"#4f8dff":"#f0a020",r=p.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,S=46,ease="cubic-bezier(.65,0,.35,1)";
     var pill=p.cloneNode(true);pill.className="gpill g-"+mode+" gpfly";pill.removeAttribute("data-theme-pick");pill.setAttribute("aria-hidden","true");pill.tabIndex=-1;
-    pill.style.cssText="left:"+r.left+"px;top:"+r.top+"px;width:"+r.width+"px;height:"+r.height+"px";document.body.appendChild(pill);p.classList.add("picked");
+    pill.style.cssText="left:"+r.left+"px;top:"+r.top+"px;width:"+r.width+"px;height:"+r.height+"px";p.classList.add("picked");
     var star=document.createElement("div");star.className="gfly";star.style.cssText="left:"+(cx-S/2)+"px;top:"+(cy-S/2)+"px;width:"+S+"px;height:"+S+"px;--gc:"+col;star.innerHTML=STAR;document.body.appendChild(star);
     var svg=star.firstChild;svg.style.opacity="0";
     set(mode);g.classList.add("leaving");root.classList.remove("gate");root.classList.add("entering");dispatchEvent(new Event("hn:enter"));if(lat)lat.leave();
     function done(){star.remove();pill.remove();g.remove();root.classList.remove("entering");if(lat)lat.stop()}
-    if(!pill.animate){done();return}
-    var H=r.height/2,ins=Math.max(0,(r.width-r.height)/2)+"px";
-    // 1. anticipation + pinch: squash down, then the capsule closes into a glowing disc and vanishes into the star
-    pill.animate([{transform:"scale(1)",clipPath:"inset(0px 0px round "+H+"px)",boxShadow:"0 0 0 0 transparent"},
-      {transform:"scale(1.03,.86)",clipPath:"inset(0px 0px round "+H+"px)",offset:.2},
-      {transform:"scale(1.06)",clipPath:"inset(0px "+ins+" round "+H+"px)",boxShadow:"0 0 30px 4px "+col,offset:.62},
-      {transform:"scale(.35)",clipPath:"inset(0px "+ins+" round "+H+"px)",boxShadow:"0 0 40px 8px "+col,opacity:0}],{duration:820,easing:ease,fill:"forwards"});
-    pill.querySelectorAll("span,svg").forEach(function(el){el.animate([{opacity:1,filter:"blur(0px)"},{opacity:0,filter:"blur(5px)"}],{duration:240,fill:"forwards"})});
-    // 2. bloom: the star springs out of the disc, spinning into place
-    svg.animate([{opacity:0,transform:"scale(0) rotate(-160deg)"},{opacity:1,transform:"scale(1) rotate(0deg)"}],{duration:900,delay:430,easing:SPRING,fill:"forwards"});
+    if(!svg.animate){done();return}
+    // the pill disappears the moment it is clicked; the star springs out in its place
+    svg.animate([{opacity:0,transform:"scale(0) rotate(-160deg)"},{opacity:1,transform:"scale(1) rotate(0deg)"}],{duration:700,easing:SPRING,fill:"forwards"});
     // 3. flight along a quadratic arc toward the live target (the hero orbit's core star, or the brand star if the core is off screen)
     function target(){var c=$("#dial .core path"),t=c&&c.getBoundingClientRect();
       if(!t||!t.width||t.bottom<0||t.top>innerHeight){var bs=$(".brand .st");t=bs&&bs.getBoundingClientRect()}
@@ -921,7 +915,7 @@ if(!reduce&&"IntersectionObserver" in window){
         var bx=(cx+tx)/2+nx*len*.32,by=(cy+ty)/2+ny*len*.32,u=1-e,x=u*u*cx+2*u*e*bx+e*e*tx,y=u*u*cy+2*u*e*by+e*e*ty,sc=(S+(ts-S)*e)/S;
         star.style.transform="translate("+(x-cx)+"px,"+(y-cy)+"px) scale("+sc+")";svg.style.rotate=(e*450)+"deg";
         if(now-last>16&&k>.03&&k<.97){last=now;spark(x,y,sc)}
-        if(k<1)requestAnimationFrame(step);else land(tx,ty)})(t0)},1080);
+        if(k<1)requestAnimationFrame(step);else land(tx,ty)})(t0)},300);
     // 4. landing: overshoot, a ripple ring, and the core star flashes as it takes over
     function land(tx,ty){svg.animate([{transform:"scale(1)",opacity:1},{transform:"scale(1.5)",opacity:1,offset:.22},{transform:"scale(.7)",opacity:0}],{duration:640,easing:"cubic-bezier(.2,.7,.1,1)",fill:"forwards",composite:"add"});
       var ring=document.createElement("i");ring.className="gripple";ring.style.cssText="left:"+(tx-11)+"px;top:"+(ty-11)+"px;--gc:"+col;document.body.appendChild(ring);
