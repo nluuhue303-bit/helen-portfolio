@@ -10,7 +10,7 @@
 <!-- favicon: Helen's mark (app-icon variant), white on near-black with the accent window -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect x='6' y='6' width='188' height='188' rx='46' fill='%2307090c'/%3E%3Cg transform='translate(100 100) scale(.78) translate(-100 -43.65)' fill='%23fff'%3E%3Cpolygon points='48,0 100,-30.02 152,0 152,17.32 100,-12.7 48,17.32'/%3E%3Crect x='48' y='29.32' width='15' height='88'/%3E%3Crect x='137' y='29.32' width='15' height='88'/%3E%3Crect x='63' y='57.02' width='74' height='15'/%3E%3Crect x='92.5' y='84.02' width='15' height='15' fill='%235b95ff'/%3E%3C/g%3E%3C/svg%3E">
 <!-- Montserrat (the typeface of Helen's logo) for headings, labels and UI; Work Sans for reading text. One request, only the weights used -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Work+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap">
 <link rel="preload" as="image" href="cb-pavilion-concert.jpg" fetchpriority="high">
 <script>(function(r){r.classList.add("js");try{if(localStorage.getItem("hn-theme")==="light")r.dataset.theme="light"}catch(e){}})(document.documentElement)</script>
 <style>
@@ -98,45 +98,86 @@ html:not(.js) .cur{display:none}
 section{padding-block:clamp(64px,9vw,128px)}
 .head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:32px;border-top:1px solid var(--line);padding-top:18px}
 h2{font:600 clamp(32px,3.8vw,54px)/1.05 var(--disp);letter-spacing:-.03em;margin:0}
-#more{padding-top:0}
-#more h2{font-size:clamp(26px,2.6vw,36px)}
+#all{padding-top:clamp(24px,4vw,56px)}
+#all h2{font-size:clamp(26px,2.6vw,36px)}
 
-/* project grids */
-.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(28px,3vw,44px) clamp(16px,2vw,28px)}
-.grid.sm{grid-template-columns:repeat(5,minmax(0,1fr));gap:24px clamp(14px,1.6vw,22px)}
-@media (max-width:1100px){.grid.sm{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:1024px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.grid{grid-template-columns:minmax(0,1fr)}.grid.sm{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.pcard{display:flex;flex-direction:column;gap:6px;width:100%;height:100%;padding:0;text-align:left;text-decoration:none;color:inherit}
-.pcard .ph{display:block;width:100%;aspect-ratio:4/3;overflow:hidden;border-radius:0;background:var(--s2);margin-bottom:8px}
-.pcard img{width:100%;height:100%;object-fit:cover;transition:scale .8s var(--ease)}
-.pcard img.draw{object-fit:contain;background:#fff;padding:6px}
-.pcard .pt{font:600 clamp(19px,1.6vw,24px)/1.2 var(--disp);letter-spacing:-.015em;transition:color .2s}
-.pcard .pk{font:500 12px/1.5 var(--pix);letter-spacing:.06em;text-transform:uppercase;color:var(--mute)}
-.grid.sm .pt{font-size:clamp(16px,1.25vw,19px)}
-.pcard:hover .pt{color:var(--acc)}
-.pcard .ph.empty{display:grid;place-items:center;border:1px dashed var(--line);background:var(--s1);font:400 12px/1.4 var(--pix);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);text-align:center;padding:12px}
-.pcard:hover .ph.empty{border-color:var(--acc);color:var(--acc)}
+/* editorial feed: three columns split by hairline rules, the middle column dropped so the columns zig-zag.
+   A CSS grid (not column wrappers), so DOM and keyboard order follow the reading order 1, 2, 3, 4… */
+:root{--rule:rgba(232,237,242,.16)}
+:root[data-theme="light"]{--rule:rgba(16,20,24,.18)}
+.feed{--gap:clamp(28px,4vw,64px);--off:clamp(150px,16vw,290px);position:relative;list-style:none;margin:0;padding:0 0 var(--off);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:var(--gap);align-items:start}
+.feed::before,.feed::after{content:"";position:absolute;top:0;bottom:0;width:1px;background:var(--rule);pointer-events:none}
+.feed::before{left:calc((100% - 2 * var(--gap)) / 3 + var(--gap) / 2)}
+.feed::after{left:calc((100% - 2 * var(--gap)) * 2 / 3 + var(--gap) * 1.5)}
+.fi{min-width:0;border-top:1px solid var(--rule);padding:14px 0 clamp(72px,8vw,136px)}
+.fi:nth-child(3n+2){translate:0 var(--off)}
+.fcard{display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;color:inherit}
+.fcard:focus-visible{outline:2px solid var(--acc);outline-offset:6px}
+.fk{align-self:flex-start;font:500 11px/1.4 var(--pix);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.fk i{font-style:normal;color:var(--acc);font-size:9px;vertical-align:1px;margin-right:2px}
+.ft{font:700 clamp(24px,2.2vw,36px)/1.02 var(--disp);letter-spacing:-.035em;margin:clamp(26px,3vw,48px) 0 clamp(22px,2.4vw,36px);max-width:15ch;text-wrap:balance}
+.ft span{text-decoration:underline 1px transparent;text-underline-offset:.16em;transition:text-decoration-color .3s}
+.fcard:hover .ft span,.fcard:focus-visible .ft span{text-decoration-color:currentColor}
+.fph{display:block;width:100%;aspect-ratio:3/2;overflow:hidden;background:var(--s2)}
+.fph img{width:100%;height:100%;object-fit:cover;transition:scale .8s var(--ease)}
+.fph img.draw{object-fit:contain;background:#fff;padding:6px}
+.fcard:hover .fph img{scale:1.02}
+.fx{margin-top:20px;max-width:44ch;font:400 15px/1.6 var(--sans);color:var(--mute);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden}
+/* featured: the two most recent works, taller image and a bigger heading */
+.fi.feat .fph{aspect-ratio:4/3}
+.fi.feat .ft{font-size:clamp(30px,3.1vw,50px);max-width:13ch}
+/* More projects: the same feed, smaller */
+.feed.sm{--off:clamp(80px,8vw,150px)}
+.feed.sm .fi{padding-bottom:clamp(48px,5vw,88px)}
+.feed.sm .ft{font-size:clamp(20px,1.7vw,27px);margin-block:clamp(18px,2vw,32px) clamp(16px,1.8vw,26px)}
+.feed.sm .fx{font-size:14px;-webkit-line-clamp:2;line-clamp:2}
+@media (max-width:1024px){
+  .feed{grid-template-columns:repeat(2,minmax(0,1fr));--off:clamp(100px,18vw,190px)}
+  .feed.sm{--off:clamp(70px,11vw,120px)}
+  .feed::before{left:50%}.feed::after{display:none}
+  .fi:nth-child(3n+2){translate:none}.fi:nth-child(2n){translate:0 var(--off)}
+}
+@media (max-width:640px){
+  .feed,.feed.sm{grid-template-columns:minmax(0,1fr);padding-bottom:0}
+  .feed::before{display:none}
+  .fi,.fi:nth-child(2n){translate:none;border-top:0;padding:0 0 56px}
+  .fi+.fi{border-top:1px solid var(--rule);padding-top:14px}
+  .ft,.fi.feat .ft{font-size:clamp(28px,8.4vw,38px)}
+}
 
 /* ---------- project window ---------- */
 #pw,#lb{color:var(--ink)}
-#pw{border:0;padding:0;background:transparent;width:min(1180px,94vw);max-width:none;height:min(86vh,980px);max-height:none;overflow:visible}
-#pw::backdrop{background:rgba(3,5,8,.75);backdrop-filter:blur(8px)}
-#pw[open] .win{animation:winin .4s var(--ease)}
-@keyframes winin{from{opacity:0;translate:0 12px}}
-.win{height:100%;display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line);border-radius:6px;overflow:hidden;box-shadow:0 40px 120px -30px rgba(0,0,0,.8)}
-#pw.max{width:100vw;height:100vh}
-#pw.max .win{border-radius:0}
-.wbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--s1)}
-.wbar .ttl{font:500 13px/1 var(--pix);letter-spacing:.02em;color:var(--mute);min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.wctl{display:flex;gap:4px}
-.wctl button{width:36px;height:32px;border-radius:4px;display:grid;place-items:center;color:var(--mute);transition:background .2s,color .2s}
-.wctl button:hover{background:var(--s2);color:var(--ink)}
-.wctl svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:1.5}
-.wbody{flex:1;overflow:auto;overscroll-behavior:contain;padding:clamp(18px,3vw,40px)}
-.wbody h3{font:600 clamp(32px,3.6vw,56px)/1.05 var(--disp);letter-spacing:-.03em;margin:6px 0 22px}
-.wlead{display:flex;justify-content:center;cursor:zoom-in;margin-bottom:26px}
-.wlead img{max-width:100%;max-height:62vh;width:auto;height:auto;border-radius:4px}
+/* a full-screen "second page": its own bar with Back, its own scroll, a big lead image, then title, meta, text and boards */
+#pw{position:fixed;inset:0;border:0;padding:0;margin:0;background:transparent;width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;overflow:hidden}
+#pw::backdrop{background:transparent}
+.win{height:100%;display:flex;flex-direction:column;background:var(--bg)}
+.wbar{flex:none;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:16px;min-height:var(--bar);padding:env(safe-area-inset-top,0px) var(--g) 0;border-bottom:1px solid var(--line);background:var(--bg)}
+.pback{justify-self:start;display:inline-flex;align-items:center;gap:8px;min-height:38px;padding:0 16px 0 12px;border:1px solid var(--line);border-radius:999px;font:500 12px/1 var(--pix);letter-spacing:.1em;text-transform:uppercase;transition:border-color .2s,color .2s}
+.pback:hover{border-color:var(--acc);color:var(--acc)}
+.pback svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.wbar .ttl{font:600 14px/1.2 var(--disp);letter-spacing:-.01em;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:52vw}
+.wbar .pcat{justify-self:end}
+.wbody{flex:1;overflow:auto;overscroll-behavior:contain}
+.plead{display:block;width:100%;height:calc(100svh - var(--bar) - clamp(56px,9vh,104px));min-height:280px;padding:0;cursor:zoom-in;background:var(--s2)}
+.plead img{width:100%;height:100%;max-width:none;object-fit:cover}
+.plead.draw img{object-fit:contain;background:#fff}
+.pin{max-width:1440px;margin:0 auto;padding:clamp(28px,4vw,60px) var(--g) clamp(72px,9vw,140px)}
+.ph2{font:700 clamp(40px,5.6vw,92px)/.98 var(--disp);letter-spacing:-.04em;margin:12px 0 clamp(28px,4vw,60px);max-width:16ch;text-wrap:balance}
+/* FLIP fallback clone (browsers without View Transitions) */
+.pflip{position:fixed;z-index:5;margin:0;max-width:none;object-fit:cover;transform-origin:50% 50%;pointer-events:none;will-change:transform,clip-path}
+.pflip.draw{object-fit:contain;background:#fff}
+/* View Transitions: the shared image morphs over ~620 ms; the page fades in over the feed, and out again on close */
+::view-transition-group(pimg){animation-duration:.62s;animation-timing-function:cubic-bezier(.65,0,.35,1)}
+/* both ends show the same picture, so only the larger snapshot (the page's lead) is drawn, cover-cropped to the moving box: no double image, no upscaled thumbnail */
+::view-transition-old(pimg),::view-transition-new(pimg){height:100%;object-fit:cover;overflow:clip;animation:none}
+html.vt-open::view-transition-old(pimg),html.vt-close::view-transition-new(pimg){display:none}
+::view-transition-old(root),::view-transition-new(root){mix-blend-mode:normal;animation-duration:.62s}
+html.vt-open::view-transition-old(root){animation:none}
+html.vt-open::view-transition-new(root){animation:vtIn .5s cubic-bezier(.65,0,.35,1) both}
+html.vt-close::view-transition-new(root){animation:none}
+html.vt-close::view-transition-old(root){z-index:1;animation:vtOut .5s cubic-bezier(.65,0,.35,1) .1s both}
+@keyframes vtIn{from{opacity:0}}
+@keyframes vtOut{to{opacity:0}}
 .dtext{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.6fr);gap:clamp(16px,4vw,48px)}
 .dtext p{margin:0 0 12px;max-width:64ch}
 .dtext details summary{cursor:pointer;display:inline-flex;gap:8px;align-items:center;font:500 12px/1 var(--pix);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);padding:8px 0}
@@ -152,7 +193,10 @@ h2{font:600 clamp(32px,3.8vw,54px)/1.05 var(--disp);letter-spacing:-.03em;margin
 .thumbs img{aspect-ratio:4/3;width:100%;object-fit:cover;border-radius:4px;background:#fff}
 .thumbs .draw img{object-fit:contain;padding:6px}
 .thumbs .cap{font:400 13px/1.4 var(--sans);letter-spacing:0;color:var(--mute);margin-top:8px}
-@media (max-width:860px){#pw{width:100vw;height:100svh}.win{border-radius:0}.dtext{grid-template-columns:1fr}}
+/* full PDF boards: whole pages at their own proportions (portrait and landscape), never cropped, large enough to read */
+.thumbs.boards{grid-template-columns:repeat(auto-fill,minmax(min(100%,520px),1fr));gap:clamp(18px,2.4vw,32px);align-items:start}
+.thumbs.boards img,.thumbs.boards .draw img{aspect-ratio:auto;height:auto;object-fit:contain;padding:0;border-radius:0}
+@media (max-width:860px){.dtext{grid-template-columns:1fr}.plead{height:auto;min-height:0;aspect-ratio:4/3}.wbar{grid-template-columns:auto minmax(0,1fr)}.wbar .pcat{display:none}.wbar .ttl{max-width:none;text-align:right}}
 
 /* skills */
 .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:clamp(24px,5vw,72px)}
@@ -359,12 +403,12 @@ html:not(.js) #gate{display:none}
 
   <section class="pad" id="work" aria-labelledby="work-h">
     <div class="head rv"><h2 id="work-h">Selected works</h2><span class="lbl">Select a project to open it</span></div>
-    <ul class="grid" id="works"></ul>
+    <ul class="feed" id="works"></ul>
   </section>
 
   <section class="pad" id="all" aria-labelledby="all-h">
     <div class="head rv"><h2 id="all-h">More projects</h2></div>
-    <ul class="grid sm" id="more"></ul>
+    <ul class="feed sm" id="more"></ul>
   </section>
 
   <section class="pad" id="skills" aria-labelledby="sk-h">
@@ -431,8 +475,8 @@ html:not(.js) #gate{display:none}
 </main>
 
 <dialog id="pw" aria-labelledby="pwtitle"><div class="win">
-  <div class="wbar"><span class="ttl" id="pwtitle">Project</span>
-    <span class="wctl"><button type="button" id="pwmax" aria-label="Maximise window"><svg viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8"/></svg></button><button type="button" id="pwx" aria-label="Close window"><svg viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8"/></svg></button></span></div>
+  <div class="wbar"><button type="button" class="pback" id="pwx" aria-label="Back to all projects"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg><span>Back</span></button>
+    <span class="ttl" id="pwtitle">Project</span><span class="pcat lbl" id="pwcat" aria-hidden="true"></span></div>
   <div class="wbody" id="pwbody"></div>
 </div></dialog>
 
@@ -445,7 +489,25 @@ html:not(.js) #gate{display:none}
 <script>
 // Projects. imgs: [src, caption, 1 = drawing (show whole sheet)]
 var P=[
- {id:"chiral",t:"The Chiral Biome",k:"M.Arch studio · QUT · 2026",lead:"cb-pavilion-concert.jpg",
+{id:"kingsthorpe",cat:"Urban design",t:"Kingsthorpe Urban Scheme 2026–2076",k:"Sustainable Urban Design · ABN402 · Bachelor of Design · 2026",lead:"kt-lead.jpg",
+ meta:[["Type","Urban design masterplan"],["Site","Kingsthorpe, Queensland 4400"],["Scale","~150 ha, staged growth from 2,159 to ~25,000 people"],["Timeframe","2026–2076, four stages"],["Course","ABN402 Sustainable Urban Design, Semester 2, 2026"]],
+ txt:["A 50-year scheme that grows Kingsthorpe from a 2,159-person rail township into a compact, walkable town of about 25,000. The town today is 98.8% detached houses, has no local passenger rail stop and no secondary school, and floods along Gowrie Creek.","The proposal adds a new station on the Western line with a 4–8 storey core within 800 m, a Gowrie Street main street, a learning and work district and a creek park sized to the flood extent. Each of four stages works on its own, so the town still functions if growth stops early."],
+ tags:["Urban design","Masterplan","Transit-oriented development","Flood-sensitive design","15-minute town","Regional Queensland"],
+ imgs:[["kt-01.jpg","Urban features and constraints, figure-ground 1:10,000",1],["kt-02.jpg","Existing urban section A–A, Goombungee Road",1],["kt-03.jpg","Masterplan and strategies overview",1],["kt-04.jpg","Proposed masterplan zoning",1],["kt-05.jpg","Station square, design highlight (AI-generated illustration)"],["kt-06.jpg","Station town centre node plan",1],["kt-07.jpg","Creek-side living node plan",1],["kt-08.jpg","Section 1, street near mixed-use residential and retail",1],["kt-09.jpg","Section 2, central node",1],["kt-10.jpg","Proposed land use",1],["kt-11.jpg","Proposed building height",1],["kt-12.jpg","Implementation in four stages",1]]},
+{id:"songline",cat:"Housing",t:"Songline Apartment",boards:1,k:"Housing design · ABN412 · Bachelor of Design · 2026",lead:"fs-lead.jpg",
+ meta:[["Type","Multi-residential apartment building (Inala Six-Pack)"],["Site","Boss Creek, Inala, Brisbane (Yagara/Jagera and Turrbal Country)"],["Scale","664.8 m² GFA, ground plus three levels, 12 m maximum height"],["Structure","Cross-laminated timber (CLT)"],["Cost","$5.92 M inc GST, Class D estimate, Nov 2026"]],
+ txt:["A four-level CLT apartment building on Boss Creek, designed from a reading of the site across five seasons: Sprinter, Sprummer, Summer, Autumn and Winter. Sun, wind, water, wildlife and the calendars of Aboriginal and Vietnamese residents set the brief.","Each apartment has an indoor-outdoor room with fold-up perforated façade panels in place of a balcony. The panels open, half-fold or close with the season. A rain garden pool, a pergola ring and native planting on the ground and the roof are designed for seven named species, including the Cycad Blue and the Emerald Dragonfly."],
+ tags:["Housing","Mass timber","CLT","Seasonal design","Habitat","Inala"],
+ imgs:[
+  ["sl-p1.jpg","Country, seasons and brief: site, Boss Creek calendar, cost plan",1],
+  ["sl-p2.jpg","Species and habitat",1],
+  ["sl-p3.jpg","Ground floor plan and landscape",1],
+  ["sl-p4.jpg","Typical plan, rooftop and seasonal households",1],
+  ["sl-p5.jpg","Façade section, details and elevations",1],
+  ["sl-p6.jpg","Stair, lift and Section AA",1],
+  ["sl-p7.jpg","Section BB 1:50 and courtyard render",1],
+  ["sl-p8.jpg","Façade and indoor-outdoor room, sun studies",1]]},
+ {id:"chiral",cat:"Landscape",t:"The Chiral Biome",k:"M.Arch studio · QUT · 2026",lead:"cb-pavilion-concert.jpg",
   meta:[["Type","Butterfly sanctuary + public landscape"],["Site","Mt Coot-tha Quarry, Brisbane"],["Scenario","2050, SEQ +1.5–2 °C"],["Workflow","Rhino, Grasshopper, RhinoMCP, Revit"]],
   txt:["By 2050, Brisbane summers reach 38–42 °C and the Richmond Birdwing, South East Queensland's most endangered butterfly, is collapsing. An invasive vine mimics the scent of its native host plant, so females lay eggs on it and the caterpillars are poisoned.",
        "The project turns the disused quarry, which already traps cool, humid air at its floor, into a breeding ground for the butterfly and a shaded public landscape. A kinetic, lotus-inspired device (C.E.N.) shades, harvests fog and releases the native host-plant scent. Chirality, the left- and right-handed asymmetry of the butterfly and its vine, drives a bilateral plan and a helical section through four buildings: Train Station, Chrysalis Tower, Nectar Pavilion and The Camp."],
@@ -454,39 +516,39 @@ var P=[
         ["cb-station-platform.jpg","Train Station arrival"],["cb-pavilion-interior.jpg","Nectar Pavilion interior"],["cb-camp-dusk.jpg","The Camp at dusk"],["cb-collage.jpg","C.E.N. canopies by the water, collage"],["cb-cen-axo2.webp","C.E.N. canopy: rainwater to cistern",1],
         ["cb-axo-station.jpg","Axo: Train Station",1],["cb-axo-tower.jpg","Axo: Chrysalis Tower",1],["cb-axo-pavilion.jpg","Axo: Nectar Pavilion",1],["cb-axo-camp.jpg","Axo: The Camp",1],
         ["cb-site-plan.jpg","Site plan",1],["cb-sec-station.jpg","Train Station section",1],["cb-sec-tower.jpg","Chrysalis Tower section",1],["cb-sec-pavilion.jpg","Nectar Pavilion section",1],["cb-sec-camp.jpg","The Camp section",1]]},
- {id:"living",t:"Living² Via Pitagora",k:"Building technology studio · Politecnico di Milano · 2024/25",lead:"l2-model-3.jpg",
+ {id:"living",cat:"Housing",t:"Living² Via Pitagora",k:"Building technology studio · Politecnico di Milano · 2024/25",lead:"l2-model-3.jpg",
   meta:[["Type","Flexible, adaptable student housing"],["Site","Via Pitagora, Milan"],["Structure","Steel frame on a 6 × 6 m grid"],["Format","7 A1 panels + physical model"]],
   txt:["Student housing built from interchangeable blocks on a steel structural grid. The rigid grid is softened by open-air walkways that weave between zig-zagging blocks, courtyards open to the sky, and blocks positioned so bedrooms get the best sun.",
        "A second façade sits one balcony-depth off the building: a lightweight steel frame clad in expanded aluminium mesh panels with a diamond-shaped parametric perforation. Openings grow on the east and west, where sun is lower, to balance daylight and heat gain. Because the units are modular, the same kit produces different façades; the chosen diagonal balcony layout connects students above and below. Resolved through structure, sections and 1:20 / 1:5 details, and tested in a physical model with 3D-printed façade panels."],
   tags:["Modular housing","Second-skin façade","Steel structure","Detailing","3D printing"],
   imgs:[["l2-model-4.jpg","Model: perforated façade, front"],["l2-model-1.jpg","Model: façade panel opened to the frame"],["l2-model-2.jpg","Model: from above, roof and bracing"],["l2-p1.jpg","Site, form finding, typologies",1],["l2-p2.jpg","Masterplan + flexible units",1],["l2-p3.jpg","Floor plans 1:200",1],["l2-p4.jpg","Sections + south elevation",1],["l2-p5.jpg","Façade panels + structure",1],["l2-p6.jpg","Details 1:20",1],["l2-p7.jpg","Details 1:5",1]]},
- {id:"unity",t:"Unit-Y Building",k:"Bachelor of Design · QUT · 2025",lead:"uy-street.jpg",
+ {id:"unity",cat:"Housing",t:"Unit-Y Building",k:"Bachelor of Design · QUT · 2025",lead:"uy-street.jpg",
   meta:[["Type","Social residential complex"],["Site","Woolloongabba, Brisbane"],["Grid","14 × 14 m → 3.5 × 3.5 m cells"],["Units","6 types, 49–122.5 m²"]],
   txt:["Social housing near Norman Creek for residents of all ages and abilities. The unit system borrows Soma Cube logic: interlocking studio to three-bedroom units are extracted from a 3.5 m grid and recombined floor by floor. A central void carries airflow, buffers sound and connects the levels visually; sliding screens let residents control noise and ventilation."],
   tags:["Modular housing","Accessibility","Cross-ventilation","Revit"],
   imgs:[["uy-concept-comic.jpg","Concept: interlocking units assembled into one block",1],["uy-units.jpg","Unit types A–F, 49–122.5 m², with accessible clearances",1],["uy-sitemap.jpg","Site analysis 1:1000",1],["uy-site.jpg","Site plan",1],["uy-ground.jpg","Ground floor plan",1],["uy-plan.jpg","Typical floor plan",1],["uy-axo.jpg","Exploded floors",1],
         ["uy-facade.jpg","Balconies and sliding screens"],["uy-interior.jpg","Apartment interior"],["uy-section.jpg","Section render through the central void"],["uy-elevations.jpg","Four elevations",1]]},
- {id:"inter",t:"Inter-Linked Center",k:"Bachelor of Design · QUT · 2025",lead:"il-court.jpg",
+ {id:"inter",cat:"Community",t:"Inter-Linked Center",k:"Bachelor of Design · QUT · 2025",lead:"il-court.jpg",
   meta:[["Type","Community centre"],["Site","Woolloongabba, Brisbane"],["Model","1:500, one 8 mm brick = 4 m"],["Levels","Ground + 3"]],
   txt:["A LEGO-inspired modular community centre that can grow in phases, for local young people from migrant and diverse cultural backgrounds. Prefabricated modules interlock into a low-cost system, with breezeways, atria and terraces linking inside and out: hammocks, open-air libraries, graffiti walls and water fountains for hot days."],
   tags:["Prefabrication","Community"],
   imgs:[["il-garden.jpg","Garden court and stairs"],["il-interior.jpg","Library interior"],["il-section.jpg","Perspective section"],["il-aerial.jpg","Site aerial"],["il-modules.jpg","Indoor and outdoor modules + final form",1],["il-mod-in.jpg","Indoor modules",1],["il-mod-out.webp","Outdoor modules: hammocks, library, swings, fountain, graffiti wall",1],["il-site.jpg","Site plan 1:500",1],["il-program.jpg","Program space, exploded",1],["il-plan-ground.jpg","Ground floor plan",1],["il-plans.jpg","Level 1–3 floor plans",1],["il-elev.jpg","Elevations",1],["il-process.jpg","Process of making: LEGO model to modules",1]]},
- {id:"facade",t:"Airfoil Façade",k:"Technical design · QUT · 2025",lead:"af-persp.jpg",
+ {id:"facade",cat:"Façade",t:"Airfoil Façade",k:"Technical design · QUT · 2025",lead:"af-persp.jpg",
   meta:[["Scope","South-west façade redesign"],["Site","140 Ann St, Brisbane"],["Scale","1:50 @ A1"],["Rotation","0° to 90°, five positions"]],
   txt:["Rotating powder-coated aluminium airfoil fins cut afternoon glare while keeping classrooms bright. Blade angles were tested against the summer-solstice sun: open before 11 am, 45° from 1–3 pm, closed after 4:30 pm. Delivered as an exploded isometric, partial sections and elevations, with maintenance access to AS/NZS 1891."],
   tags:["Façade engineering","Solar analysis","Detailing"],
   imgs:[["af-elev.jpg","Blades in front of the classrooms"],["af-concept.jpg","Site, concept, climate and blade tests",1],["af-exploded.jpg","Exploded isometric view with legend",1],["af-details.jpg","Partial sections and elevations 1:50",1]]},
- {id:"house",t:"Collingwood Park Residence",k:"Practice · Ryujin Oceania · 2026",lead:"cp-dusk.jpg",
+ {id:"house",cat:"Residential",t:"Collingwood Park Residence",k:"Practice · Ryujin Oceania · 2026",lead:"cp-dusk.jpg",
   meta:[["Type","House + landscape"],["Site","Collingwood Park, QLD"],["Site / building","1130 m² / 214 m²"],["Site cover","19%"]],
   txt:["A house and garden with a Japanese-inspired design language: material restraint, framed views and a close link between inside and out. Delivered through site and planting plan, floor plan, elevations and internal joinery elevations with NCC 2022 notes."],
   tags:["Residential","Landscape","Documentation"],
   imgs:[["cp-front.jpg","Front garden"],["cp-day.jpg","Terraced garden and deck"],["cp-bath.jpg","Outdoor bath court"],["cp-landscape.jpg","Landscape and site plan",1],["cp-d1.jpg","Floor plan",1],["cp-d2.jpg","Elevations 1 and 2",1],["cp-d3.jpg","Elevations 3 and 4",1],["cp-section.jpg","Section A",1],["cp-d4.jpg","Roof plan",1],["cp-d5.jpg","Internal elevations: kitchen",1],["cp-d6.jpg","Internal elevations: walk-in pantry",1],["cp-d7.jpg","Internal elevations: bathroom and WC",1]]},
- {id:"gardner",t:"Gardner Neuroscience Institute",k:"Integrated sustainable building design · Politecnico di Milano · 2024/25",lead:"gn-cover.jpg",leadDraw:1,
+ {id:"gardner",cat:"Analysis",t:"Gardner Neuroscience Institute",k:"Integrated sustainable building design · Politecnico di Milano · 2024/25",lead:"gn-cover.jpg",leadDraw:1,
   meta:[["Type","Technical analysis of an existing building"],["Building","UC Gardner Neuroscience Institute, Cincinnati"],["Scope","Structure, envelope, climate, services"]],
   txt:["A technical case study of a neurological care centre designed around patients with sensory and mobility needs. We analysed its steel structure and bracing, its orientation-based shading envelope and textile mesh second skin, daylight performance by floor, and its HVAC, fresh-air, water and electrical systems, then assessed its sustainability strategies."],
   tags:["Building physics","Envelope","Daylight analysis","HVAC"],
   imgs:[["gn-envelope.jpg","Envelope and shading",1],["gn-details.jpg","Façade details",1],["gn-daylight.jpg","Daylight performance",1],["gn-hvac.jpg","Fresh-air distribution",1]]},
- {id:"dfa",t:"Design for All: Polimi Building 13",k:"Multicriteria analysis · Politecnico di Milano · 2025",lead:"dfa-hall.jpg",
+ {id:"dfa",cat:"Analysis",t:"Design for All: Polimi Building 13",k:"Multicriteria analysis · Politecnico di Milano · 2025",lead:"dfa-hall.jpg",
   meta:[["Type","Inclusive design evaluation"],["Focus","Common areas of a campus building"],["Method","Multicriteria analysis (Socrates)"],["Format","Written report"]],
   txt:["An evaluation of how inclusive a university building's common areas are. A value tree split the goal into atmosphere, space configuration and wayfinding. Three alternatives (private workplaces, a wayfinding system and a welcoming atmosphere) were scored in neutral and stakeholder-weighted scenarios, informed by a student survey. The welcoming atmosphere scored highest: warmer materials, better lighting and clear zones for rest, meeting and lunch."],
   tags:["Accessibility","Evaluation","User research"],
@@ -494,42 +556,32 @@ var P=[
         ["dfa-before-hall.jpg","Before: common study area today"],["dfa-chalk.webp","After: welcoming atmosphere, chalk walls"],
         ["dfa-before-sign.jpg","Before: current wayfinding signage"],["dfa-wayfinding.jpg","After: wayfinding system"],
         ["dfa-pods.jpg","After: private workplaces, study pods"],["dfa-alt.jpg","Alternative 1: private workplaces",1],["dfa-alt2.jpg","Alternatives 2 and 3",1],["dfa-results.jpg","Scenario results",1]]},
- {id:"envhouse",t:"Environmental House",k:"House design · Environmental design",lead:"eh-front.jpg",
+ {id:"envhouse",cat:"Residential",t:"Environmental House",k:"House design · Environmental design",lead:"eh-front.jpg",
   meta:[["Type","Climate-responsive duplex"],["Site","Dubbo, NSW"],["Climate","Zone 4, warm temperate"],["Materials","Double brick, timber, light concrete tiles, low-E glazing"]],
   txt:["A single-storey duplex shaped around Dubbo's climate. The L-shaped plan promotes cross-ventilation and separates zones: north-facing living rooms for winter sun, south-facing bedrooms, east-facing kitchens for soft morning light, and west-side service spaces buffering the afternoon heat. A shared courtyard water feature cools the air by evaporation.",
        "Double brick walls give thermal mass, light-coloured concrete roof tiles reduce heat gain, and low-E glazing admits winter sun while holding internal heat. The design was tested against Dubbo's sun path and radiation range: high summer gain around 300 W/m² to shade against, and 150–200 W/m² in winter to capture."],
   tags:["Residential","Passive design","Rendering"],
   imgs:[["eh-street.jpg","Street view"],["eh-plan.jpg","Floor plan",1],["eh-interior.jpg","Kitchen and living"],["eh-section.jpg","Perspective section"],["eh-elev-a.jpg","Elevations 1 and 2",1],["eh-elev-b.jpg","Elevations 3 and 4",1],["eh-site.jpg","Site plan and sun path",1]]},
- {id:"technopark",t:"Technopark",k:"Typological design · Masterplan",lead:"tp-pleasure-aerial.jpg",
+ {id:"technopark",cat:"Masterplan",t:"Technopark",k:"Typological design · Masterplan",lead:"tp-pleasure-aerial.jpg",
   meta:[["Type","Technology park: dwelling, pleasure, production"],["Site","East of Emerald, QLD (919 ha)"],["Typology","Château de Coucy"],["Systems","Vertical farming, kinetic facade, rainwater filtration"]],
   txt:["A masterplan for a technology park on 919 hectares of former agricultural land east of Emerald, Queensland. Five precedents were analysed for parti, symmetry, proportion, hierarchy, circulation and repetition. Château de Coucy, an irregular trapezoid with cylindrical corner towers around a central keep, became the typology for all three buildings.",
        "The trapezoid was reworked three ways: a Place of Dwelling, a six-storey apartment ring around a shared courtyard with pop-out windows and a rooftop garden; a Place of Pleasure, a fitness centre and bar with a vertical garden and slanted roofs; and a Place of Production, a company building behind an open-and-close facade. A personal manifesto set the rules: curves meeting angular forms, visible exoskeletons, green walls, a central viewing point in each building, and brutalist materials with pops of colour.",
        "The shape came out of the typology in steps. The castle plan was broken down into its parti, symmetry, proportion, hierarchy, circulation and repeated units, then redrawn by hand, again and again, in coloured pen until the keep, towers and outer wall read as simple parts. Those parts were then pulled apart for each building: the dwelling keeps the trapezoid and opens it into a courtyard ring; the pleasure building turns the towers into hexagon pavilions around a central court; and the production building stretches the outer wall into a long bent frame. Set side by side on the site, the three flows lock together into one campus.",
        "Systems tie the park back to its farming past: indoor vertical farming under LED light, a hexagonal facade panel that opens and closes to control sun, and a rainwater filter for the vertical gardens run by a NodeMCU controller, relay and pump."],
   tags:["Masterplan","Typology","Rendering"],
-  imgs:[["tp-site.jpg","Site plan",1],["tp-proc-analysis.jpg","Process 1: typological analysis of Château de Coucy",1],["tp-proc-sketches.jpg","Process 2: hand sketches, playing with the shape",1],["tp-dev-dwelling.jpg","Process 3: dwelling, the trapezoid opened into a courtyard ring",1],["tp-dev-pleasure.jpg","Process 4: pleasure, towers become hexagon pavilions",1],["tp-dev-production.jpg","Process 5: production, the frame bent into a triangle",1],["tp-proc-flow.jpg","Process 6: the three flows set together on the site",1],["tp-dwelling-court.jpg","Place of Dwelling: courtyard"],["tp-dwelling-plan.jpg","Place of Dwelling: ground floor",1],["tp-dwelling-elev.jpg","Place of Dwelling: elevations",1],["tp-dwelling-section.jpg","Place of Dwelling: sections",1],["tp-pleasure-bar.jpg","Place of Pleasure: bar at night"],["tp-pleasure-plan.jpg","Place of Pleasure: ground floor",1],["tp-pleasure-elev.jpg","Place of Pleasure: elevations",1],["tp-production-aerial.jpg","Place of Production: aerial"],["tp-production-plan.jpg","Place of Production: ground floor",1],["tp-production-section.jpg","Place of Production: sections",1],["tp-facade-bottles.jpg","Green facade: recycled bottles as planting and light modules",1],["tp-water-filter.jpg","Rainwater filter for the vertical gardens",1]]},
-{id:"kingsthorpe",t:"Kingsthorpe Urban Scheme 2026–2076",k:"Sustainable Urban Design · ABN402 · Bachelor of Design · 2026",lead:"kt-lead.jpg",
- meta:[["Type","Urban design masterplan"],["Site","Kingsthorpe, Queensland 4400"],["Scale","~150 ha, staged growth from 2,159 to ~25,000 people"],["Timeframe","2026–2076, four stages"],["Course","ABN402 Sustainable Urban Design, Semester 2, 2026"]],
- txt:["A 50-year scheme that grows Kingsthorpe from a 2,159-person rail township into a compact, walkable town of about 25,000. The town today is 98.8% detached houses, has no local passenger rail stop and no secondary school, and floods along Gowrie Creek.","The proposal adds a new station on the Western line with a 4–8 storey core within 800 m, a Gowrie Street main street, a learning and work district and a creek park sized to the flood extent. Each of four stages works on its own, so the town still functions if growth stops early."],
- tags:["Urban design","Masterplan","Transit-oriented development","Flood-sensitive design","15-minute town","Regional Queensland"],
- imgs:[["kt-01.jpg","Urban features and constraints, figure-ground 1:10,000",1],["kt-02.jpg","Existing urban section A–A, Goombungee Road",1],["kt-03.jpg","Masterplan and strategies overview",1],["kt-04.jpg","Proposed masterplan zoning",1],["kt-05.jpg","Station square, design highlight (AI-generated illustration)"],["kt-06.jpg","Station town centre node plan",1],["kt-07.jpg","Creek-side living node plan",1],["kt-08.jpg","Section 1, street near mixed-use residential and retail",1],["kt-09.jpg","Section 2, central node",1],["kt-10.jpg","Proposed land use",1],["kt-11.jpg","Proposed building height",1],["kt-12.jpg","Implementation in four stages",1]]},
-{id:"fiveseasons",t:"Five Seasons on Boss Creek",k:"Housing design · ABN412 · Bachelor of Design · 2026",lead:"fs-lead.jpg",
- meta:[["Type","Multi-residential apartment building (Inala Six-Pack)"],["Site","Boss Creek, Inala, Brisbane (Yagara/Jagera and Turrbal Country)"],["Scale","664.8 m² GFA, ground plus three levels, 12 m maximum height"],["Structure","Cross-laminated timber (CLT)"],["Cost","$5.92 M inc GST, Class D estimate, Nov 2026"]],
- txt:["A four-level CLT apartment building on Boss Creek, designed from a reading of the site across five seasons: Sprinter, Sprummer, Summer, Autumn and Winter. Sun, wind, water, wildlife and the calendars of Aboriginal and Vietnamese residents set the brief.","Each apartment has an indoor-outdoor room with fold-up perforated façade panels in place of a balcony. The panels open, half-fold or close with the season. A rain garden pool, a pergola ring and native planting on the ground and the roof are designed for seven named species, including the Cycad Blue and the Emerald Dragonfly."],
- tags:["Housing","Mass timber","CLT","Seasonal design","Habitat","Inala"],
- imgs:[["fs-01.jpg","Country, seasons and return brief",1],["fs-02.jpg","Species the scheme is designed for"],["fs-03.jpg","Study model"],["fs-04.jpg","Ground floor plan and landscape",1],["fs-05.jpg","Typical plan, rooftop and seasonal households 1:100",1],["fs-06.jpg","Façade section, details and elevations",1],["fs-07.jpg","Stair, lift and Section AA",1],["fs-08.jpg","Section BB 1:50",1],["fs-09.jpg","Façade and indoor-outdoor room",1],["fs-10.jpg","Indoor-outdoor room interiors"]]}
+  imgs:[["tp-site.jpg","Site plan",1],["tp-proc-analysis.jpg","Process 1: typological analysis of Château de Coucy",1],["tp-proc-sketches.jpg","Process 2: hand sketches, playing with the shape",1],["tp-dev-dwelling.jpg","Process 3: dwelling, the trapezoid opened into a courtyard ring",1],["tp-dev-pleasure.jpg","Process 4: pleasure, towers become hexagon pavilions",1],["tp-dev-production.jpg","Process 5: production, the frame bent into a triangle",1],["tp-proc-flow.jpg","Process 6: the three flows set together on the site",1],["tp-dwelling-court.jpg","Place of Dwelling: courtyard"],["tp-dwelling-plan.jpg","Place of Dwelling: ground floor",1],["tp-dwelling-elev.jpg","Place of Dwelling: elevations",1],["tp-dwelling-section.jpg","Place of Dwelling: sections",1],["tp-pleasure-bar.jpg","Place of Pleasure: bar at night"],["tp-pleasure-plan.jpg","Place of Pleasure: ground floor",1],["tp-pleasure-elev.jpg","Place of Pleasure: elevations",1],["tp-production-aerial.jpg","Place of Production: aerial"],["tp-production-plan.jpg","Place of Production: ground floor",1],["tp-production-section.jpg","Place of Production: sections",1],["tp-facade-bottles.jpg","Green facade: recycled bottles as planting and light modules",1],["tp-water-filter.jpg","Rainwater filter for the vertical gardens",1]]}
 ];
-// In progress: listed, not openable yet
-var SOON=[{id:"office",t:"Building Science: Office",k:"Coming soon"},{id:"songline",t:"Songline Apartment",k:"Project site · 2026",url:"https://nluuhue303-bit.github.io/helen-portfolio/"},{id:"dream",t:"Library of the Dream",k:"Coming soon"}];
+// In progress: kept in the data for later, not shown on the page yet
+var SOON=[{id:"office",t:"Building Science: Office",k:"Coming soon"},{id:"dream",t:"Library of the Dream",k:"Coming soon"}];
 
 var $=function(s,r){return (r||document).querySelector(s)},esc=function(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;")};
 var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches; // honour the OS "reduce motion" setting
 var ST="";
 
-// ---------- project grids ----------
-// Selected works: a curated subset as large image cards; the rest (plus project sites with a url) go in the smaller More projects grid.
-// SOON items without a url are kept in the data but not shown.
-var LEADALT={kingsthorpe:"AI-generated street view: green timber-clad mixed-use buildings, a cycle path, rain-garden median and a bus stop",fiveseasons:"Courtyard render: rain garden, pergola and BBQ area beside the four-storey apartment building",chiral:"Nectar Pavilion: a string ensemble performs under a timber-framed glass dome, with butterflies on the walls",
+// ---------- project feeds ----------
+// Selected works: a curated subset in P order (the two most recent first, shown larger); the rest go in the smaller More projects feed.
+// Both feeds fill a 3-column zig-zag left → middle → right (CSS grid, so DOM and tab order follow the reading order).
+var LEADALT={kingsthorpe:"AI-generated street view: green timber-clad mixed-use buildings, a cycle path, rain-garden median and a bus stop",songline:"Courtyard render: rain garden, pergola and BBQ area beside the four-storey apartment building",chiral:"Nectar Pavilion: a string ensemble performs under a timber-framed glass dome, with butterflies on the walls",
  living:"physical model: 3D-printed perforated façade panel in front of the steel frame, casting patterned shadows",
  unity:"street elevation render: brick housing block with timber shutters and perforated balcony screens",
  inter:"garden court render: hammocks under a timber pergola in front of the modular centre",
@@ -538,31 +590,92 @@ var LEADALT={kingsthorpe:"AI-generated street view: green timber-clad mixed-use 
  envhouse:"front view render",technopark:"Place of Pleasure, aerial view"};
 function leadAlt(p){return p.t+", "+(LEADALT[p.id]||"lead image")}
 var NOT_SELECTED={gardner:1,dfa:1,envhouse:1,technopark:1},SEL=P.filter(function(p){return !NOT_SELECTED[p.id]});
-function card(p){return '<li class="rv"><button type="button" class="pcard" data-open="'+p.id+'" aria-haspopup="dialog"><span class="ph"><img loading="lazy" decoding="async" src="'+p.lead+'"'+(p.leadDraw?' class="draw"':'')+' alt="'+esc(leadAlt(p))+'"></span><span class="pt">'+esc(p.t)+'</span><span class="pk">'+esc(p.k)+'</span></button></li>'}
-$("#works").innerHTML=SEL.map(card).join("");
-$("#more").innerHTML=P.filter(function(p){return NOT_SELECTED[p.id]}).map(card).join("")+
- SOON.filter(function(s){return s.url}).map(function(s){return '<li class="rv"><a class="pcard" href="'+esc(s.url)+'" target="_blank" rel="noopener"><span class="ph empty">Opens project site ↗</span><span class="pt">'+esc(s.t)+'</span><span class="pk">'+esc(s.k)+'</span></a></li>'}).join("");
+// one feed item: rule, "● CATEGORY", centred heading, lead image, clamped excerpt. A real link, so it can open in a new tab too.
+function item(p,feat){return '<li class="fi'+(feat?' feat':'')+'"><a class="fcard rv" href="#project/'+p.id+'" data-open="'+p.id+'" aria-haspopup="dialog">'+
+ '<span class="fk"><i aria-hidden="true">●</i> '+esc(p.cat||"Project")+'</span><h3 class="ft"><span>'+esc(p.t)+'</span></h3>'+
+ '<span class="fph"><img loading="lazy" decoding="async" src="'+p.lead+'"'+(p.leadDraw?' class="draw"':'')+' alt="'+esc(leadAlt(p))+'"></span>'+
+ '<span class="fx">'+esc(p.txt[0])+'</span></a></li>'}
+$("#works").innerHTML=SEL.map(function(p,i){return item(p,i<2)}).join("");
+$("#more").innerHTML=P.filter(function(p){return NOT_SELECTED[p.id]}).map(function(p){return item(p)}).join("");
 
-var pw=$("#pw"),pwbody=$("#pwbody"),current=null;
-function openProject(id){
-  var i=P.findIndex(function(q){return q.id===id});if(i<0)return;var p=P[i];current=id;
+// ---------- project page: a full-screen "second page" in the #pw dialog ----------
+// The clicked image grows from its place on the page into the page's lead image (View Transitions API, FLIP clone fallback),
+// and shrinks back into its card on close. Hash routing: #project/<id> opens, Back/Esc/browser Back close.
+var pw=$("#pw"),pwbody=$("#pwbody"),current=null,srcEl=null,closing=false;
+var PT=620,PEASE="cubic-bezier(.65,0,.35,1)",canVT=typeof document.startViewTransition==="function",noop=function(){};
+function findP(id){for(var i=0;i<P.length;i++)if(P[i].id===id)return P[i];return null}
+function render(p){
   var imgs=p.imgs.filter(function(m){return m[0]!==p.lead});
-  $("#pwtitle").textContent=p.t;
-  pwbody.innerHTML='<span class="lbl">'+esc(p.k)+'</span><h3>'+esc(p.t)+'</h3>'+
-   '<div class="wlead" data-full="'+p.lead+'" data-cap="'+esc(p.t)+'"><img src="'+p.lead+'" alt="'+esc(leadAlt(p))+'"'+(p.leadDraw?' style="background:#fff"':'')+'></div>'+
+  $("#pwtitle").textContent=p.t;$("#pwcat").textContent=p.cat||"";
+  pwbody.innerHTML='<button type="button" class="plead'+(p.leadDraw?' draw':'')+'" data-full="'+p.lead+'" data-cap="'+esc(p.t)+'" aria-label="Enlarge lead image"><img src="'+p.lead+'" alt="'+esc(leadAlt(p))+'"></button>'+
+   '<div class="pin"><span class="lbl">'+esc(p.k)+'</span><h2 class="ph2">'+esc(p.t)+'</h2>'+
    '<div class="dtext"><div><dl class="meta">'+p.meta.map(function(m){return '<dt>'+m[0]+'</dt><dd>'+esc(m[1])+'</dd>'}).join("")+'</dl><div class="chips">'+p.tags.map(function(t){return '<span>'+esc(t)+'</span>'}).join("")+'</div></div>'+
    '<div><p>'+esc(p.txt[0])+'</p>'+(p.txt.length>1?'<details><summary>'+ST+'Read more</summary>'+p.txt.slice(1).map(function(t){return '<p>'+esc(t)+'</p>'}).join("")+'</details>':'')+'</div></div>'+
-   '<div class="nodes">Drawings and renders ('+imgs.length+')</div>'+
-   '<div class="thumbs">'+imgs.map(function(m,k){return '<button type="button" class="'+(m[2]?'draw':'')+'" data-full="'+m[0]+'" data-cap="'+esc(m[1])+'"><img loading="lazy" src="'+m[0]+'" alt="'+esc(p.t+", "+m[1])+'"><div class="cap">'+esc(m[1])+'</div></button>'}).join("")+'</div>';
-  pwbody.scrollTop=0;
-    if(!pw.open){try{pw.showModal()}catch(e){pw.setAttribute("open","")}}
+   '<div class="nodes">'+(p.boards?'Boards':'Drawings and renders')+' ('+imgs.length+')</div>'+
+   '<div class="thumbs'+(p.boards?' boards':'')+'">'+imgs.map(function(m){return '<button type="button" class="'+(m[2]?'draw':'')+'" data-full="'+m[0]+'" data-cap="'+esc(m[1])+'"><img loading="lazy" src="'+m[0]+'" alt="'+esc(p.t+", "+m[1])+'"><div class="cap">'+esc(m[1])+'</div></button>'}).join("")+'</div></div>';
+  pwbody.scrollTop=0;return pwbody.querySelector(".plead img")}
+function cardFor(id){return document.querySelector('.feed [data-open="'+id+'"]')||document.querySelector('[data-open="'+id+'"]')}
+function imgOf(el){return el?(el.tagName==="IMG"?el:el.querySelector("img")):null}
+function inView(el){var r=el.getBoundingClientRect();return r.width>0&&r.bottom>0&&r.top<innerHeight}
+function decoded(img){return Promise.race([img.decode?img.decode().catch(noop):Promise.resolve(),new Promise(function(r){setTimeout(r,400)})])}
+function show(){if(!pw.open){try{pw.showModal()}catch(e){pw.setAttribute("open","")}}}
+function hide(){var lb=$("#lb");if(lb.open)lb.close();if(pw.open)pw.close()}
+// resolves when p settles or after ms, whichever is first (a hidden tab may not run animation frames)
+function within(p,ms){return Promise.race([p.catch(noop),new Promise(function(r){setTimeout(r,ms)})])}
+function fade(on){var w=pw.querySelector(".win"),d=reduce?180:320,a=w.animate(on?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:d,easing:"ease",fill:"forwards"});
+  return within(a.finished,d+150).then(function(){return a})}
+// View Transitions: the two images share one name, so the browser morphs one rectangle into the other
+function vt(open,from,to,update){var R=document.documentElement;R.classList.add(open?"vt-open":"vt-close");from.style.viewTransitionName="pimg";
+  var ran=false;function run(){if(ran)return;ran=true;from.style.viewTransitionName="";update();to.style.viewTransitionName="pimg"}
+  var t=document.startViewTransition(run);setTimeout(run,1000); // never leave the page half-switched if the browser stalls the transition
+  return within(t.finished,PT+800).then(function(){to.style.viewTransitionName="";R.classList.remove("vt-open","vt-close")})}
+// FLIP fallback: a clone of the lead sits at the lead's rect; uniform scale + clip-path take it from the card's rect (no stretching)
+function flip(open,cardImg,lead){
+  var r0=cardImg.getBoundingClientRect(),r1=lead.getBoundingClientRect(),c=document.createElement("img"),win=pw.querySelector(".win");
+  c.src=lead.currentSrc||lead.src;c.alt="";c.className="pflip"+(lead.parentNode.classList.contains("draw")?" draw":"");c.setAttribute("aria-hidden","true");
+  c.style.cssText="left:"+r1.left+"px;top:"+r1.top+"px;width:"+r1.width+"px;height:"+r1.height+"px";pw.appendChild(c);
+  var s=Math.max(r0.width/r1.width,r0.height/r1.height),ix=Math.max(0,(r1.width-r0.width/s)/2),iy=Math.max(0,(r1.height-r0.height/s)/2),
+    tx=(r0.left+r0.width/2)-(r1.left+r1.width/2),ty=(r0.top+r0.height/2)-(r1.top+r1.height/2),
+    A={transform:"translate("+tx+"px,"+ty+"px) scale("+s+")",clipPath:"inset("+iy+"px "+ix+"px)"},B={transform:"translate(0px,0px) scale(1)",clipPath:"inset(0px 0px)"};
+  lead.style.visibility="hidden";cardImg.style.visibility="hidden";
+  var a=c.animate(open?[A,B]:[B,A],{duration:PT,easing:PEASE,fill:"forwards"}),
+    w=win.animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:PT*.65,delay:open?0:PT*.35,easing:"ease",fill:"forwards"});
+  return within(a.finished,PT+300).then(function(){a.cancel();if(!open)hide();lead.style.visibility="";cardImg.style.visibility="";c.remove();w.cancel()})}
+function openProject(id,from){
+  var p=findP(id);if(!p||closing)return;if(pw.open&&current===id)return;
+  current=id;srcEl=from||cardFor(id);var lead=render(p),si=imgOf(srcEl);
+  if(pw.open)return; // already showing another project: just swap the content
+  if(reduce||!si||!inView(si)){show();fade(true).then(function(a){a.cancel()});return}
+  decoded(lead).then(function(){
+    if(canVT)vt(true,si,lead,show);else{show();flip(true,si,lead)}});
 }
-function closeProject(){pw.close()}
-pw.addEventListener("close",function(){pw.classList.remove("max")});
-$("#pwx").addEventListener("click",closeProject);
-$("#pwmax").addEventListener("click",function(){pw.classList.toggle("max")});
-pw.addEventListener("click",function(e){if(e.target===pw)closeProject()});
-document.addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(b)openProject(b.dataset.open)});
+function closeProject(){
+  if(!pw.open||closing)return;closing=true;
+  var el=srcEl&&document.contains(srcEl)?srcEl:cardFor(current),si=imgOf(el),lead=pwbody.querySelector(".plead img"),lb=$("#lb");
+  if(lb.open)lb.close();
+  function done(){closing=false;current=null;srcEl=null;if(el)try{el.focus({preventScroll:true})}catch(e){}}
+  if(reduce||!si||!lead){fade(false).then(function(a){hide();a.cancel();done()});return}
+  if(!inView(si))el.scrollIntoView({block:"center",behavior:"instant"}); // shrink back into a card the visitor can see
+  if(!inView(lead))pwbody.scrollTop=0;
+  (canVT?vt(false,lead,si,hide):flip(false,si,lead)).then(done);
+}
+// routing: #project/<id>
+var HP=/^#project\/([\w-]+)$/;
+function hashId(){var m=location.hash.match(HP);return m?m[1]:null}
+function route(){var id=hashId();if(id&&findP(id))openProject(id);else if(pw.open)closeProject()}
+function back(){if(!pw.open)return;if(history.state&&history.state.pw&&hashId())history.back();else{if(hashId())history.replaceState(null,"",location.pathname+location.search);closeProject()}}
+addEventListener("popstate",route);addEventListener("hashchange",route);
+$("#pwx").addEventListener("click",back);
+pw.addEventListener("cancel",function(e){e.preventDefault();back()}); // Esc runs the same reverse animation
+pw.addEventListener("close",function(){if(!closing){current=null;if(hashId())history.replaceState(null,"",location.pathname+location.search)}});
+document.addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(!b||e.defaultPrevented)return;
+  if(e.button||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return; // let modified clicks open the link in a new tab
+  e.preventDefault();var id=b.dataset.open;if(!findP(id))return;
+  if(hashId()!==id)history.pushState({pw:id},"","#project/"+id);openProject(id,b)});
+// deep link: open #project/<id> on load, after the welcome gate if it shows
+(function(){function boot(){if(hashId())route()}
+  if(document.getElementById("gate"))new MutationObserver(function(m,o){if(!document.getElementById("gate")){o.disconnect();setTimeout(boot,60)}}).observe(document.body,{childList:true});
+  else boot()})();
 
 // ---------- theme: dark by default, the header toggle switches and remembers ----------
 var root=document.documentElement;
