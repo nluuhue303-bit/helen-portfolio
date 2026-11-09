@@ -284,23 +284,26 @@ html:not(.js) #gate{display:none}
 #gate{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:clamp(24px,4.4vh,44px);padding:24px 24px calc(24px + 4vh);color:#f2f4f6}
 #gate .gbg{position:absolute;inset:0;z-index:-1;overflow:hidden;background:radial-gradient(circle at 50% 50%,#131c2a 0,#0b111a 26%,#05070a 70%)}
 #gate .gpat{position:absolute;inset:0}
-@keyframes gCard{from{opacity:0;translate:0 14px;scale:.98}}
 @keyframes gIn{from{opacity:0}}
-#gate .glogo{display:block;height:clamp(112px,17vh,156px);width:auto;color:#f2f4f6;animation:gCard 1.4s var(--ease) both}
+/* the mark fades in first (a quick 250ms) and the welcome starts typing almost at once */
+#gate .glogo{display:block;height:clamp(112px,17vh,156px);width:auto;color:#f2f4f6;animation:gIn .25s ease-out both}
 #gate .gl{margin:0;font:500 clamp(24px,5.5vw,72px)/1.2 var(--disp);letter-spacing:-.025em;white-space:nowrap;text-shadow:0 2px 18px #05070a}
 /* the full line sits invisibly in the same grid cell and reserves the width; the typed copy grows over it from the left, so nothing shifts */
 #gate .gw{display:inline-grid}
 #gate .gw>span{grid-area:1/1;justify-self:start}
 #gate .gghost{visibility:hidden}
-#gate .gl .cur{display:inline-block;width:.06em;height:.9em;margin:0 -.12em 0 .06em;vertical-align:-.1em;border-radius:1px;background:#5b95ff;animation:blink 1s steps(1) infinite;transition:opacity .6s}
+#gate .gl .cur{display:inline-block;width:.06em;height:.9em;margin:0 -.12em 0 .06em;vertical-align:-.1em;border-radius:1px;background:#5b95ff;animation:gCaret 1.06s ease-in-out infinite;transition:opacity .7s ease}
+/* the caret holds solid while keys land, blinks softly in the pauses, and eases out a beat after the line is done */
+@keyframes gCaret{0%,30%{opacity:1}50%,80%{opacity:0}100%{opacity:1}}
+#gate.typing .gl .cur{animation:none;opacity:1}
 #gate.typed .gl .cur{opacity:0;animation:none}
 /* phones: the line is about 12.8em wide, so it takes up to 30px but never more than the space between the gutters */
 @media (max-width:760px){#gate .glogo{height:96px}#gate .gl{font-size:min(30px,calc((100vw - 48px)/12.8))}}
 /* the switch fades in once the welcome is typed, but it is live from the start: a click, Tab or Enter works at once (focus reveals it early) */
 #gate .gb{display:flex;gap:14px}
 /* segmented Dark / Light switch: one pill, a white thumb slides under the active or hovered option */
-#gate .gseg{position:relative;display:inline-flex;padding:4px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.17);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 14px 34px -14px rgba(0,0,0,.9);opacity:0;scale:.9;filter:blur(4px);transition:opacity .5s var(--ease),scale .7s cubic-bezier(.34,1.56,.64,1),filter .5s}
-#gate.ready .gseg,#gate .gseg:focus-within{opacity:1;scale:1;filter:none}
+#gate .gseg{position:relative;display:inline-flex;padding:4px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.17);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 14px 34px -14px rgba(0,0,0,.9);opacity:0;translate:0 8px;transition:opacity .4s ease-out,translate .4s ease-out}
+#gate.ready .gseg,#gate .gseg:focus-within{opacity:1;translate:0 0}
 #gate .gthumb{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:#f4f6fa;box-shadow:0 0 24px rgba(255,255,255,.25);transition:translate .5s cubic-bezier(.34,1.35,.5,1),width .5s cubic-bezier(.34,1.35,.5,1),opacity .3s}
 #gate .gseg .gpill{position:relative;z-index:1;height:38px;padding:0 22px;gap:9px;background:transparent;border-color:transparent;box-shadow:none;color:#c3ccd8;letter-spacing:.12em;transition:color .35s}
 #gate .gseg .gpill:hover,#gate .gseg .gpill:focus-visible{background:transparent;border-color:transparent;box-shadow:none;scale:1;outline:none}
@@ -325,10 +328,11 @@ html:not(.js) #gate{display:none}
 #gate .g-dark:hover,#gate .g-dark:focus-visible{background:#4f8dff;border-color:#4f8dff;box-shadow:0 0 30px rgba(79,141,255,.55)}#gate .g-dark:hover svg,#gate .g-dark:focus-visible svg{color:#fff}
 #gate .g-light:hover,#gate .g-light:focus-visible{background:#f0a020;border-color:#f0a020;color:#fff;box-shadow:0 0 30px rgba(240,160,32,.5)}#gate .g-light:hover svg,#gate .g-light:focus-visible svg{color:#fff;rotate:45deg}
 #gate .gseg .gpill:focus-visible{outline:2px solid #f2f4f6;outline-offset:3px}
-/* the exit: a full-size square, centred on the logo's window and scaled down to exactly cover it, scales back up to fill the viewport (transform only, so it stays crisp);
-   over the last 30% its inner layer fades from the window blue to the chosen theme's background, then the whole overlay fades into the site */
-.gzoom{position:fixed;z-index:101;margin:0;pointer-events:none;background:#5b95ff;transform-origin:50% 50%;will-change:transform,opacity}
-.gzoom i{position:absolute;inset:0;background:var(--gz-end,#07090c);opacity:0;will-change:opacity}
+/* the exit: a square already big enough to cover the viewport, centred on the logo's window; a clip-path inset opens it from the window's exact box
+   to the full square (no scaling, so every frame is crisp). From mid-zoom its inner layer eases from the window blue to the chosen theme's background,
+   then the whole overlay fades into the site. will-change is set from JS only while it runs */
+.gzoom{position:fixed;z-index:101;margin:0;pointer-events:none;background:#5b95ff;contain:strict}
+.gzoom i{position:absolute;inset:0;background:var(--gz-end,#07090c);opacity:0}
 
 
 /* reduced motion: no transitions, animations or smooth scrolling beyond what's essential */
@@ -834,38 +838,53 @@ function sidePattern(){
   opts.forEach(function(o){o.addEventListener("pointerenter",function(){thumbTo(o)});o.addEventListener("focus",function(){thumbTo(o)})});
   if(seg)seg.addEventListener("pointerleave",function(){thumbTo(g.contains(document.activeElement)&&document.activeElement.dataset.themePick?document.activeElement:home())});
   thumbTo(home());if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){thumbTo(g.querySelector(".gseg .gpill.on")||home())});
-  var txt="Welcome to my portfolio :)",out=$("#gtype"),k=0,gone=false,tid=0;
-  // typing done: the caret fades, the switch fades in and (unless the visitor already moved focus into it) the current theme takes focus
-  function ready(){if(gone)return;g.classList.add("ready","typed");thumbTo(g.querySelector(".gseg .gpill.on")||home());var h=home();if(h&&!g.contains(document.activeElement))h.focus({preventScroll:true})}
-  if(reduce){out.textContent=txt;ready()}else tid=setTimeout(function t(){out.textContent=txt.slice(0,++k);tid=k<txt.length?setTimeout(t,60+Math.random()*20):setTimeout(ready,320)},250);
+  var txt="Welcome to my portfolio :)",out=$("#gtype"),k=0,gone=false,tid=0,started=false,t0=performance.now();
+  // typing done: the switch rises in and (unless the visitor already moved focus into it) the current theme takes focus; the caret blinks a beat, then eases out
+  function ready(){if(gone)return;g.classList.remove("typing");g.classList.add("ready");thumbTo(g.querySelector(".gseg .gpill.on")||home());var h=home();if(h&&!g.contains(document.activeElement))h.focus({preventScroll:true});
+    tid=setTimeout(function(){if(!gone)g.classList.add("typed")},reduce?0:1100)}
+  // a natural cadence: 55-75ms a key with jitter, a breath after "Welcome" and before ":)"
+  function step(n){var d=55+Math.random()*20;if(n===7)d+=210;else if(txt.slice(n)===":)")d+=190;else if(txt.charAt(n-1)===" ")d+=12;return d}
+  function type(){out.textContent=txt.slice(0,++k);tid=k<txt.length?setTimeout(type,step(k)):setTimeout(ready,200)}
+  // start as soon as the site opens: wait only for the webfont (so the line never reflows when Montserrat swaps in), at most 400ms, and give the mark a head start of ~120ms
+  function start(){if(started||gone)return;started=true;g.classList.add("typing");tid=setTimeout(type,Math.max(0,120-(performance.now()-t0)))}
+  if(reduce){out.textContent=txt;ready()}else{if(document.fonts&&document.fonts.ready)document.fonts.ready.then(start,start);setTimeout(start,400)}
   function bail(){g.remove();root.classList.remove("gate");var zz=$(".gzoom");if(zz)zz.remove();dispatchEvent(new Event("hn:enter"))}
   function enter(p){if(gone||!p)return;gone=true;clearTimeout(tid);try{zoom(p)}catch(err){bail()}}
   function zoom(p){
-    var mode=p.dataset.themePick;set(mode);g.classList.add("leaving");
+    // the theme is applied first, so the site renders underneath the gate while the zoom runs and the reveal has nothing left to paint
+    var mode=p.dataset.themePick;set(mode);g.classList.add("leaving");g.classList.remove("typing");
     var left=false;function leave(){if(left)return;left=true;g.remove();root.classList.remove("gate");var b=$("#theme");if(b)b.focus({preventScroll:true});dispatchEvent(new Event("hn:enter"))}
     var win=g.querySelector(".gwin"),r=win&&win.getBoundingClientRect();
     // reduced motion (or no Web Animations): a short fade, no zoom
-    if(reduce||!g.animate||!r||!r.width){if(g.animate){g.animate([{opacity:1},{opacity:0}],{duration:200,easing:"ease-out",fill:"forwards"}).onfinish=leave;setTimeout(leave,600)}else leave();return}
-    // let the logo's entrance finish first so every measurement below is of the settled layout
+    if(reduce||!g.animate||!r||!r.width){if(g.animate){g.animate([{opacity:1},{opacity:0}],{duration:200,easing:"ease-out",fill:"forwards"}).finished.then(leave,leave);setTimeout(leave,800)}else leave();return}
+    // let the logo's entrance finish first, then take every measurement up front: nothing reads layout once the animation runs
     var logo=g.querySelector(".glogo");if(logo&&logo.getAnimations)logo.getAnimations().forEach(function(a){try{a.finish()}catch(e){}});r=win.getBoundingClientRect();
     var W=innerWidth,H=innerHeight,cx=r.left+r.width/2,cy=r.top+r.height/2,
-      L=Math.ceil(2*Math.hypot(Math.max(cx,W-cx),Math.max(cy,H-cy)))+4, // side that covers the viewport diagonal from the window's centre
-      D=W<=760?950:1050,EASE="cubic-bezier(.7,0,.2,1)",
-      bg=getComputedStyle(root).getPropertyValue("--bg").trim()||(mode==="light"?"#f3f4f2":"#07090c");
+      h=Math.ceil(Math.max(cx,W-cx,cy,H-cy))+2, // half-side of the square, centred on the window, that covers the viewport
+      D=W<=760?1200:1300,EASE="cubic-bezier(.83,0,.17,1)",SOFT="cubic-bezier(.65,0,.35,1)",
+      bg=getComputedStyle(root).getPropertyValue("--bg").trim()||(mode==="light"?"#f3f4f2":"#07090c"),
+      parts=[".gpat",".glogo",".gl",".gb"].map(function(q){var el=g.querySelector(q);return el&&{el:el,b:el.getBoundingClientRect()}}).filter(Boolean);
     var z=document.createElement("div");z.className="gzoom";z.setAttribute("aria-hidden","true");
-    z.style.cssText="left:"+(cx-L/2)+"px;top:"+(cy-L/2)+"px;width:"+L+"px;height:"+L+"px;--gz-end:"+bg;
-    z.appendChild(document.createElement("i"));document.body.appendChild(z);win.style.visibility="hidden";
-    // the camera push: everything else in the gate scales up around the window and fades
-    var push=[{transform:"scale(1)",opacity:1},{transform:"scale(1.3)",opacity:0}];
-    [".gpat",".glogo",".gl",".gb"].forEach(function(q){var el=g.querySelector(q);if(!el)return;var b=el.getBoundingClientRect();
-      el.style.transformOrigin=(cx-b.left)+"px "+(cy-b.top)+"px";el.animate(push,{duration:D*.7,easing:EASE,fill:"forwards"})});
-    // the window grows from its exact on-screen box to the full cover; its colour turns into the theme background over the last 30%
-    z.animate([{transform:"scale("+r.width/L+","+r.height/L+")"},{transform:"scale(1)"}],{duration:D,easing:EASE,fill:"forwards"}).onfinish=covered;
-    z.firstChild.animate([{opacity:0},{opacity:1}],{duration:D*.3,delay:D*.7,easing:"ease-in-out",fill:"forwards"});
-    var fin=false;setTimeout(covered,D+500);
-    // the screen is all theme background now: drop the gate underneath and cross-fade into the site
-    function covered(){if(fin)return;fin=true;leave();
-      z.animate([{opacity:1},{opacity:0}],{duration:300,easing:"ease-out",fill:"forwards"}).onfinish=function(){z.remove()};setTimeout(function(){z.remove()},900)}}
+    z.style.cssText="left:"+(cx-h)+"px;top:"+(cy-h)+"px;width:"+2*h+"px;height:"+2*h+"px;--gz-end:"+bg+";will-change:clip-path,opacity";
+    var tint=document.createElement("i");tint.style.willChange="opacity";z.appendChild(tint);
+    // the window opens from its exact on-screen box to the full square; the side grows geometrically (like a camera push), so the start reads as a zoom rather than a crawl
+    var keys=[],N=8,s0=Math.max(r.width,r.height)/2;
+    for(var i=0;i<=N;i++){var o=i/N,sz=i===N?h:s0*Math.pow(h/s0,o);keys.push({offset:o,clipPath:"inset("+Math.max(0,h-sz*r.height/(2*s0)).toFixed(2)+"px "+Math.max(0,h-sz*r.width/(2*s0)).toFixed(2)+"px)"})}
+    keys[0].clipPath="inset("+(h-r.height/2).toFixed(2)+"px "+(h-r.width/2).toFixed(2)+"px)";
+    document.body.appendChild(z);
+    var grow=z.animate(keys,{duration:D,easing:EASE,fill:"forwards"});
+    // from mid-zoom the blue eases into the theme background
+    tint.animate([{opacity:0},{opacity:1}],{duration:D*.55,delay:D*.45,easing:SOFT,fill:"forwards"});
+    // the mark, the line, the switch and the side patterns drift in toward the window and fade over the first 60%
+    parts.forEach(function(t){t.el.style.willChange="transform,opacity";t.el.style.transformOrigin=(cx-t.b.left)+"px "+(cy-t.b.top)+"px";
+      t.el.animate([{transform:"scale(1)",opacity:1},{transform:"scale(.86)",opacity:0}],{duration:D*.6,easing:SOFT,fill:"forwards"})});
+    var fin=false;grow.finished.then(covered,covered);setTimeout(covered,D+1500); // the timer is only a safety net if the timeline stalls (hidden tab)
+    // the screen is all theme background now: drop the gate underneath, let the header and hero settle in, and fade the overlay into the site
+    function covered(){if(fin)return;fin=true;settle();leave();
+      var f=z.animate([{opacity:1},{opacity:0}],{duration:400,easing:"cubic-bezier(.4,0,.2,1)",fill:"forwards"});
+      f.finished.then(drop,drop);setTimeout(drop,1500)}
+    function drop(){if(z.parentNode)z.remove()}
+    function settle(){[".top",".hero .txt",".hero .hfig"].forEach(function(q,i){var el=$(q);if(el&&el.animate)el.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:500,delay:40+i*70,easing:"cubic-bezier(.22,1,.36,1)",fill:"backwards"})})}}
   g.addEventListener("click",function(e){var p=e.target.closest("[data-theme-pick]");if(p)enter(p)});
   // keyboard: Tab cycles the two choices, Enter/Space picks the focused one (or the current theme), Esc picks dark; all live while the welcome is still typing
   addEventListener("keydown",function(e){if(gone)return;
