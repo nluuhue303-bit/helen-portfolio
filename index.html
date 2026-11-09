@@ -296,13 +296,8 @@ html:not(.js) #gate{display:none}
 @keyframes gCaret{0%,30%{opacity:1}50%,80%{opacity:0}100%{opacity:1}}
 #gate.typing .gl .cur{animation:none;opacity:1}
 #gate.typed .gl .cur{opacity:0;animation:none}
-/* second line, "I design for <word>": its space is reserved from the start (slot as wide as "sustainability"), it fades in once the welcome is typed, then the blue word cycles */
-#gate .gl2{margin:calc(-1 * clamp(24px,4.4vh,44px) + clamp(8px,1.6vh,16px)) 0 0;font:500 clamp(17px,2.1vw,30px)/1.25 var(--disp);letter-spacing:-.015em;color:#aeb9c7;white-space:nowrap;text-shadow:0 2px 14px #05070a;opacity:0;translate:0 6px;transition:opacity .45s ease-out,translate .45s ease-out}
-#gate.ready .gl2{opacity:1;translate:0 0}
-#gate .gl2 .acc{color:#5b95ff}
-#gate .gl2 .cur{display:inline-block;width:.07em;height:.85em;margin-left:.06em;vertical-align:-.08em;border-radius:1px;background:#5b95ff;animation:gCaret 1.06s ease-in-out infinite}
 /* phones: the line is about 12.8em wide, so it takes up to 30px but never more than the space between the gutters */
-@media (max-width:760px){#gate .glogo{height:96px}#gate .gl{font-size:min(30px,calc((100vw - 48px)/12.8))}#gate .gl2{font-size:min(18px,calc((100vw - 48px)/13.5))}}
+@media (max-width:760px){#gate .glogo{height:96px}#gate .gl{font-size:min(30px,calc((100vw - 48px)/12.8))}}
 /* the switch fades in once the welcome is typed, but it is live from the start: a click, Tab or Enter works at once (focus reveals it early) */
 #gate .gb{display:flex;gap:14px}
 /* segmented Dark / Light switch: one pill, a white thumb slides under the active or hovered option */
@@ -346,7 +341,6 @@ html:not(.js) #gate{display:none}
 <div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"><div class="gpat"><div class="gside l" id="gsideL"></div><div class="gside r" id="gsideR"></div></div></div>
   <svg class="glogo" viewBox="44 -34 112 155.34" aria-hidden="true" focusable="false"><g fill="currentColor"><polygon points="48,0 100,-30.02 152,0 152,17.32 100,-12.7 48,17.32"/><rect x="48" y="29.32" width="15" height="88"/><rect x="137" y="29.32" width="15" height="88"/><rect x="63" y="57.02" width="74" height="15"/></g><rect class="gwin" x="92.5" y="84.02" width="15" height="15" fill="#5b95ff"/></svg>
   <p class="gl" id="gtxt" role="heading" aria-level="2" aria-label="Welcome to my portfolio :)"><span class="gw" aria-hidden="true"><span class="gghost">Welcome to my portfolio :)</span><span><span id="gtype"></span><span class="cur"></span></span></span></p>
-  <p class="gl2" aria-label="I design for climate, ecology, people, the city and sustainability."><span aria-hidden="true">I design for <span class="slot"><span class="ghost">climate</span><span class="ghost">ecology</span><span class="ghost">people</span><span class="ghost">the city</span><span class="ghost">sustainability</span><span class="now"><span class="acc" id="gword"></span><span class="cur"></span></span></span></span></p>
   <div class="gb"><div class="gseg" role="group" aria-label="Choose a theme"><i class="gthumb" aria-hidden="true"></i>
     <button type="button" class="gpill g-dark" data-theme-pick="dark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z"/></svg><span>Dark</span></button>
     <button type="button" class="gpill g-light" data-theme-pick="light"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.8"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1"/></svg><span>Light</span></button>
@@ -837,12 +831,10 @@ function sidePattern(){
   if(seg)seg.addEventListener("pointerleave",function(){thumbTo(g.contains(document.activeElement)&&document.activeElement.dataset.themePick?document.activeElement:home())});
   thumbTo(home());if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){thumbTo(g.querySelector(".gseg .gpill.on")||home())});
   var txt="Welcome to my portfolio :)",out=$("#gtype"),k=0,gone=false,tid=0,started=false,t0=performance.now();
-  // second line: "I design for" + a blue word typed (90ms a key), held (2.2s), deleted (45ms a key), then the next; the timer stops when the gate closes
-  var gw=$("#gword"),W=["climate","ecology","people","the city","sustainability"],wi=0,wc=0,wdel=false,wid=0;
-  function word(){if(gone||!gw)return;if(wdel){gw.textContent=W[wi].slice(0,--wc);if(!wc){wdel=false;wi=(wi+1)%W.length}wid=setTimeout(word,45)}else{gw.textContent=W[wi].slice(0,++wc);if(wc===W[wi].length){wdel=true;wid=setTimeout(word,2200)}else wid=setTimeout(word,90)}}
+  var wid=0;
   // typing done: the switch and the second line rise in and (unless the visitor already moved focus into it) the current theme takes focus; the caret blinks a beat, then eases out
   function ready(){if(gone)return;g.classList.remove("typing");g.classList.add("ready");thumbTo(g.querySelector(".gseg .gpill.on")||home());var h=home();if(h&&!g.contains(document.activeElement))h.focus({preventScroll:true});
-    wid=setTimeout(word,450);tid=setTimeout(function(){if(!gone)g.classList.add("typed")},1100)}
+    tid=setTimeout(function(){if(!gone)g.classList.add("typed")},1100)}
   // a natural cadence: 55-75ms a key with jitter, a breath after "Welcome" and before ":)"
   function step(n){var d=55+Math.random()*20;if(n===7)d+=210;else if(txt.slice(n)===":)")d+=190;else if(txt.charAt(n-1)===" ")d+=12;return d}
   function type(){out.textContent=txt.slice(0,++k);tid=k<txt.length?setTimeout(type,step(k)):setTimeout(ready,200)}
