@@ -893,7 +893,7 @@ function sidePattern(){
   // typing done: the caret keeps blinking, the switch rises in and (unless the visitor already moved focus into the gate) takes focus
   function ready(){if(gone)return;g.classList.remove("typing");g.classList.add("ready");T.caret("blink");if(sw&&!g.contains(document.activeElement))sw.focus({preventScroll:true})}
   // a natural cadence: 45-70ms a key with jitter, a small breath after spaces, a longer one after "Welcome" and before ":)"
-  function step(n){var d=45+Math.random()*25;if(n===7)d+=200;else if(txt.slice(n)===":)")d+=180;else if(txt.charAt(n-1)===" ")d+=30;return d}
+  function step(n){var d=22+Math.random()*14;if(n===7)d+=90;else if(txt.slice(n)===":)")d+=80;else if(txt.charAt(n-1)===" ")d+=12;return d}
   function type(){T.put(txt,++k);if(k<txt.length)tid=setTimeout(type,step(k));else{T.caret("blink");tid=setTimeout(ready,200)}}
   // start as soon as the site opens: wait only for the webfont (so the line never reflows when Montserrat swaps in), at most 400ms, and give the mark a head start of ~120ms
   function start(){if(started||gone)return;started=true;g.classList.add("typing");T.caret("");tid=setTimeout(type,Math.max(0,120-(performance.now()-t0)))}
