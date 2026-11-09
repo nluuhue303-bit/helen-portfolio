@@ -51,6 +51,37 @@ a,button,[data-full]{touch-action:manipulation;-webkit-tap-highlight-color:trans
 .pill.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
 .pill.ghost:hover{border-color:var(--acc);filter:none}
 .bar-r{display:flex;gap:8px;align-items:center}
+/* day/night switch (header and welcome gate): a sky-blue track with soft clouds and a sun knob; at night the knob springs right and becomes a cratered moon
+   while the clouds sink away and stars twinkle in. Its look follows the theme on <html>, so every copy stays in sync and nothing animates on load.
+   CSS only; sized by --w/--h/--p */
+.dn{--w:56px;--h:26px;--p:3px;--k:calc(var(--h) - 2*var(--p));position:relative;display:inline-block;flex:none;width:var(--w);height:var(--h);padding:0;border-radius:999px;cursor:pointer;vertical-align:middle;transition:scale .25s var(--ease)}
+.dn:active{scale:.95}
+.dn:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+.dn-sky{position:absolute;inset:0;overflow:hidden;border-radius:inherit;background:linear-gradient(180deg,#3a8ae3 0%,#6fb6f2 55%,#a6d8fb 100%);isolation:isolate}
+.dn-sky::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 140% at 85% 30%,#22336b 0%,#101b42 45%,#070c22 100%);opacity:0;transition:opacity .6s ease}
+.dn-sky::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 2px 5px rgba(0,0,0,.32),inset 0 -1px 2px rgba(255,255,255,.28),inset 0 0 0 1px rgba(255,255,255,.14);pointer-events:none}
+:root[data-theme="light"] .dn-sky::after{box-shadow:inset 0 2px 5px rgba(0,0,0,.28),inset 0 -1px 2px rgba(255,255,255,.3),inset 0 0 0 1px rgba(16,20,24,.12)}
+.dn-stars{position:absolute;inset:0;opacity:0;translate:0 -35%;transition:opacity .45s ease,translate .6s var(--ease)}
+.dn-stars i{position:absolute;left:var(--x);top:var(--y);width:calc(var(--h)*var(--s));height:calc(var(--h)*var(--s));border-radius:50%;background:#fff;animation:dnTw 1.9s ease-in-out var(--d) infinite alternate;animation-play-state:paused}
+.dn-stars i.sp{border-radius:0;clip-path:polygon(50% 0,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0 50%,40% 40%)}
+@keyframes dnTw{from{opacity:.25;scale:.55}to{opacity:1;scale:1}}
+.dn-cl{position:absolute;right:-5%;bottom:-16%;width:66%;height:auto;overflow:visible;transition:translate .55s cubic-bezier(.3,.7,.2,1)}
+.dn-cl.b{right:4%;bottom:2%;width:58%;transition-delay:.05s}
+.dn-knob{position:absolute;top:var(--p);left:var(--p);width:var(--k);height:var(--k);border-radius:50%;background:#ffcf3a;
+  box-shadow:0 0 0 calc(var(--k)*.3) rgba(255,255,255,.17),0 0 0 calc(var(--k)*.62) rgba(255,255,255,.1),0 0 0 calc(var(--k)*.96) rgba(255,255,255,.06),0 0 calc(var(--k)*.55) rgba(255,214,90,.8),inset calc(var(--k)*-.07) calc(var(--k)*-.09) 0 rgba(222,135,0,.38);
+  transition:translate .58s cubic-bezier(.34,1.5,.55,1),background-color .5s ease,box-shadow .5s ease}
+.dn-knob i{position:absolute;border-radius:50%;background:#a1aab8;box-shadow:inset calc(var(--k)*.035) calc(var(--k)*.035) 0 rgba(40,48,62,.28);opacity:0;scale:.3;transition:opacity .35s ease,scale .45s var(--ease)}
+.dn-knob i:nth-child(1){left:20%;top:22%;width:30%;height:30%}
+.dn-knob i:nth-child(2){left:58%;top:48%;width:22%;height:22%}
+.dn-knob i:nth-child(3){left:30%;top:64%;width:15%;height:15%}
+/* night (the default theme) */
+:root:not([data-theme="light"]) .dn-sky::before{opacity:1}
+:root:not([data-theme="light"]) .dn-stars{opacity:1;translate:0 0;transition-delay:.12s}
+:root:not([data-theme="light"]) .dn-stars i{animation-play-state:running}
+:root:not([data-theme="light"]) .dn-cl{translate:0 120%;transition-timing-function:cubic-bezier(.5,0,.8,.4)}
+:root:not([data-theme="light"]) .dn-knob{translate:calc(var(--w) - var(--h)) 0;background-color:#cfd5de;
+  box-shadow:0 0 0 calc(var(--k)*.3) rgba(255,255,255,.06),0 0 0 calc(var(--k)*.62) rgba(255,255,255,.035),0 0 0 calc(var(--k)*.96) rgba(255,255,255,.02),0 0 calc(var(--k)*.5) rgba(196,212,240,.45),inset calc(var(--k)*-.07) calc(var(--k)*-.09) 0 rgba(70,80,100,.35)}
+:root:not([data-theme="light"]) .dn-knob i{opacity:1;scale:1;transition-delay:.15s}
 #menubtn{display:none}
 @media (max-width:860px){
   #menubtn{display:inline-flex}
@@ -79,9 +110,16 @@ main{padding-top:var(--bar-top)}
 .slot>*{grid-area:1/1;display:block}
 .slot .ghost{visibility:hidden}
 .hero .slot{display:grid;width:max-content}
-.cur{display:inline-block;width:.06em;height:.8em;background:var(--acc);margin-left:.06em;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
-@keyframes blink{50%{opacity:0}}
+/* underscore caret: an empty inline (no break opportunity, no advance width, so it never re-wraps or widens a reserved line) that draws a short bar on the
+   baseline. Solid while keys land; .blink fades it in and out in the pauses; .off eases it away. --cb lifts the bar from the bottom of the font's box to the baseline */
+.cur{position:relative;display:inline;color:var(--acc);--cb:.25em}
+.cur::after{content:"";position:absolute;left:.05em;bottom:var(--cb);width:.5em;height:.08em;border-radius:.04em;background:currentColor;transition:opacity .2s ease}
+.cur.blink::after{animation:blink 1.05s ease-in-out infinite}
+.cur.off::after{opacity:0;animation:none;transition-duration:.6s}
+@keyframes blink{0%,16%{opacity:1}50%,66%{opacity:0}100%{opacity:1}}
 html:not(.js) .cur{display:none}
+.trest{visibility:hidden}
+#intro .cur{color:inherit;--cb:.24em}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
 .hfig{margin:0;min-width:0}
 .hfig button{display:block;width:100%;padding:0;cursor:pointer}
@@ -291,24 +329,23 @@ html:not(.js) #gate{display:none}
 #gate .gw{display:inline-grid}
 #gate .gw>span{grid-area:1/1;justify-self:start}
 #gate .gghost{visibility:hidden}
-#gate .gl .cur{display:inline-block;width:.06em;height:.9em;margin:0 -.12em 0 .06em;vertical-align:-.1em;border-radius:1px;background:#5b95ff;animation:gCaret 1.06s ease-in-out infinite;transition:opacity .7s ease}
-/* the caret holds solid while keys land, blinks softly in the pauses, and eases out a beat after the line is done */
-@keyframes gCaret{0%,30%{opacity:1}50%,80%{opacity:0}100%{opacity:1}}
-#gate.typing .gl .cur{animation:none;opacity:1}
-#gate.typed .gl .cur{opacity:0;animation:none}
+/* the underscore caret holds solid while keys land and keeps blinking softly once the line is done */
+#gate .gl .cur{color:#5b95ff}
 /* phones: the line is about 12.8em wide, so it takes up to 30px but never more than the space between the gutters */
 @media (max-width:760px){#gate .glogo{height:96px}#gate .gl{font-size:min(30px,calc((100vw - 48px)/12.8))}}
 /* the switch fades in once the welcome is typed, but it is live from the start: a click, Tab or Enter works at once (focus reveals it early) */
-#gate .gb{display:flex;gap:14px}
-/* segmented Dark / Light switch: one pill, a white thumb slides under the active or hovered option */
-#gate .gseg{position:relative;display:inline-flex;padding:4px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.17);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 14px 34px -14px rgba(0,0,0,.9);opacity:0;translate:0 8px;transition:opacity .4s ease-out,translate .4s ease-out}
-#gate.ready .gseg,#gate .gseg:focus-within{opacity:1;translate:0 0}
-#gate .gthumb{position:absolute;top:4px;bottom:4px;left:0;width:0;border-radius:999px;background:#f4f6fa;box-shadow:0 0 24px rgba(255,255,255,.25);transition:translate .5s cubic-bezier(.34,1.35,.5,1),width .5s cubic-bezier(.34,1.35,.5,1),opacity .3s}
-#gate .gseg .gpill{position:relative;z-index:1;height:38px;padding:0 22px;gap:9px;background:transparent;border-color:transparent;box-shadow:none;color:#c3ccd8;letter-spacing:.12em;transition:color .35s}
-#gate .gseg .gpill:hover,#gate .gseg .gpill:focus-visible{background:transparent;border-color:transparent;box-shadow:none;scale:1;outline:none}
-#gate .gseg .gpill.on{color:#121821}
-#gate .gseg .g-dark svg,#gate .gseg .g-dark:hover svg{color:#9db6e0}#gate .gseg .g-dark.on svg{color:#2d5fc4}
-#gate .gseg .g-light svg,#gate .gseg .g-light:hover svg{color:#f0a020;rotate:none}
+/* Light [day/night switch] Dark, with a quiet "Enter →" underneath. The active label lights up with the theme */
+#gate .gb{display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;translate:0 8px;transition:opacity .4s ease-out,translate .4s ease-out}
+#gate.ready .gb,#gate .gb:focus-within{opacity:1;translate:0 0}
+#gate .gsw{display:flex;align-items:center;gap:16px}
+#gate .dnl{font:600 12px/1 var(--pix);letter-spacing:.14em;text-transform:uppercase;color:#f2f4f6;opacity:.4;cursor:pointer;user-select:none;-webkit-user-select:none;transition:opacity .45s ease}
+:root[data-theme="light"] #gate .dnl.l,:root:not([data-theme="light"]) #gate .dnl.d{opacity:1}
+#gate .dn{--w:120px;--h:48px;--p:5px;box-shadow:0 16px 36px -14px rgba(0,0,0,.95)}
+#gate .dn:focus-visible{outline-color:#f2f4f6;outline-offset:4px}
+#gate .genter{font:600 11px/1 var(--pix);letter-spacing:.16em;text-transform:uppercase;color:#aab4c2;padding:9px 12px;border-radius:999px;transition:color .25s}
+#gate .genter span{display:inline-block;margin-left:4px;transition:translate .3s var(--ease)}
+#gate .genter:hover,#gate .genter:focus-visible{color:#fff}#gate .genter:hover span,#gate .genter:focus-visible span{translate:4px 0}
+#gate .genter:focus-visible{outline:2px solid #f2f4f6;outline-offset:2px}
 /* side patterns: hanging lanterns and star chains flanking the composition */
 #gate .gside{position:absolute;top:0;height:min(76vh,640px);width:110px;animation:gIn 2s var(--ease) .6s both}
 #gate .gside.l{left:max(8px,calc(50% - min(47vw,650px)))}#gate .gside.r{right:max(8px,calc(50% - min(47vw,650px)));scale:-1 1}
@@ -319,14 +356,6 @@ html:not(.js) #gate{display:none}
 @keyframes gTwk{from{opacity:.45}to{opacity:1}}
 @media (max-width:760px){#gate .gside{height:min(46vh,380px);width:70px}#gate .gside .ch2{display:none}}
 #gate.leaving{pointer-events:none}
-.gpill{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:42px;padding:0 26px;border-radius:999px;font:600 12px/1 var(--pix);letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;transition:scale .3s var(--ease),box-shadow .3s,background .3s,color .3s,border-color .3s}
-.gpill svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;transition:color .3s,rotate .3s}
-.gpill.g-dark{background:rgba(0,0,0,.9);color:#fff;border:1px solid rgba(255,255,255,.2);box-shadow:0 0 20px rgba(0,0,0,.8)}.gpill.g-dark svg{color:#4f8dff}
-.gpill.g-light{background:#fff;color:#171717;border:1px solid rgba(255,255,255,.8);box-shadow:0 0 20px rgba(255,255,255,.25)}.gpill.g-light svg{color:#f0a020}
-#gate .gpill:hover,#gate .gpill:focus-visible{scale:1.05;outline:none}#gate .gpill:active{scale:.95}
-#gate .g-dark:hover,#gate .g-dark:focus-visible{background:#4f8dff;border-color:#4f8dff;box-shadow:0 0 30px rgba(79,141,255,.55)}#gate .g-dark:hover svg,#gate .g-dark:focus-visible svg{color:#fff}
-#gate .g-light:hover,#gate .g-light:focus-visible{background:#f0a020;border-color:#f0a020;color:#fff;box-shadow:0 0 30px rgba(240,160,32,.5)}#gate .g-light:hover svg,#gate .g-light:focus-visible svg{color:#fff;rotate:45deg}
-#gate .gseg .gpill:focus-visible{outline:2px solid #f2f4f6;outline-offset:3px}
 /* the exit: a square already big enough to cover the viewport, centred on the logo's window; a clip-path inset opens it from the window's exact box
    to the full square (no scaling, so every frame is crisp). From mid-zoom its inner layer eases from the window blue to the chosen theme's background,
    then the whole overlay fades into the site. will-change is set from JS only while it runs */
@@ -341,12 +370,29 @@ html:not(.js) #gate{display:none}
 <div id="gate" role="dialog" aria-modal="true" aria-labelledby="gtxt"><div class="gbg" aria-hidden="true"><div class="gpat"></div></div>
   <svg class="glogo" viewBox="44 -34 112 155.34" aria-hidden="true" focusable="false"><g fill="currentColor"><polygon points="48,0 100,-30.02 152,0 152,17.32 100,-12.7 48,17.32"/><rect x="48" y="29.32" width="15" height="88"/><rect x="137" y="29.32" width="15" height="88"/><rect x="63" y="57.02" width="74" height="15"/></g><rect class="gwin" x="92.5" y="84.02" width="15" height="15" fill="#5b95ff"/></svg>
   <p class="gl" id="gtxt" role="heading" aria-level="2" aria-label="Welcome to my portfolio :)"><span class="gw" aria-hidden="true"><span class="gghost">Welcome to my portfolio :)</span><span><span id="gtype"></span><span class="cur"></span></span></span></p>
-  <div class="gb"><div class="gseg" role="group" aria-label="Choose a theme"><i class="gthumb" aria-hidden="true"></i>
-    <button type="button" class="gpill g-dark" data-theme-pick="dark"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 9.6A5.8 5.8 0 0 1 6.4 2.5a5.8 5.8 0 1 0 7.1 7.1z"/></svg><span>Dark</span></button>
-    <button type="button" class="gpill g-light" data-theme-pick="light"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.8"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1"/></svg><span>Light</span></button>
-  </div></div>
+  <!-- pick a theme: clicking the switch (or a label) flips it and enters; on the keyboard Space flips it and Enter goes in; Esc goes in dark -->
+  <div class="gb"><div class="gsw"><span class="dnl l" data-pick="light" aria-hidden="true">Light</span>
+    <button type="button" class="dn" id="gdn" role="switch" aria-checked="true" aria-label="Dark mode"><span class="dn-sky" aria-hidden="true"><span class="dn-stars"><i style="--x:10%;--y:24%;--s:.07;--d:-.2s"></i><i style="--x:21%;--y:58%;--s:.05;--d:-1.1s"></i><i class="sp" style="--x:27%;--y:14%;--s:.2;--d:-.7s"></i><i style="--x:38%;--y:46%;--s:.06;--d:-1.5s"></i><i style="--x:15%;--y:76%;--s:.045;--d:-.5s"></i><i style="--x:46%;--y:20%;--s:.05;--d:-1.3s"></i><i class="sp" style="--x:44%;--y:64%;--s:.15;--d:-.9s"></i></span><svg class="dn-cl b" viewBox="0 0 100 44"><g fill="#fff" opacity=".55"><circle cx="14" cy="34" r="12"/><circle cx="32" cy="24" r="15"/><circle cx="54" cy="20" r="16"/><circle cx="74" cy="27" r="14"/><circle cx="90" cy="34" r="12"/><rect y="32" width="100" height="12"/></g></svg><svg class="dn-cl" viewBox="0 0 100 44"><g fill="#fff"><circle cx="12" cy="36" r="11"/><circle cx="30" cy="27" r="14"/><circle cx="52" cy="22" r="17"/><circle cx="73" cy="28" r="14"/><circle cx="91" cy="35" r="12"/><rect y="34" width="100" height="10"/></g></svg><span class="dn-knob"><i></i><i></i><i></i></span></span></button>
+    <span class="dnl d" data-pick="dark" aria-hidden="true">Dark</span></div>
+    <button type="button" class="genter" aria-label="Enter the portfolio">Enter<span aria-hidden="true">→</span></button>
+  </div>
 </div>
 <script>(function(r){if(document.getElementById("gate"))r.classList.add("gate")})(document.documentElement)</script>
+<script>
+// shared typer for every typed line: one text node holds the typed part (plus, optionally, one hidden text node with the rest of the line, so wrapping
+// is already final and nothing jumps), and an underscore caret that is solid while keys land, "blink" in pauses and "off" when it eases away.
+// Per key it only sets text node data: no innerHTML, no layout reads.
+window.hnType=function(el,cur,rest){
+  el.textContent="";var a=document.createTextNode(""),b=null,mode=null;el.appendChild(a);
+  if(!cur){cur=document.createElement("span");el.appendChild(cur)}cur.setAttribute("aria-hidden","true");
+  if(rest){var r=document.createElement("span");r.className="trest";b=document.createTextNode("");r.appendChild(b);el.appendChild(r)}
+  var api={
+    put:function(t,k){a.data=t.slice(0,k);if(b)b.data=t.slice(k);return api},
+    caret:function(m){m=m||"";if(m!==mode){mode=m;cur.className=m?"cur "+m:"cur"}return api},
+    // per-key delay: a jittered base, a small breath after a space and a longer one after punctuation
+    gap:function(t,k,lo,hi){var d=lo+Math.random()*(hi-lo),ch=t.charAt(k-1);if(ch===" ")d+=lo*.7;else if(/[.,;:!?]/.test(ch))d+=lo*3.2;return d}
+  };return api.caret("")};
+</script>
 
 <header class="top">
   <a class="brand" href="#top" aria-label="Helen Nguyen, home">
@@ -357,7 +403,7 @@ html:not(.js) #gate{display:none}
     <a href="#work">Work</a><a href="#skills">Skills</a><a href="#cv">Experience</a><a href="#contact">Contact</a>
   </nav>
   <div class="bar-r">
-    <button class="pill ghost" id="theme" type="button">Light</button>
+    <button type="button" class="dn" id="theme" role="switch" aria-checked="true" aria-label="Dark mode"><span class="dn-sky" aria-hidden="true"><span class="dn-stars"><i style="--x:12%;--y:22%;--s:.08;--d:-.2s"></i><i style="--x:24%;--y:62%;--s:.06;--d:-1.1s"></i><i class="sp" style="--x:30%;--y:16%;--s:.22;--d:-.7s"></i><i style="--x:42%;--y:50%;--s:.07;--d:-1.5s"></i></span><svg class="dn-cl b" viewBox="0 0 100 44"><g fill="#fff" opacity=".55"><circle cx="14" cy="34" r="12"/><circle cx="32" cy="24" r="15"/><circle cx="54" cy="20" r="16"/><circle cx="74" cy="27" r="14"/><circle cx="90" cy="34" r="12"/><rect y="32" width="100" height="12"/></g></svg><svg class="dn-cl" viewBox="0 0 100 44"><g fill="#fff"><circle cx="12" cy="36" r="11"/><circle cx="30" cy="27" r="14"/><circle cx="52" cy="22" r="17"/><circle cx="73" cy="28" r="14"/><circle cx="91" cy="35" r="12"/><rect y="34" width="100" height="10"/></g></svg><span class="dn-knob"><i></i><i></i><i></i></span></span></button>
     <button class="pill ghost" id="menubtn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
     <a class="pill cta-top" href="#contact">Contact me</a>
   </div>
@@ -563,14 +609,14 @@ var P=[
        "Double brick walls give thermal mass, light-coloured concrete roof tiles reduce heat gain, and low-E glazing admits winter sun while holding internal heat. The design was tested against Dubbo's sun path and radiation range: high summer gain around 300 W/m² to shade against, and 150–200 W/m² in winter to capture."],
   tags:["Residential","Passive design","Rendering"],
   imgs:[["eh-street.jpg","Street view"],["eh-plan.jpg","Floor plan",1],["eh-interior.jpg","Kitchen and living"],["eh-section.jpg","Perspective section"],["eh-elev-a.jpg","Elevations 1 and 2",1],["eh-elev-b.jpg","Elevations 3 and 4",1],["eh-site.jpg","Site plan and sun path",1]]},
- {id:"technopark",cat:"Masterplan",t:"Technopark",k:"Typological design · Masterplan",lead:"tp-pleasure-aerial.jpg",
+ {id:"technopark",cat:"Masterplan",t:"Technopark",k:"Typological design · Masterplan",lead:"tp-facade-bottles.jpg",
   meta:[["Type","Technology park: dwelling, pleasure, production"],["Site","East of Emerald, QLD (919 ha)"],["Typology","Château de Coucy"],["Systems","Vertical farming, kinetic facade, rainwater filtration"]],
   txt:["A masterplan for a technology park on 919 hectares of former agricultural land east of Emerald, Queensland. Five precedents were analysed for parti, symmetry, proportion, hierarchy, circulation and repetition. Château de Coucy, an irregular trapezoid with cylindrical corner towers around a central keep, became the typology for all three buildings.",
        "The trapezoid was reworked three ways: a Place of Dwelling, a six-storey apartment ring around a shared courtyard with pop-out windows and a rooftop garden; a Place of Pleasure, a fitness centre and bar with a vertical garden and slanted roofs; and a Place of Production, a company building behind an open-and-close facade. A personal manifesto set the rules: curves meeting angular forms, visible exoskeletons, green walls, a central viewing point in each building, and brutalist materials with pops of colour.",
        "The shape came out of the typology in steps. The castle plan was broken down into its parti, symmetry, proportion, hierarchy, circulation and repeated units, then redrawn by hand, again and again, in coloured pen until the keep, towers and outer wall read as simple parts. Those parts were then pulled apart for each building: the dwelling keeps the trapezoid and opens it into a courtyard ring; the pleasure building turns the towers into hexagon pavilions around a central court; and the production building stretches the outer wall into a long bent frame. Set side by side on the site, the three flows lock together into one campus.",
        "Systems tie the park back to its farming past: indoor vertical farming under LED light, a hexagonal facade panel that opens and closes to control sun, and a rainwater filter for the vertical gardens run by a NodeMCU controller, relay and pump."],
   tags:["Masterplan","Typology","Rendering"],
-  imgs:[["tp-site.jpg","Site plan",1],["tp-proc-analysis.jpg","Process 1: typological analysis of Château de Coucy",1],["tp-proc-sketches.jpg","Process 2: hand sketches, playing with the shape",1],["tp-dev-dwelling.jpg","Process 3: dwelling, the trapezoid opened into a courtyard ring",1],["tp-dev-pleasure.jpg","Process 4: pleasure, towers become hexagon pavilions",1],["tp-dev-production.jpg","Process 5: production, the frame bent into a triangle",1],["tp-proc-flow.jpg","Process 6: the three flows set together on the site",1],["tp-dwelling-court.jpg","Place of Dwelling: courtyard"],["tp-dwelling-plan.jpg","Place of Dwelling: ground floor",1],["tp-dwelling-elev.jpg","Place of Dwelling: elevations",1],["tp-dwelling-section.jpg","Place of Dwelling: sections",1],["tp-pleasure-bar.jpg","Place of Pleasure: bar at night"],["tp-pleasure-plan.jpg","Place of Pleasure: ground floor",1],["tp-pleasure-elev.jpg","Place of Pleasure: elevations",1],["tp-production-aerial.jpg","Place of Production: aerial"],["tp-production-plan.jpg","Place of Production: ground floor",1],["tp-production-section.jpg","Place of Production: sections",1],["tp-facade-bottles.jpg","Green facade: recycled bottles as planting and light modules",1],["tp-water-filter.jpg","Rainwater filter for the vertical gardens",1]]}
+  imgs:[["tp-site.jpg","Site plan",1],["tp-proc-analysis.jpg","Process 1: typological analysis of Château de Coucy",1],["tp-proc-sketches.jpg","Process 2: hand sketches, playing with the shape",1],["tp-dev-dwelling.jpg","Process 3: dwelling, the trapezoid opened into a courtyard ring",1],["tp-dev-pleasure.jpg","Process 4: pleasure, towers become hexagon pavilions",1],["tp-dev-production.jpg","Process 5: production, the frame bent into a triangle",1],["tp-proc-flow.jpg","Process 6: the three flows set together on the site",1],["tp-dwelling-court.jpg","Place of Dwelling: courtyard"],["tp-dwelling-plan.jpg","Place of Dwelling: ground floor",1],["tp-dwelling-elev.jpg","Place of Dwelling: elevations",1],["tp-dwelling-section.jpg","Place of Dwelling: sections",1],["tp-pleasure-aerial.jpg","Place of Pleasure: aerial"],["tp-pleasure-bar.jpg","Place of Pleasure: bar at night"],["tp-pleasure-plan.jpg","Place of Pleasure: ground floor",1],["tp-pleasure-elev.jpg","Place of Pleasure: elevations",1],["tp-production-aerial.jpg","Place of Production: aerial"],["tp-production-plan.jpg","Place of Production: ground floor",1],["tp-production-section.jpg","Place of Production: sections",1],["tp-facade-bottles.jpg","Green facade: recycled bottles as planting and light modules",1],["tp-water-filter.jpg","Rainwater filter for the vertical gardens",1]]}
 ];
 // In progress: kept in the data for later, not shown on the page yet
 var SOON=[{id:"office",t:"Building Science: Office",k:"Coming soon"},{id:"dream",t:"Library of the Dream",k:"Coming soon"}];
@@ -588,7 +634,7 @@ var LEADALT={optioneering:"Render of the Copacabana pavilion: a wing-shaped cano
  inter:"garden court render: hammocks under a timber pergola in front of the modular centre",
  facade:"render: rotating aluminium airfoil fins across the glazed façade",
  house:"house and garden at dusk",gardner:"cover sheet of the technical analysis",gurone:"Aerial photo of the Mills of Gurone on the Olona River, with Casa Matta outlined",dfa:"after: the entrance hall with a welcoming atmosphere",
- envhouse:"front view render",technopark:"Place of Pleasure, aerial view"};
+ envhouse:"front view render",technopark:"Green facade diagram: recycled plastic bottles cut and assembled into hexagonal planting and light modules"};
 function leadAlt(p){return p.t+", "+(LEADALT[p.id]||"lead image")}
 
 // one card: category, arrow, lead image, title, year. A real link, so it can open in a new tab too.
@@ -680,11 +726,11 @@ document.addEventListener("click",function(e){var b=e.target.closest("[data-open
   if(document.getElementById("gate"))new MutationObserver(function(m,o){if(!document.getElementById("gate")){o.disconnect();setTimeout(boot,60)}}).observe(document.body,{childList:true});
   else boot()})();
 
-// ---------- theme: dark by default, the header toggle switches and remembers ----------
+// ---------- theme: dark by default, the header day/night switch flips and remembers it (its look follows <html>, so CSS animates it) ----------
 var root=document.documentElement;
 (function(){var b=$("#theme");
   function cur(){return root.dataset.theme==="light"?"light":"dark"}
-  function sync(){var n=cur()==="dark"?"light":"dark";b.textContent=n==="light"?"Light":"Dark";b.setAttribute("aria-label","Switch to "+n+" theme")}
+  function sync(){b.setAttribute("aria-checked",cur()==="dark"?"true":"false")}
   function set(n){if(n==="light")root.dataset.theme="light";else delete root.dataset.theme;try{localStorage.setItem("hn-theme",n)}catch(e){}sync()}
   sync();b.addEventListener("click",function(){set(cur()==="dark"?"light":"dark")});
   addEventListener("hn:theme",sync); // the opening gate picked a theme
@@ -707,26 +753,33 @@ var root=document.documentElement;
 function reserve(p,src){var txt=src.textContent,g=document.createElement("span");p.style.display="grid";
   g.textContent=txt;g.style.cssText="grid-area:1/1;visibility:hidden";g.setAttribute("aria-hidden","true");
   src.style.gridArea="1/1";p.insertBefore(g,src);return txt}
-// hero headline: "I design for" + a word that is typed (90ms a key), held (2.2s), deleted (45ms a key) and replaced by the next
-(function(){var el=$("#typed");if(!el)return;
-  var w=["climate","ecology","people","the city","sustainability"],i=0,c=w[0].length,del=true;
-  function t(){if(del){el.textContent=w[i].slice(0,--c);if(!c){del=false;i=(i+1)%w.length}setTimeout(t,45)}else{el.textContent=w[i].slice(0,++c);if(c===w[i].length){del=true;setTimeout(t,2200)}else setTimeout(t,90)}}
-  // "climate" is shown in full first; the cycle starts once the opening gate has closed
-  if(document.documentElement.classList.contains("gate"))addEventListener("hn:enter",function(){setTimeout(t,2200)},{once:true});else setTimeout(t,2200);
+// hero headline: "I design for" + a word that is typed (45-70ms a key), held with a blinking caret (2.2s), deleted with an easing (slow first keys, then quicker) and replaced by the next
+(function(){var el=$("#typed");if(!el||!window.hnType)return;
+  var w=["climate","ecology","people","the city","sustainability"],i=0,c=w[0].length,T=hnType(el,el.nextElementSibling);
+  T.put(w[0],c).caret("blink");
+  function hold(){T.caret("blink");setTimeout(del,2200)}
+  function del(){var t=w[i],n=t.length;T.caret("");
+    (function d(){T.put(t,--c);if(c>0){var p=(n-c)/n;setTimeout(d,30+95*(1-p)*(1-p))}else{i=(i+1)%w.length;setTimeout(type,320)}})()}
+  function type(){var t=w[i];(function s(){T.put(t,++c);if(c<t.length)setTimeout(s,T.gap(t,c,45,70));else hold()})()}
+  // "climate" is shown in full first (caret blinking); the cycle starts once the opening gate has closed
+  if(document.documentElement.classList.contains("gate"))addEventListener("hn:enter",function(){setTimeout(del,2200)},{once:true});else setTimeout(del,2200);
 })();
-// intro paragraph types out once on load
-(function(){var p=$("#intro"),src=$("#introTxt"),txt=reserve(p,src),k=0;src.textContent="";
-  function t(){k=Math.min(txt.length,k+2);src.innerHTML=esc(txt.slice(0,k))+(k<txt.length?'<span class="cur" style="height:1em"></span>':"");if(k<txt.length)setTimeout(t,18)}
-  if(document.documentElement.classList.contains("gate"))addEventListener("hn:enter",function(){setTimeout(t,500)},{once:true});else setTimeout(t,400); // wait for the opening gate
+// intro paragraph types out once on load (25-40ms a key); the caret blinks for ~2s at the end, then fades out
+(function(){var p=$("#intro"),src=$("#introTxt");if(!p||!src||!window.hnType)return;
+  var txt=reserve(p,src),k=0,T=hnType(src,null,true);T.put(txt,0).caret("off");
+  function t(){T.put(txt,++k);if(k<txt.length)setTimeout(t,T.gap(txt,k,25,40));else{T.caret("blink");setTimeout(function(){T.caret("off")},2100)}}
+  function go(){T.caret("");t()}
+  if(document.documentElement.classList.contains("gate"))addEventListener("hn:enter",function(){setTimeout(go,500)},{once:true});else setTimeout(go,400); // wait for the opening gate
 })();
-// "Thanks for stopping by." types out each time it comes into view
-(function(){var el=$("#thx");if(!el)return;
+// "Thanks for stopping by." types out each time it comes into view, then the caret keeps blinking
+(function(){var el=$("#thx");if(!el||!window.hnType)return;
   var wrap=document.createElement("span"),txt=el.textContent,timer=0;el.textContent="";el.appendChild(wrap);wrap.textContent=txt;reserve(el,wrap);el.style.justifyContent="center";
-  function paint(k){wrap.innerHTML=esc(txt.slice(0,k))+'<span class="cur"></span>'}
-  function run(){clearTimeout(timer);var k=0;(function t(){paint(++k);if(k<txt.length)timer=setTimeout(t,75)})()}
-  paint(0);
+  var T=hnType(wrap,null,true);
+  function idle(){clearTimeout(timer);T.put(txt,0).caret("blink")}
+  function run(){clearTimeout(timer);var k=0;T.caret("");(function t(){T.put(txt,++k);if(k<txt.length)timer=setTimeout(t,T.gap(txt,k,45,70));else T.caret("blink")})()}
+  idle();
   if(!("IntersectionObserver" in window))return run(); // very old browsers: type it once
-  new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)run();else{clearTimeout(timer);paint(0)}})},{threshold:.5}).observe(el);
+  new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)run();else idle()})},{threshold:.5}).observe(el);
 })();
 
 // ---------- lightbox: browses the open project's images; lens on hover, zoom on click ----------
@@ -828,29 +881,26 @@ function sidePattern(){
   function set(n){if(n==="light")root.dataset.theme="light";else delete root.dataset.theme;try{localStorage.setItem("hn-theme",n)}catch(e){}dispatchEvent(new Event("hn:theme"))}
 
   ["#gsideL","#gsideR"].forEach(function(id){var el=$(id);if(el)el.innerHTML=sidePattern()});
-  // the switch's white thumb sits under the active theme and follows the pointer between the two options
-  var seg=g.querySelector(".gseg"),thumb=g.querySelector(".gthumb"),opts=[].slice.call(g.querySelectorAll(".gseg .gpill"));
-  function thumbTo(b){if(!b||!thumb)return;thumb.style.width=b.offsetWidth+"px";thumb.style.translate=b.offsetLeft+"px 0";opts.forEach(function(o){o.classList.toggle("on",o===b)})}
-  function home(){return g.querySelector('[data-theme-pick="'+cur()+'"]')}
-  opts.forEach(function(o){o.addEventListener("pointerenter",function(){thumbTo(o)});o.addEventListener("focus",function(){thumbTo(o)})});
-  if(seg)seg.addEventListener("pointerleave",function(){thumbTo(g.contains(document.activeElement)&&document.activeElement.dataset.themePick?document.activeElement:home())});
-  thumbTo(home());if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){thumbTo(g.querySelector(".gseg .gpill.on")||home())});
-  var txt="Welcome to my portfolio :)",out=$("#gtype"),k=0,gone=false,tid=0,started=false,t0=performance.now();
-  var wid=0;
-  // typing done: the switch and the second line rise in and (unless the visitor already moved focus into it) the current theme takes focus; the caret blinks a beat, then eases out
-  function ready(){if(gone)return;g.classList.remove("typing");g.classList.add("ready");thumbTo(g.querySelector(".gseg .gpill.on")||home());var h=home();if(h&&!g.contains(document.activeElement))h.focus({preventScroll:true});
-    tid=setTimeout(function(){if(!gone)g.classList.add("typed")},1100)}
-  // a natural cadence: 55-75ms a key with jitter, a breath after "Welcome" and before ":)"
-  function step(n){var d=55+Math.random()*20;if(n===7)d+=210;else if(txt.slice(n)===":)")d+=190;else if(txt.charAt(n-1)===" ")d+=12;return d}
-  function type(){out.textContent=txt.slice(0,++k);tid=k<txt.length?setTimeout(type,step(k)):setTimeout(ready,200)}
+  // the day/night switch: its look follows the theme on <html> (CSS), so flipping the theme is what animates it
+  var sw=$("#gdn"),gob=g.querySelector(".genter"),pend=false;
+  function sync(){if(sw)sw.setAttribute("aria-checked",cur()==="dark"?"true":"false")}
+  function flip(){set(cur()==="dark"?"light":"dark");sync()}
+  sync();
+  var txt="Welcome to my portfolio :)",out=$("#gtype"),T=window.hnType(out,out.nextElementSibling),k=0,gone=false,tid=0,started=false,t0=performance.now();
+  var wid=0;T.put(txt,0).caret("blink");
+  // typing done: the caret keeps blinking, the switch rises in and (unless the visitor already moved focus into the gate) takes focus
+  function ready(){if(gone)return;g.classList.remove("typing");g.classList.add("ready");T.caret("blink");if(sw&&!g.contains(document.activeElement))sw.focus({preventScroll:true})}
+  // a natural cadence: 45-70ms a key with jitter, a small breath after spaces, a longer one after "Welcome" and before ":)"
+  function step(n){var d=45+Math.random()*25;if(n===7)d+=200;else if(txt.slice(n)===":)")d+=180;else if(txt.charAt(n-1)===" ")d+=30;return d}
+  function type(){T.put(txt,++k);if(k<txt.length)tid=setTimeout(type,step(k));else{T.caret("blink");tid=setTimeout(ready,200)}}
   // start as soon as the site opens: wait only for the webfont (so the line never reflows when Montserrat swaps in), at most 400ms, and give the mark a head start of ~120ms
-  function start(){if(started||gone)return;started=true;g.classList.add("typing");tid=setTimeout(type,Math.max(0,120-(performance.now()-t0)))}
+  function start(){if(started||gone)return;started=true;g.classList.add("typing");T.caret("");tid=setTimeout(type,Math.max(0,120-(performance.now()-t0)))}
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(start,start);setTimeout(start,400);
   function bail(){g.remove();root.classList.remove("gate");var zz=$(".gzoom");if(zz)zz.remove();dispatchEvent(new Event("hn:enter"))}
   function enter(p){if(gone||!p)return;gone=true;clearTimeout(tid);clearTimeout(wid);try{zoom(p)}catch(err){bail()}}
   function zoom(p){
     // the theme is applied first, so the site renders underneath the gate while the zoom runs and the reveal has nothing left to paint
-    var mode=p.dataset.themePick;set(mode);g.classList.add("leaving");g.classList.remove("typing");
+    var mode=p;set(mode);sync();g.classList.add("leaving");g.classList.remove("typing");
     var left=false;function leave(){if(left)return;left=true;g.remove();root.classList.remove("gate");var b=$("#theme");if(b)b.focus({preventScroll:true});dispatchEvent(new Event("hn:enter"))}
     var win=g.querySelector(".gwin"),r=win&&win.getBoundingClientRect();
     // no Web Animations (or no window to zoom into): a short fade, no zoom
@@ -883,12 +933,19 @@ function sidePattern(){
       f.finished.then(drop,drop);setTimeout(drop,1500)}
     function drop(){if(z.parentNode)z.remove()}
     function settle(){[".top",".hero .txt",".hero .hfig"].forEach(function(q,i){var el=$(q);if(el&&el.animate)el.animate([{opacity:0,transform:"translateY(12px)"},{opacity:1,transform:"none"}],{duration:500,delay:40+i*70,easing:"cubic-bezier(.22,1,.36,1)",fill:"backwards"})})}}
-  g.addEventListener("click",function(e){var p=e.target.closest("[data-theme-pick]");if(p)enter(p)});
-  // keyboard: Tab cycles the two choices, Enter/Space picks the focused one (or the current theme), Esc picks dark; all live while the welcome is still typing
-  addEventListener("keydown",function(e){if(gone)return;
-    if(e.key==="Escape"){e.preventDefault();enter(g.querySelector('[data-theme-pick="dark"]'));return}
-    if(e.key==="Tab"){var bs=g.querySelectorAll("button"),f=bs[0],l=bs[bs.length-1];if(!g.contains(document.activeElement)){f.focus();e.preventDefault()}else if(e.shiftKey&&document.activeElement===f){l.focus();e.preventDefault()}else if(!e.shiftKey&&document.activeElement===l){f.focus();e.preventDefault()}return}
-    if((e.key==="Enter"||e.key===" ")&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest(".gpill"))){e.preventDefault();enter(home())}});
+  // pointer: a click or tap on the switch (or on a label) flips the theme with the animation, then goes in once the knob has landed
+  function pick(mode){if(gone||pend)return;if(mode===cur())return enter(mode);pend=true;set(mode);sync();wid=setTimeout(function(){enter(cur())},620)}
+  if(sw)sw.addEventListener("click",function(){pick(cur()==="dark"?"light":"dark")});
+  [].forEach.call(g.querySelectorAll("[data-pick]"),function(l){l.addEventListener("click",function(){pick(l.dataset.pick)})});
+  if(gob)gob.addEventListener("click",function(){enter(cur())}); // "Enter →": go in with the theme as it stands
+  // keyboard: Tab moves between the switch and "Enter →", Space flips the switch, Enter goes in with the theme shown, Esc goes in dark; all live while the welcome is still typing
+  addEventListener("keydown",function(e){if(gone)return;var a=document.activeElement;
+    if(e.key==="Escape"){e.preventDefault();enter("dark");return}
+    if(e.key==="Tab"){var bs=g.querySelectorAll("button"),f=bs[0],l=bs[bs.length-1];if(!g.contains(a)){f.focus();e.preventDefault()}else if(e.shiftKey&&a===f){l.focus();e.preventDefault()}else if(!e.shiftKey&&a===l){f.focus();e.preventDefault()}return}
+    if(e.key===" "&&a===sw){e.preventDefault();if(!pend&&!e.repeat)flip();return}
+    if(e.key==="Enter"||(e.key===" "&&a!==gob)){e.preventDefault();enter(cur())}});
+  // Space activates a button on key-up: keep it from also "clicking" the switch (which would flip it back and go in)
+  addEventListener("keyup",function(e){if(!gone&&e.key===" "&&document.activeElement===sw)e.preventDefault()});
  }catch(err){g.remove();root.classList.remove("gate");dispatchEvent(new Event("hn:enter"))}
 })();
 </script>
