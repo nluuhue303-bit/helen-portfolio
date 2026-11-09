@@ -118,6 +118,8 @@ main{padding-top:var(--bar-top)}
 .cur.off::after{opacity:0;animation:none;transition-duration:.6s}
 @keyframes blink{0%,16%{opacity:1}50%,66%{opacity:0}100%{opacity:1}}
 html:not(.js) .cur{display:none}
+/* the owner prefers the typing with no visible caret */
+.cur{display:none!important}
 .trest{visibility:hidden}
 #intro .cur{color:inherit;--cb:.24em}
 .hero .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
