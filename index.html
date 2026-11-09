@@ -368,7 +368,7 @@ html:not(.js) #gate{display:none}
     <button type="button" class="gpill g-light" data-theme-pick="light"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.8"/><path d="M8 1.2v1.6M8 13.2v1.6M1.2 8h1.6M13.2 8h1.6M3.2 3.2l1.1 1.1M11.7 11.7l1.1 1.1M3.2 12.8l1.1-1.1M11.7 4.3l1.1-1.1"/></svg><span>Light</span></button>
   </div></div>
 </div>
-<script>(function(r){var g=document.getElementById("gate"),s=null;try{s=localStorage.getItem("hn-theme")}catch(e){}if(s==="light"||s==="dark")g.parentNode.removeChild(g);else r.classList.add("gate")})(document.documentElement)</script>
+<script>(function(r){if(document.getElementById("gate"))r.classList.add("gate")})(document.documentElement)</script>
 
 <header class="top">
   <a class="brand" href="#top" aria-label="Helen Nguyen, home">
